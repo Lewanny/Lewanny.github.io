@@ -111,10 +111,13 @@
 <meta property="og:site_name" content="Lewanny 的个人博客空间">
 <meta property="og:description" content="关于 Next 主题的优化，如设置主题样式、字体、头像、第三方统计、评论、分享等在 NexT 使用文档 里都有极详细的介绍，这里不一一介绍了。只记录一些文档中没有提及的点。 第三方推荐搜索：Local Search 简单方便，安装即可使用。统计：不蒜子统计，简单易用推荐使用。评论：来必力评论，目前好像也只有这个可用了，之前还用过不蒜子评论和网易云跟帖。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-28T10:48:27.000Z">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/Hexo-next-theme-optimization/social_icon.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/Hexo-next-theme-optimization/music_position.png">
+<meta property="og:updated_time" content="2018-02-28T11:09:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo Next 主题的优化">
 <meta name="twitter:description" content="关于 Next 主题的优化，如设置主题样式、字体、头像、第三方统计、评论、分享等在 NexT 使用文档 里都有极详细的介绍，这里不一一介绍了。只记录一些文档中没有提及的点。 第三方推荐搜索：Local Search 简单方便，安装即可使用。统计：不蒜子统计，简单易用推荐使用。评论：来必力评论，目前好像也只有这个可用了，之前还用过不蒜子评论和网易云跟帖。">
+<meta name="twitter:image" content="http://omkug1guu.bkt.clouddn.com/Hexo-next-theme-optimization/social_icon.png">
 
 
 
@@ -408,8 +411,29 @@
       
         <p>关于 Next 主题的优化，如设置主题样式、字体、头像、第三方统计、评论、分享等在 <a href="http://theme-next.iissnan.com/" target="_blank" rel="noopener">NexT 使用文档</a> 里都有极详细的介绍，这里不一一介绍了。只记录一些文档中没有提及的点。</p>
 <h4 id="第三方推荐"><a href="#第三方推荐" class="headerlink" title="第三方推荐"></a>第三方推荐</h4><p>搜索：<a href="http://theme-next.iissnan.com/third-party-services.html#local-search" target="_blank" rel="noopener">Local Search</a> 简单方便，安装即可使用。<br>统计：<a href="http://theme-next.iissnan.com/third-party-services.html#analytics-busuanzi" target="_blank" rel="noopener">不蒜子统计</a>，简单易用推荐使用。<br>评论：<a href="http://theme-next.iissnan.com/third-party-services.html#livere" target="_blank" rel="noopener">来必力评论</a>，目前好像也只有这个可用了，之前还用过不蒜子评论和网易云跟帖。<br><a id="more"></a></p>
-<h4 id="侧边栏社交小图标设置"><a href="#侧边栏社交小图标设置" class="headerlink" title="侧边栏社交小图标设置"></a>侧边栏社交小图标设置</h4><p>打开主题配置文件 _config.yml 搜索 <code>social:</code>，在 <a href="https://fontawesome.com/icons?d=gallery" target="_blank" rel="noopener">图标库</a> 找自己喜欢的小图标，并将名字复制在对应的 || 后，保存即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">social:</span><br><span class="line">  GitHub: https://github.com/Lewanny || github</span><br><span class="line">  微博: https://weibo.com/u/2951067307 || weibo</span><br><span class="line">  简书: https://www.jianshu.com/users/f0040a970739 || heartbeat </span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">![](http://omkug1guu.bkt.clouddn.com/Hexo-next-theme-optimization/social_icon.png)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### 添加 about 页面</span><br><span class="line">进入到博客根目录下，执行以下命令：</span><br><span class="line"></span><br><span class="line">	$ hexo new page &quot;about&quot;</span><br><span class="line">	</span><br><span class="line">完成后会在 `/source/about` 目录下生成一个 index.md 文件。打开 index.md 文件，在 data 下添加 `type: &quot;about&quot;`，然后编辑自己想要展示的内容即可。（注意将主题配置文件中的 `menu:` about 页面打开）。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### 添加网易云音乐播放</span><br><span class="line">使用 `iframe` 标签播放即可。</span><br><span class="line">	</span><br><span class="line">	&lt;iframe frameborder=&quot;no&quot; border=&quot;0&quot; marginwidth=&quot;0&quot;</span><br><span class="line">	 width=&quot;300&quot; height=&quot;86&quot; </span><br><span class="line">	 src=&quot;https://music.163.com/outchain/player?type=2&amp;id=5253801&amp;auto=0&amp;height=66&quot;&gt;&lt;/iframe&gt;  // 到网易云中复制即可</span><br><span class="line"></span><br><span class="line">&lt;iframe frameborder=&quot;no&quot; border=&quot;0&quot; marginwidth=&quot;0&quot;</span><br><span class="line">	 width=&quot;300&quot; height=&quot;86&quot; </span><br><span class="line">	 src=&quot;https://music.163.com/outchain/player?type=2&amp;id=5253801&amp;auto=0&amp;height=66&quot;&gt;&lt;/iframe&gt;</span><br><span class="line">	 </span><br><span class="line">如果想放在侧栏里面播放，将代码 加入到 `hexo/themes/next/layout/_macro` 目录中的 sidebar.swig 文件中即可。位置如下：</span><br><span class="line"></span><br><span class="line">![](http://omkug1guu.bkt.clouddn.com/Hexo-next-theme-optimization/music_position.png)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#### 设置 favicon 图标</span><br><span class="line">准备一个常见格式名(如.jpg、.png等)的图片作为备选 favicon，选择一个 favicon 制作网站完成制作，例如：[比特虫](http://www.bitbug.net/)。</span><br><span class="line"></span><br><span class="line">如下修改主题配置文件即可：</span><br></pre></td></tr></table></figure></p>
-<p>favicon:<br>  small: /images/favicon_16x16.ico<br>  medium: /images/favicon_32x32.ico<br>  apple_touch_icon: /images/favicon_128x128.ico<br>  safari_pinned_tab: /images/favicon_128x128.ico<br><code>`</code></p>
+<h4 id="侧边栏社交小图标设置"><a href="#侧边栏社交小图标设置" class="headerlink" title="侧边栏社交小图标设置"></a>侧边栏社交小图标设置</h4><p>打开主题配置文件 _config.yml 搜索 <code>social:</code>，在 <a href="https://fontawesome.com/icons?d=gallery" target="_blank" rel="noopener">图标库</a> 找自己喜欢的小图标，并将名字复制在对应的 || 后，保存即可：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">social:</span><br><span class="line">  GitHub: https:<span class="comment">//github.com/Lewanny || github</span></span><br><span class="line">  微博: https:<span class="comment">//weibo.com/u/2951067307 || weibo</span></span><br><span class="line">  简书: https:<span class="comment">//www.jianshu.com/users/f0040a970739 || heartbeat</span></span><br></pre></td></tr></table></figure>
+<p><img src="http://omkug1guu.bkt.clouddn.com/Hexo-next-theme-optimization/social_icon.png" alt=""></p>
+<h4 id="添加-about-页面"><a href="#添加-about-页面" class="headerlink" title="添加 about 页面"></a>添加 about 页面</h4><p>进入到博客根目录下，执行以下命令：</p>
+<pre><code>$ hexo new page &quot;about&quot;
+</code></pre><p>完成后会在 <code>/source/about</code> 目录下生成一个 index.md 文件。打开 index.md 文件，在 data 下添加 <code>type: &quot;about&quot;</code>，然后编辑自己想要展示的内容即可。（注意将主题配置文件中的 <code>menu:</code> about 页面打开）。</p>
+<h4 id="添加网易云音乐播放"><a href="#添加网易云音乐播放" class="headerlink" title="添加网易云音乐播放"></a>添加网易云音乐播放</h4><p>使用 <code>iframe</code> 标签播放即可。</p>
+<pre><code>&lt;iframe frameborder=&quot;no&quot; border=&quot;0&quot; marginwidth=&quot;0&quot;
+ width=&quot;300&quot; height=&quot;86&quot; 
+ src=&quot;https://music.163.com/outchain/player?type=2&amp;id=5253801&amp;auto=0&amp;height=66&quot;&gt;&lt;/iframe&gt;  // 到网易云中复制即可
+</code></pre><iframe frameborder="no" border="0" marginwidth="0" width="300" height="86" src="https://music.163.com/outchain/player?type=2&id=5253801&auto=0&height=66"></iframe>
+
+<p>如果想放在侧栏里面播放，将代码 加入到 <code>hexo/themes/next/layout/_macro</code> 目录中的 sidebar.swig 文件中即可。位置如下：</p>
+<p><img src="http://omkug1guu.bkt.clouddn.com/Hexo-next-theme-optimization/music_position.png" alt=""></p>
+<h4 id="设置网站的-Favicon-图标"><a href="#设置网站的-Favicon-图标" class="headerlink" title="设置网站的 Favicon 图标"></a>设置网站的 Favicon 图标</h4><p>准备一个常见格式名(如.jpg、.png等)的图片作为备选 favicon，选择一个 favicon 制作网站完成制作，例如：<a href="http://www.bitbug.net/" target="_blank" rel="noopener">比特虫</a>。</p>
+<p>如下修改主题配置文件即可：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">favicon:</span><br><span class="line">  small: /images/favicon_16x16.ico</span><br><span class="line">  medium: /images/favicon_32x32.ico</span><br><span class="line">  apple_touch_icon: /images/favicon_128x128.ico</span><br><span class="line">  safari_pinned_tab: /images/favicon_128x128.ico</span><br></pre></td></tr></table></figure></p>
+<h4 id="添加-“high-一下”"><a href="#添加-“high-一下”" class="headerlink" title="添加 “high 一下”"></a>添加 “high 一下”</h4><h4 id="绑定独立域名"><a href="#绑定独立域名" class="headerlink" title="绑定独立域名"></a>绑定独立域名</h4><p>购买域名<br>在你的域名注册提供商那里配置DNS解析，获取GitHub的IP地址点击，进入source目录下，添加CNAME文件</p>
+<pre><code>$ cd source/
+ $ touch CNAME
+$ vim CNAME # 输入你的域名
+$ git add CNAME
+$ git commit -m &quot;add CNAME&quot;
+</code></pre><p>#### </p>
 
       
     </div>
@@ -653,7 +677,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#第三方推荐"><span class="nav-number">1.</span> <span class="nav-text">第三方推荐</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#侧边栏社交小图标设置"><span class="nav-number">2.</span> <span class="nav-text">侧边栏社交小图标设置</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#第三方推荐"><span class="nav-number">1.</span> <span class="nav-text">第三方推荐</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#侧边栏社交小图标设置"><span class="nav-number">2.</span> <span class="nav-text">侧边栏社交小图标设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加-about-页面"><span class="nav-number">3.</span> <span class="nav-text">添加 about 页面</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加网易云音乐播放"><span class="nav-number">4.</span> <span class="nav-text">添加网易云音乐播放</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置网站的-Favicon-图标"><span class="nav-number">5.</span> <span class="nav-text">设置网站的 Favicon 图标</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#添加-“high-一下”"><span class="nav-number">6.</span> <span class="nav-text">添加 “high 一下”</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绑定独立域名"><span class="nav-number">7.</span> <span class="nav-text">绑定独立域名</span></a></li></ol></div>
             
 
           </div>
@@ -673,33 +697,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2018</span>
-  <span class="with-love">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">Lewanny</span>
-
-  
-
-  
-</div>
-
-
-
-
-  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.0.4</div>
-
-
-
-
+        
         
 <div class="busuanzi-count">
   <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
@@ -708,14 +706,13 @@
 
   
     <span class="site-pv" title="总访问量">
-      <i class="fa fa-eye"></i>
-      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      本站总访问量<span class="busuanzi-value" id="busuanzi_value_site_pv"></span>次
     </span>
   
 </div>
 
 
-
+<!--<i class="fa fa-eye"></i>-->
 
 
 
