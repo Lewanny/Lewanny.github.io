@@ -103,24 +103,24 @@
   <meta name="keywords" content="Hexo, NexT" />
 
 
-<meta name="description" content="世界拥挤繁忙，行人各有方向。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="分类">
-<meta property="og:url" content="http://yoursite.com/categories/index.html">
+<meta name="description" content="继承继承：子类 subClass作用：可以通过类的继承来增添父类的属性和方法。写法：在 .h 文件中1@interface Student : Person">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 开发 OC 拓展类的几种方式">
+<meta property="og:url" content="http://yoursite.com/2014/10/03/2014/iOS-objc-class-extension-methods/index.html">
 <meta property="og:site_name" content="Lewanny 的个人博客空间">
-<meta property="og:description" content="世界拥挤繁忙，行人各有方向。">
+<meta property="og:description" content="继承继承：子类 subClass作用：可以通过类的继承来增添父类的属性和方法。写法：在 .h 文件中1@interface Student : Person">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-28T07:53:10.000Z">
+<meta property="og:updated_time" content="2018-03-01T10:08:44.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="分类">
-<meta name="twitter:description" content="世界拥挤繁忙，行人各有方向。">
+<meta name="twitter:title" content="iOS 开发 OC 拓展类的几种方式">
+<meta name="twitter:description" content="继承继承：子类 subClass作用：可以通过类的继承来增添父类的属性和方法。写法：在 .h 文件中1@interface Student : Person">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/"/>
+  <link rel="canonical" href="http://yoursite.com/2014/10/03/2014/iOS-objc-class-extension-methods/"/>
 
 
 
@@ -129,7 +129,7 @@
     sidebar: "",
   };
 </script>
-  <title>分类 | Lewanny 的个人博客空间</title>
+  <title>iOS 开发 OC 拓展类的几种方式 | Lewanny 的个人博客空间</title>
   
 
 
@@ -299,60 +299,201 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2014/10/03/2014/iOS-objc-class-extension-methods/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lewanny">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lewanny 的个人博客空间">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-<h1 class="post-title" itemprop="name headline">分类</h1>
-
-<div class="post-meta">
-  
-  
-
-
-
-</div>
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <div class="category-all-page">
-            <div class="category-all-title">
-                
-                
-                  
-                    
-                  
-                
-                  
-                    
-                  
-                
-                目前共计 2 个分类
-            </div>
-            <div class="category-all">
-              <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Objective-C/">Objective-C</a><span class="category-list-count">5</span></li></ul>
-            </div>
-          </div>
+          <h1 class="post-title" itemprop="name headline">iOS 开发 OC 拓展类的几种方式</h1>
         
-      </div>
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-10-03T19:56:49+08:00">2014-10-03</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Objective-C/" itemprop="url" rel="index"><span itemprop="name">Objective-C</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h4 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h4><p>继承：子类 <code>subClass</code><br>作用：可以通过类的继承来增添父类的属性和方法。<br>写法：在 .h 文件中<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Student</span> : <span class="title">Person</span></span></span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h4 id="类目"><a href="#类目" class="headerlink" title="类目"></a>类目</h4><p>类目：<code>Category</code>，也叫分类、类别。<br>作用：可以增添父类的方法，但是不能定义变量。多用于不知道源码的情况下，对父类进行拓展。例如用来拓展系统类。<br>写法：在 .h 和 .m 中，文件名为 “父类名+分类名” 格式。在 <code>@interface</code> 和 <code>@implementation</code> 后 “父类名(分类名)” 。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// NSString+autoResize</span></span><br><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">NSString</span> (<span class="title">autoResize</span>)</span></span><br><span class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">NSString</span> (<span class="title">autoResize</span>)</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="延展"><a href="#延展" class="headerlink" title="延展"></a>延展</h4><p>延展：<code>Extension</code><br>作用：定义私有方法，可以隐藏不对外公布的方法，多用于隐藏一些中间步骤的方法。<br>写法：在 .m 文件中的 <code>@implementation</code> 前实现。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">Person</span>() </span>&#123;    </span><br><span class="line">  <span class="built_in">NSString</span> * _age;</span><br><span class="line">&#125;</span><br><span class="line">  - (<span class="keyword">void</span>)logAge;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h4><p>协议方法：<code>protocol</code><br>作用：可以实现类似多继承的方法，一个类遵守多个协议。<br>写法：协议只有 .h 文件，定义了方法。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@required</span> <span class="comment">//默认是必须实现的</span></span><br><span class="line">  - (<span class="keyword">void</span>)method1;</span><br><span class="line">  - (<span class="keyword">void</span>)method2;</span><br><span class="line">                       </span><br><span class="line"><span class="keyword">@optional</span> <span class="comment">//可以选择实现</span></span><br><span class="line">  - (<span class="keyword">void</span>)method3;</span><br></pre></td></tr></table></figure></p>
+
       
     </div>
+
     
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢您的支持！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat-reward-image.png" alt="Lewanny 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay-reward-image.png" alt="Lewanny 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/11/09/2014/iOS-objc-development-note-UISlider/" rel="prev" title="iOS 开发笔记之 UISlider">
+                iOS 开发笔记之 UISlider <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
 
 
 
-    
-    
-    
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -387,8 +528,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -496,6 +646,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#继承"><span class="nav-number">1.</span> <span class="nav-text">继承</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类目"><span class="nav-number">2.</span> <span class="nav-text">类目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#延展"><span class="nav-number">3.</span> <span class="nav-text">延展</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#协议"><span class="nav-number">4.</span> <span class="nav-text">协议</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
