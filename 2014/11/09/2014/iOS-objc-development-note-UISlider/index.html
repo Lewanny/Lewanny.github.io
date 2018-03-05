@@ -111,7 +111,7 @@
 <meta property="og:site_name" content="Lewanny 的个人博客空间">
 <meta property="og:description" content="改变 UISlider 滑道的高度12345// 控制 slider 的宽和高，这个方法才是真正的改变 slider 滑道的高- (CGRect)trackRectForBounds:(CGRect)bounds&amp;#123;    return CGRectMake(0, 0, CGRectGetWidth(self.frame), _adjustHeight);&amp;#125; 注意：此方法直接调用">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-01T10:30:32.000Z">
+<meta property="og:updated_time" content="2018-03-02T01:51:53.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS 开发笔记之 UISlider">
 <meta name="twitter:description" content="改变 UISlider 滑道的高度12345// 控制 slider 的宽和高，这个方法才是真正的改变 slider 滑道的高- (CGRect)trackRectForBounds:(CGRect)bounds&amp;#123;    return CGRectMake(0, 0, CGRectGetWidth(self.frame), _adjustHeight);&amp;#125; 注意：此方法直接调用">
@@ -408,6 +408,7 @@
       
         <h4 id="改变-UISlider-滑道的高度"><a href="#改变-UISlider-滑道的高度" class="headerlink" title="改变 UISlider 滑道的高度"></a>改变 UISlider 滑道的高度</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 控制 slider 的宽和高，这个方法才是真正的改变 slider 滑道的高</span></span><br><span class="line">- (<span class="built_in">CGRect</span>)trackRectForBounds:(<span class="built_in">CGRect</span>)bounds</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="built_in">CGRectGetWidth</span>(<span class="keyword">self</span>.frame), _adjustHeight);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>注意：此方法直接调用是无效的，要重写一个继承于 UISlider 的子类，在子类中重写下面的方法才有效。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-(<span class="built_in">CGRect</span>)trackRectForBounds:(<span class="built_in">CGRect</span>)bounds;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
 <h4 id="改变-UISlider-滑块的大小"><a href="#改变-UISlider-滑块的大小" class="headerlink" title="改变 UISlider 滑块的大小"></a>改变 UISlider 滑块的大小</h4><p>可以使用 <code>setThumbImage</code> 方法，滑块的大小会随设置的图片尺寸改变。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[_progressSlider setThumbImage:[<span class="built_in">UIImage</span> imageNamed:<span class="string">@"ic_slider"</span>] </span><br><span class="line">                 scaleToSize:<span class="built_in">CGSizeMake</span>(<span class="number">10</span>, <span class="number">10</span>) </span><br><span class="line">                 forState:<span class="built_in">UIControlStateNormal</span>];</span><br></pre></td></tr></table></figure></p>
 <p>改变 UIImage 尺寸的方法，可加在 UIImage 的 Category 方法中。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> 对原来的图片的大小进行处理</span></span><br><span class="line"><span class="comment"> @param image 要处理的图片</span></span><br><span class="line"><span class="comment"> @param size  处理过图片的大小</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">+ (<span class="built_in">UIImage</span> *)imageNamed:(<span class="built_in">NSString</span> *)imagestr scaleToSize:(<span class="built_in">CGSize</span>)size</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageNamed:imagestr];</span><br><span class="line">    <span class="built_in">UIGraphicsBeginImageContext</span>(size);</span><br><span class="line">    [image drawInRect:<span class="built_in">CGRectMake</span>(<span class="number">0</span>,<span class="number">0</span>, size.width, size.height)];</span><br><span class="line">    <span class="built_in">UIImage</span> *scaleImage=<span class="built_in">UIGraphicsGetImageFromCurrentImageContext</span>();</span><br><span class="line">    <span class="built_in">UIGraphicsEndImageContext</span>();</span><br><span class="line">    <span class="keyword">return</span> scaleImage;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h4 id="增加触控范围"><a href="#增加触控范围" class="headerlink" title="增加触控范围"></a>增加触控范围</h4><p>在 UISlider 的拖动手势不灵敏的时候此方法有效。同样需要子类继承 UISlider，然后重写下面的方法。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">CGRect</span>)thumbRectForBounds:(<span class="built_in">CGRect</span>)bounds trackRect:(<span class="built_in">CGRect</span>)rect value:(<span class="keyword">float</span>)value</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// y 轴方向改变手势范围</span></span><br><span class="line">   rect.origin.y = rect.origin.y - <span class="number">10</span>;</span><br><span class="line">   rect.size.height = rect.size.height + <span class="number">20</span>;</span><br><span class="line">   <span class="keyword">return</span> <span class="built_in">CGRectInset</span>([<span class="keyword">super</span> thumbRectForBounds:bounds trackRect:rect value:value], <span class="number">10</span>, <span class="number">10</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -571,7 +572,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -613,7 +614,21 @@
                     
                       
                     
-                    <span class="site-state-item-count">6</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon_128x128.ico?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon_32x32.ico?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon_16x16.ico?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/favicon_128x128.ico?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="block," />
+
+
+<meta name="description" content="代码块 Block 是苹果在 iOS4 开始引入的对 C 语言的扩展，用来实现匿名函数的特性。Block 是一种特殊的数据类型，其可以正常定义变量、作为参数、作为返回值。特殊地，Block 还可以保存一段代码，在需要的时候调用。目前 Block 已经广泛应用于 iOS 开发中，常用于 GCD、动画、排序及各类回调。 Block 在我们的实际开发中太常用了，个人觉得很好用，无论是界面传值还是当做参数">
+<meta name="keywords" content="block">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 中 Block 的基本语法和使用">
+<meta property="og:url" content="http://yoursite.com/2015/09/24/2015/iOS-block-basic-grammar-and-usage/index.html">
+<meta property="og:site_name" content="Lewanny 的个人博客空间">
+<meta property="og:description" content="代码块 Block 是苹果在 iOS4 开始引入的对 C 语言的扩展，用来实现匿名函数的特性。Block 是一种特殊的数据类型，其可以正常定义变量、作为参数、作为返回值。特殊地，Block 还可以保存一段代码，在需要的时候调用。目前 Block 已经广泛应用于 iOS 开发中，常用于 GCD、动画、排序及各类回调。 Block 在我们的实际开发中太常用了，个人觉得很好用，无论是界面传值还是当做参数">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-02T02:08:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS 中 Block 的基本语法和使用">
+<meta name="twitter:description" content="代码块 Block 是苹果在 iOS4 开始引入的对 C 语言的扩展，用来实现匿名函数的特性。Block 是一种特殊的数据类型，其可以正常定义变量、作为参数、作为返回值。特殊地，Block 还可以保存一段代码，在需要的时候调用。目前 Block 已经广泛应用于 iOS 开发中，常用于 GCD、动画、排序及各类回调。 Block 在我们的实际开发中太常用了，个人觉得很好用，无论是界面传值还是当做参数">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/09/24/2015/iOS-block-basic-grammar-and-usage/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>iOS 中 Block 的基本语法和使用 | Lewanny 的个人博客空间</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lewanny 的个人博客空间</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/09/24/2015/iOS-block-basic-grammar-and-usage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lewanny">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lewanny 的个人博客空间">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS 中 Block 的基本语法和使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-09-24T19:23:33+08:00">2015-09-24</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Objective-C/" itemprop="url" rel="index"><span itemprop="name">Objective-C</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>代码块 Block 是苹果在 iOS4 开始引入的对 C 语言的扩展，用来实现匿名函数的特性。Block 是一种特殊的数据类型，其可以正常定义变量、作为参数、作为返回值。特殊地，Block 还可以保存一段代码，在需要的时候调用。目前 Block 已经广泛应用于 iOS 开发中，常用于 GCD、动画、排序及各类回调。</p>
+<p>Block 在我们的实际开发中太常用了，个人觉得很好用，无论是界面传值还是当做参数都十分的灵活。例如 GCD、AFNetworking 的回调等都是用 Block 实现的，且 Apple 官方的很多 API 都由 Delegate 写法换成了 Block 。</p>
+<a id="more"></a>
+<h3 id="Block-是什么？"><a href="#Block-是什么？" class="headerlink" title="Block 是什么？"></a>Block 是什么？</h3><p>那么，Block 到底是什么呢？用一句话来概括就是<code>带有自动变量的匿名函数</code>。</p>
+<h4 id="匿名函数"><a href="#匿名函数" class="headerlink" title="匿名函数"></a>匿名函数</h4><p><code>匿名函数</code>顾名思义就是不带名字的函数，C 语言中不允许该类函数的存在，而在 OC 的 Block 中则是可以使用指针来直接调用一个函数的。</p>
+<h4 id="自动变量"><a href="#自动变量" class="headerlink" title="自动变量"></a>自动变量</h4><p>自动变量在 Block 中的具体表现就是<code>截获自动变量</code>。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">void</span>(^blockLog)() = ^&#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"Input a = %d"</span>, a);</span><br><span class="line">&#125;;</span><br><span class="line">a = <span class="number">10</span>;</span><br><span class="line">blockLog();</span><br><span class="line"><span class="comment">// 打印结果：Input a = 0</span></span><br></pre></td></tr></table></figure></p>
+<p>上面的代码虽然我们在调用 blockLog 前改变了变量 a 的值，但是输出的值还是 blockLog 在编译时 a 的值。所以截获自动变量的概念就是：<strong>在Block中会保存变量的值，而不会随变量的值的改变而改变</strong>。</p>
+<p>我们再来看下面的代码。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">void</span>(^blockLog)() = ^&#123;</span><br><span class="line">    a = <span class="number">10</span>;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"Input a = %d"</span>, a);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>上面的代码会报错，编译器会提示不能再 Block 中改变变量的值。因为在 Block 截获了变量的瞬间值后就不能再改变改变量的值，如果想在 Block 中改变该变量的值，那么我们需要在变量声明的时候加上 __Block 修饰符。如下：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">__block <span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">void</span>(^blockLog)() = ^&#123;</span><br><span class="line">    a = <span class="number">10</span>;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"Input a = %d"</span>, a);</span><br><span class="line">&#125;;</span><br><span class="line">blockLog();</span><br><span class="line"><span class="comment">// 打印结果：Input a = 10</span></span><br></pre></td></tr></table></figure></p>
+<p>但是下面的情况是允许的：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSMutableArray</span> *arrayInsert = [<span class="built_in">NSMutableArray</span> array];</span><br><span class="line"><span class="keyword">void</span>(^blockLog)() = ^&#123;</span><br><span class="line">    [arrayInsert addObject:<span class="string">@"Obj"</span>];</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"array = %@"</span>, arrayInsert);</span><br><span class="line">&#125;;</span><br><span class="line">blockLog();</span><br></pre></td></tr></table></figure></p>
+<p>因为我们只是对截获的变量进行了操作，而没有进行赋值，所以对于截获变量，可以进行操作而不可以进行赋值。</p>
+<p>还有一点需要注意，在 Block 中不支持对 C 语言数组进行操作。</p>
+<h3 id="Block-的语法和分类"><a href="#Block-的语法和分类" class="headerlink" title="Block 的语法和分类"></a>Block 的语法和分类</h3><h4 id="Block-的语法"><a href="#Block-的语法" class="headerlink" title="Block 的语法"></a>Block 的语法</h4><p>下面是一个完整的 Block 写法：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">^<span class="keyword">int</span> (<span class="built_in">NSString</span> *str1, <span class="built_in">NSString</span> *str2) &#123;</span><br><span class="line">	<span class="keyword">return</span> [str1 intValue] + [str2 intValue];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>“^” 这个符号用来表示这是一个 <code>Block</code> 。</li>
+<li>int 表示<code>返回值</code>。（可省略或 void）</li>
+<li>(NSString str1, NSString str2) 这个括号中是 Block 的参数，即<code>参数列表</code>，语法和 C 语言类似。（没有时也可省略）</li>
+</ul>
+<h4 id="Block-变量"><a href="#Block-变量" class="headerlink" title="Block 变量"></a>Block 变量</h4><p>那么为什么需要 Block 变量？我们可以这样理解，我们可以通过这个 Block 变量来获取 Block 的指针，然后通过这个指针就可以来使用 Block 函数。我们先来看一下如何声明一个 Block 变量：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> (^blockExp)(<span class="built_in">NSString</span> *str1,<span class="built_in">NSString</span> *str1);</span><br></pre></td></tr></table></figure></p>
+<p>对照前面的 Block 函数其含义分别为：</p>
+<ul>
+<li>返回值</li>
+<li>变量名</li>
+<li>参数列表</li>
+</ul>
+<p>然后我们用上面讲到的 Block 语法来对这 Block 变量进行赋值，我们就可以将这个 Block 变量当作 C 语言函数来使用了。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> (^blockExp)(<span class="built_in">NSString</span> *str1, <span class="built_in">NSString</span> *str2);</span><br><span class="line">blockExp = ^(<span class="built_in">NSString</span> *str1, <span class="built_in">NSString</span> *str2) &#123;</span><br><span class="line">    <span class="keyword">return</span> [str1 intValue] + [str2 intValue];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"Result = %d"</span>, blockExp(<span class="string">@"1"</span>, <span class="string">@"2"</span>));</span><br><span class="line"><span class="comment">// 打印结果：Result = 3</span></span><br></pre></td></tr></table></figure>
+<h4 id="无参无返的-Block"><a href="#无参无返的-Block" class="headerlink" title="无参无返的 Block"></a>无参无返的 Block</h4><p>无参数无返回值的 Block 。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> (^block1)() = ^() &#123;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br><span class="line">block1()</span><br></pre></td></tr></table></figure></p>
+<h4 id="有参无返的-Block"><a href="#有参无返的-Block" class="headerlink" title="有参无返的 Block"></a>有参无返的 Block</h4><p>无参数无返回值的 Block 。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> (^block2)(<span class="built_in">NSString</span> *) = ^(<span class="built_in">NSString</span> *str) &#123;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br><span class="line">block2(<span class="string">@"Obj"</span>);</span><br></pre></td></tr></table></figure></p>
+<h4 id="有参有返的-Block"><a href="#有参有返的-Block" class="headerlink" title="有参有返的 Block"></a>有参有返的 Block</h4><p>无参数有返回值的 Block 。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> (^block3)(<span class="keyword">int</span> num) = ^(<span class="keyword">int</span> num) &#123;</span><br><span class="line">    <span class="keyword">return</span> num+<span class="number">1</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@"Result = %d"</span>, block3(<span class="number">10</span>));</span><br><span class="line"><span class="comment">// 输出结果：Result = 11</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="Block-的实际应用"><a href="#Block-的实际应用" class="headerlink" title="Block 的实际应用"></a>Block 的实际应用</h3><h4 id="Block-结合-typedef-使用"><a href="#Block-结合-typedef-使用" class="headerlink" title="Block 结合 typedef 使用"></a>Block 结合 typedef 使用</h4><p>在实际使用 Block 的过程中，我们可能需要重复地声明多个相同返回值相同参数列表的 Block 变量，如果总是重复地编写一长串代码来声明变量会非常繁琐，所以我们可以使用 typedef 来定义 Block 类型。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一种无返回值有参数的 Block 类型</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">void</span> (^SayHello)(<span class="built_in">NSString</span> *str);</span><br><span class="line"><span class="comment">// 可以像 OC 中声明变量一样使用 Block 类型 SayHello 来声明变量并调用</span></span><br><span class="line">SayHello hello = ^(<span class="built_in">NSString</span> *saySrr)&#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, saySrr);</span><br><span class="line">&#125;;</span><br><span class="line">hello(<span class="string">@"Hello World"</span>);</span><br><span class="line">    </span><br><span class="line"><span class="comment">// 打印结果：Hello World</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="Block-作为属性"><a href="#Block-作为属性" class="headerlink" title="Block 作为属性"></a>Block 作为属性</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一种有参有返的 Block </span></span><br><span class="line"><span class="keyword">typedef</span> <span class="built_in">NSString</span> *(^MyBlock)(<span class="keyword">int</span> a);</span><br><span class="line"><span class="comment">// 定义一个 MyBlock 属性</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>)MyBlock block;</span><br></pre></td></tr></table></figure>
+<h4 id="Block-作为函数参数"><a href="#Block-作为函数参数" class="headerlink" title="Block 作为函数参数"></a>Block 作为函数参数</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一个 Block </span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">void</span> (^MyBlock)(<span class="built_in">UIColor</span>* aColor);</span><br></pre></td></tr></table></figure>
+<p>这样我们就可以使用 MyBlock 来表示这个 Block，将 MyBlock 加入到函数参数中来声明一个函数。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)setMyBlock:(MyBlock)block &#123;</span><br><span class="line">    </span><br><span class="line">    block([<span class="built_in">UIColor</span> redColor]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可在任意地方调用这个函数。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[secondVc setMyBlock:^<span class="built_in">NSString</span> *(<span class="built_in">UIColor</span>* aColor) &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"%@"</span>, aColor);</span><br><span class="line">    wself.view.backgroundColor = aColor;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">@""</span>;</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure></p>
+<p>我们平时锁使用的许多回调当中大多都是这样的形式，其较多的就是网络请求回调了，我们只需要调用方法，然后在回调当中就可以对结果进行操作，很多苹果自己写的 API 都是使用了这样的方法。这样做的好处就是形式上十份简洁，当然像这种地方你使用 delegate 肯定也是可以的，但是表现上就没有 Block 那么简洁，使用起来也没有 Block 那么方便。</p>
+<h4 id="使用-Block-在页面中反向传值"><a href="#使用-Block-在页面中反向传值" class="headerlink" title="使用 Block 在页面中反向传值"></a>使用 Block 在页面中反向传值</h4><p>Blcok 是一个匿名函数，同时也是一个指针，那么使用 Block 就可以弥补在 iOS 中函数传递的功能。<br>在页面 B 中定义一个 Block 并声明一个 Block 变量。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 声明部分</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">void</span>(^BlockChange)(<span class="built_in">NSString</span> *titleStr, <span class="built_in">UIColor</span> *bgColor);</span><br><span class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>)BlockChange blockChange;</span><br><span class="line">- (<span class="keyword">void</span>)setChangeColorBlock:(BlockChange) block;</span><br><span class="line"><span class="comment">// 实现部分</span></span><br><span class="line">- (<span class="keyword">void</span>)setChangeColorBlock:(BlockChange) block &#123;</span><br><span class="line">    <span class="keyword">self</span>.blockChange = block;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在页面 A 中的代码。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SecondViewController *secondVc = [[SecondViewController alloc] init];</span><br><span class="line">__<span class="keyword">weak</span> FirstViewController * wself = <span class="keyword">self</span>;</span><br><span class="line">[secondVc setChangeColorBlock:^(<span class="built_in">NSString</span> *titleStr, <span class="built_in">UIColor</span> *bgColor) &#123;</span><br><span class="line">    wself.view.backgroundColor = bgColor;</span><br><span class="line">    wself.tabBarItem.title = titleStr;</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure></p>
+<p>在页面 B 的任意适当位置调用 block 变量。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">self</span>.blockChange(<span class="string">@"传递颜色"</span>, [<span class="built_in">UIColor</span> grayColor]);</span><br></pre></td></tr></table></figure></p>
+<p>这样 @”传递颜色” 和 [UIColor grayColor] 就从界面 B 传到了界面 A 。</p>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><h4 id="使用-block-修改局部变量"><a href="#使用-block-修改局部变量" class="headerlink" title="使用 __block 修改局部变量"></a>使用 __block 修改局部变量</h4><p>Block 可以访问局部变量，但是不能修改。如果想要修改局部变量，需要使用 __block 来修饰变量。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">__block <span class="keyword">int</span> multiplier = <span class="number">7</span>;</span><br><span class="line"><span class="keyword">int</span> (^myBlock)(<span class="keyword">int</span>) = ^(<span class="keyword">int</span> num) &#123;</span><br><span class="line">      multiplier ++;<span class="comment">//这样就可以了</span></span><br><span class="line">      <span class="keyword">return</span> num * multiplier;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>但是如果局部变量是<code>数组字典或者指针</code>的时候，只 copy 了这个指针，两个指针指向同一个地址，block 只修改指针上的内容。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSMutableArray</span> *arrayInsert = [<span class="built_in">NSMutableArray</span> array];</span><br><span class="line"><span class="keyword">void</span>(^blockLog)() = ^&#123;</span><br><span class="line">    [arrayInsert addObject:<span class="string">@"Obj"</span>];</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@"array = %@"</span>, arrayInsert);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>例子中的 arrayInsert 是一个指针，指向一个可数组。在 block 里面，并没有修改这个指针，而是修改了这个指针指向的数组。换句话说，指针保存的是一块内存区域的地址，在block 里，并没有改变这个地址，而是读取出这个地址，然后去操作这块地址空间的内容，这是允许的。</p>
+<p>因为声明 block 的时候实际上是把当时的临时变量又复制了一份，在 block 里即使修改了这些复制的变量，也不影响外面的原始变量。即所谓的闭包。但是当变量是一个指针的时候，block里只是复制了一份这个指针，两个指针指向同一个地址。所以，在block里面对指针指向内容做的修改，在block外面也一样生效。</p>
+<h4 id="使用-week-修改局部变量"><a href="#使用-week-修改局部变量" class="headerlink" title="使用 __week 修改局部变量"></a>使用 __week 修改局部变量</h4><p>如果在 Block 中使用附有 <code>__strong</code> 修饰符的对象类型自动变量，那么当 Block 从栈复制到堆时，改对象为 Block 所有。这样容易<code>引起循环引用</code>，从而发生内存泄漏。然而我们只需要保证当前控制器也就是 self 在需要释放的时候正确释放就可以。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__<span class="keyword">weak</span> FirstViewController * wself = <span class="keyword">self</span>;</span><br></pre></td></tr></table></figure></p>
+<p>我们定义一个 <code>wself 变量并使用 __weak 修饰符</code>，在 Block 代码块中，所有需要 self 的地方都用 wself 来替代。这样就不会增加引用计数，所以 Block 持有 self 对象就不会造成循环引用，从而造成内存泄漏。</p>
+<p>注意：在使用 block 前需要对 block 指针做判空处理，如果是MRC的编译环境下，要先 release 掉 block 对象。将 block 赋值为空，是解掉循环引用的重要方法。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢您的支持！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat-reward-image.png" alt="Lewanny 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay-reward-image.png" alt="Lewanny 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/block/" rel="tag"># block</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/07/17/2015/iOS-loading-flash-screen-dynamically-metohd/" rel="next" title="iOS 简单而实用的动态加载闪屏图方法">
+                <i class="fa fa-chevron-left"></i> iOS 简单而实用的动态加载闪屏图方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/10/04/2015/iOS-judge-system-version-methods/" rel="prev" title="iOS 判断系统版本号的多种方法">
+                iOS 判断系统版本号的多种方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDU5OS83MTU0"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Lewanny" />
+            
+              <p class="site-author-name" itemprop="name">Lewanny</p>
+              <p class="site-description motion-element" itemprop="description">世界拥挤繁忙，行人各有方向。</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">2</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Lewanny" target="_blank" title="GitHub"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://weibo.com/u/2951067307" target="_blank" title="微博"><i class="fa fa-fw fa-weibo"></i>微博</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.jianshu.com/users/f0040a970739" target="_blank" title="简书"><i class="fa fa-fw fa-heartbeat"></i>简书</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Block-是什么？"><span class="nav-number">1.</span> <span class="nav-text">Block 是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#匿名函数"><span class="nav-number">1.1.</span> <span class="nav-text">匿名函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自动变量"><span class="nav-number">1.2.</span> <span class="nav-text">自动变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Block-的语法和分类"><span class="nav-number">2.</span> <span class="nav-text">Block 的语法和分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Block-的语法"><span class="nav-number">2.1.</span> <span class="nav-text">Block 的语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Block-变量"><span class="nav-number">2.2.</span> <span class="nav-text">Block 变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#无参无返的-Block"><span class="nav-number">2.3.</span> <span class="nav-text">无参无返的 Block</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#有参无返的-Block"><span class="nav-number">2.4.</span> <span class="nav-text">有参无返的 Block</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#有参有返的-Block"><span class="nav-number">2.5.</span> <span class="nav-text">有参有返的 Block</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Block-的实际应用"><span class="nav-number">3.</span> <span class="nav-text">Block 的实际应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Block-结合-typedef-使用"><span class="nav-number">3.1.</span> <span class="nav-text">Block 结合 typedef 使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Block-作为属性"><span class="nav-number">3.2.</span> <span class="nav-text">Block 作为属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Block-作为函数参数"><span class="nav-number">3.3.</span> <span class="nav-text">Block 作为函数参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-Block-在页面中反向传值"><span class="nav-number">3.4.</span> <span class="nav-text">使用 Block 在页面中反向传值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意事项"><span class="nav-number">4.</span> <span class="nav-text">注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-block-修改局部变量"><span class="nav-number">4.1.</span> <span class="nav-text">使用 __block 修改局部变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-week-修改局部变量"><span class="nav-number">4.2.</span> <span class="nav-text">使用 __week 修改局部变量</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2014 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lewanny</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v6.0.4</div>
+
+
+<div>
+<span id="busuanzi_container_site_pv">
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+</span>
+</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
