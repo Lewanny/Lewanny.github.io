@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+  <url>
+    <loc>http://lewanny.com/2018/01/11/2018/Hexo-build-yourown-blog-with-hexo/</loc>
+    <lastmod>2018-03-08T07:58:42.000Z</lastmod>
+    <data>
+        <display>
+        <title>使用 Hexo 搭建个人博客并部署到 Github Page</title>
+        <pubTime>2018-01-11T09:14:04.000Z</pubTime>
+        
+        <tag>Hexo</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hexo" url="http://lewanny.com/categories/Hexo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2018/01/12/2018/Hexo-next-theme-optimization/</loc>
+    <lastmod>2018-03-08T07:51:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hexo Next 主题的优化</title>
+        <pubTime>2018-01-12T09:37:08.000Z</pubTime>
+        
+        <tag>主题优化</tag>
+         
+         
+           
+             
+              <breadCrumb title="Hexo" url="http://lewanny.com/categories/Hexo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2017/04/16/2017/iOS-bluetooth-summary-of-data-conversion/</loc>
+    <lastmod>2018-03-08T07:46:00.000Z</lastmod>
+    <data>
+        <display>
+        <title>总结下 iOS 蓝牙开发中常用的数据转换</title>
+        <pubTime>2017-04-16T11:42:22.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2017/03/20/2017/iOS-beta-test-with-TestFlight/</loc>
+    <lastmod>2018-03-08T07:38:14.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 开发使用 TestFlight 进行 Beta 测试</title>
+        <pubTime>2017-03-20T12:37:59.000Z</pubTime>
+        
+        <tag>TestFlight</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2017/02/18/2017/HTML-CSS-learn-note-part02-css-style-layout/</loc>
+    <lastmod>2018-03-08T07:25:08.000Z</lastmod>
+    <data>
+        <display>
+        <title>HTML+CSS 学习笔记 - CSS 基本样式与布局</title>
+        <pubTime>2017-02-18T11:47:00.000Z</pubTime>
+        
+        <tag>HTML+CSS</tag>
+         
+         
+           
+             
+              <breadCrumb title="HTML+CSS" url="http://lewanny.com/categories/HTML-CSS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2017/02/09/2017/HTML-CSS-learn-note-part01-label/</loc>
+    <lastmod>2018-03-08T07:15:41.000Z</lastmod>
+    <data>
+        <display>
+        <title>HTML+CSS 学习笔记 - 标签部分</title>
+        <pubTime>2017-02-09T13:29:07.000Z</pubTime>
+        
+        <tag>HTML+CSS</tag>
+         
+         
+           
+             
+              <breadCrumb title="HTML+CSS" url="http://lewanny.com/categories/HTML-CSS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2017/01/21/2017/summary-year-end-2016/</loc>
+    <lastmod>2018-03-08T06:29:16.000Z</lastmod>
+    <data>
+        <display>
+        <title>2016 年终总结</title>
+        <pubTime>2017-01-21T11:31:54.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="日常总结" url="http://lewanny.com/categories/%E6%97%A5%E5%B8%B8%E6%80%BB%E7%BB%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2017/01/18/2017/Mac-use-tips-and-problem-solution/</loc>
+    <lastmod>2018-03-08T06:14:30.000Z</lastmod>
+    <data>
+        <display>
+        <title>mac OS 使用技巧和一些问题的解决方法</title>
+        <pubTime>2017-01-18T14:17:01.000Z</pubTime>
+        
+        <tag>mac OS</tag>
+         
+         
+           
+             
+              <breadCrumb title="mac OS" url="http://lewanny.com/categories/mac-OS/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2017/01/04/2017/update-Ruby-by-RVM-CocoaPods-xcworkspace-solution/</loc>
+    <lastmod>2018-03-08T06:08:52.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 使用 RVM 升级 Ruby 解决 CocoaPods 无法生成 xcworkspace 文件的问题</title>
+        <pubTime>2017-01-04T05:38:21.000Z</pubTime>
+        
+        <tag>CocoaPods</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2016/12/22/2016/iOS-private-API-acquire-and-usage/</loc>
+    <lastmod>2018-03-08T03:35:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 私有 API、未公开 API 和公开 API 的对比和使用</title>
+        <pubTime>2016-12-22T15:07:07.000Z</pubTime>
+        
+        <tag>私有 Api</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2016/12/04/2016/Swift-learn-part2-operator/</loc>
+    <lastmod>2018-03-08T03:20:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>Swift 学习 - 基本运算符</title>
+        <pubTime>2016-12-04T14:55:13.000Z</pubTime>
+        
+        <tag>Swift</tag>
+         
+         
+           
+             
+              <breadCrumb title="Swift 学习" url="http://lewanny.com/categories/Swift-%E5%AD%A6%E4%B9%A0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2016/11/30/2016/iOS-solution-view-offset-when-calling/</loc>
+    <lastmod>2018-03-08T03:11:17.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 通话或网络共享等状态栏变化导致 view 偏移的解决方法</title>
+        <pubTime>2016-11-30T13:06:58.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2016/11/28/2016/iOS-comparison-of-NullSafe-and-AvoidCrash/</loc>
+    <lastmod>2018-03-08T03:08:11.000Z</lastmod>
+    <data>
+        <display>
+        <title>应用 Crash 捕获库 NullSafe 和 AvoidCrash 对比</title>
+        <pubTime>2016-11-28T14:28:06.000Z</pubTime>
+        
+        <tag>NullSafe</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2016/11/25/2016/iOS-null-safe-solution/</loc>
+    <lastmod>2018-03-08T02:47:33.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS null 导致程序 Crash 的解决方案</title>
+        <pubTime>2016-11-25T13:25:31.000Z</pubTime>
+        
+        <tag>NullSafe</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2016/11/21/2016/Swift-learn-part1-basis/</loc>
+    <lastmod>2018-03-08T02:40:30.000Z</lastmod>
+    <data>
+        <display>
+        <title>Swift 学习 – 基础部分</title>
+        <pubTime>2016-11-21T12:17:39.000Z</pubTime>
+        
+        <tag>Swift</tag>
+         
+         
+           
+             
+              <breadCrumb title="Swift 学习" url="http://lewanny.com/categories/Swift-%E5%AD%A6%E4%B9%A0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2016/10/25/2016/iOS-build-widget-app-complete-solution/</loc>
+    <lastmod>2018-03-08T02:08:11.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 构建 Widget 应用全解（适配 iOS 10）</title>
+        <pubTime>2016-10-25T13:41:16.000Z</pubTime>
+        
+        <tag>Widget 应用</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2016/05/17/2016/iOS-ipa-volume-decrease/</loc>
+    <lastmod>2018-03-05T10:38:19.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 如何优化 ipa 程序安装包的大小</title>
+        <pubTime>2016-05-17T14:34:54.000Z</pubTime>
+        
+        <tag>ipa 优化</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2016/08/21/2016/iOS-achive-ipa-package-methods/</loc>
+    <lastmod>2018-03-05T10:37:26.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 打 ipa 包的几种实用方法</title>
+        <pubTime>2016-08-21T11:21:43.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2016/06/20/2016/iOS-GCD-introduce-and-usage/</loc>
+    <lastmod>2018-03-05T10:09:52.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 关于 GCD 的详细介绍和基本用法</title>
+        <pubTime>2016-06-20T13:13:16.000Z</pubTime>
+        
+        <tag>GCD</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2016/03/24/2016/iOS-modify-project-name-entirely/</loc>
+    <lastmod>2018-03-05T09:08:56.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 使用 Xcode 彻底修改项目名（包含修改 CocoaPods 项目名）</title>
+        <pubTime>2016-03-24T13:01:22.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2016/01/27/2016/iOS-CocoaPods-usage-and-problem/</loc>
+    <lastmod>2018-03-05T08:27:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>CocoaPods 的安装使用和常见问题</title>
+        <pubTime>2016-01-27T05:01:06.000Z</pubTime>
+        
+        <tag>CocoaPods</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2015/12/11/2015/iOS-3DTouch-introduction-and-realization/</loc>
+    <lastmod>2018-03-02T02:47:39.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 3D Touch 功能的介绍和实现</title>
+        <pubTime>2015-12-11T14:26:52.000Z</pubTime>
+        
+        <tag>3D Touch</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2015/10/04/2015/iOS-judge-system-version-methods/</loc>
+    <lastmod>2018-03-02T02:29:34.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 判断系统版本号的多种方法</title>
+        <pubTime>2015-10-04T13:09:11.000Z</pubTime>
+        
+        <tag>版本号</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2015/11/06/2015/iOS-upload-appstore-error-90096-solution/</loc>
+    <lastmod>2018-03-02T02:28:25.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 上传 ipa 包至 App Store 报错 Error ITMS-90096 Your binary is not optimized for iPhone 5</title>
+        <pubTime>2015-11-06T04:35:26.000Z</pubTime>
+        
+        <tag>AppStore 上传</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2015/09/24/2015/iOS-block-basic-grammar-and-usage/</loc>
+    <lastmod>2018-03-02T02:08:02.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 中 Block 的基本语法和使用</title>
+        <pubTime>2015-09-24T11:23:33.000Z</pubTime>
+        
+        <tag>block</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2014/11/09/2014/iOS-objc-development-note-UISlider/</loc>
+    <lastmod>2018-03-02T01:51:53.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 开发笔记之 UISlider</title>
+        <pubTime>2014-11-09T12:21:34.000Z</pubTime>
+        
+        <tag>UISlider</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2015/07/17/2015/iOS-loading-flash-screen-dynamically-metohd/</loc>
+    <lastmod>2018-03-02T01:47:15.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 简单而实用的动态加载闪屏图方法</title>
+        <pubTime>2015-07-17T00:42:13.000Z</pubTime>
+        
+        <tag>动态闪屏</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2015/06/23/2015/iOS-thirdlib-FMDB-detailed-annotation/</loc>
+    <lastmod>2018-03-01T11:34:10.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 第三方库 FMDB 详解</title>
+        <pubTime>2015-06-23T10:59:22.000Z</pubTime>
+        
+        <tag>FMDB</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2015/04/14/2015/iOS-select-acquire-device-unique-identifying/</loc>
+    <lastmod>2018-03-01T10:58:17.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 如何选择和获取设备的唯一标识符</title>
+        <pubTime>2015-04-14T13:39:20.000Z</pubTime>
+        
+        <tag>设备标识</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2015/02/19/2015/iOS-NSTimer-notice-and-GCDTimer-usage/</loc>
+    <lastmod>2018-03-01T10:47:52.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS NSTimer 注意事项及 GCD 定时器的使用</title>
+        <pubTime>2015-02-19T09:29:07.000Z</pubTime>
+        
+        <tag>NSTimer</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2014/10/03/2014/iOS-objc-class-extension-methods/</loc>
+    <lastmod>2018-03-01T10:08:44.000Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 开发 OC 拓展类的几种方式</title>
+        <pubTime>2014-10-03T11:56:49.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+    
+</urlset>
