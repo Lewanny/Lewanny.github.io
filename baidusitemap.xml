@@ -4,6 +4,42 @@
 
     
   <url>
+    <loc>http://lewanny.com/2018/01/14/Hexo-submit-article-baidu-google-to-included/</loc>
+    <lastmod>2018-03-15T11:33:50.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hexo 博客文章提交 Baidu 和 Google 收录</title>
+        <pubTime>2018-01-14T11:51:30.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Hexo" url="http://lewanny.com/categories/Hexo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2018/01/12/2018/Hexo-next-theme-optimization/</loc>
+    <lastmod>2018-03-15T10:53:32.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hexo Next 主题的优化</title>
+        <pubTime>2018-01-12T09:37:08.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Hexo" url="http://lewanny.com/categories/Hexo/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://lewanny.com/2018/02/12/iOS-large-number-UIimage-memory-problem-optimization/</loc>
     <lastmod>2018-03-15T10:46:47.000Z</lastmod>
     <data>
@@ -51,26 +87,6 @@
         <pubTime>2018-01-11T09:14:04.000Z</pubTime>
         
         <tag>Hexo</tag>
-         
-         
-           
-             
-              <breadCrumb title="Hexo" url="http://lewanny.com/categories/Hexo/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://lewanny.com/2018/01/12/2018/Hexo-next-theme-optimization/</loc>
-    <lastmod>2018-03-08T07:51:19.000Z</lastmod>
-    <data>
-        <display>
-        <title>Hexo Next 主题的优化</title>
-        <pubTime>2018-01-12T09:37:08.000Z</pubTime>
-        
-        <tag>主题优化</tag>
          
          
            

@@ -20,15 +20,20 @@
       </categories>
   </entry>
   <entry>
+    <title><![CDATA[Hexo 博客文章提交 Baidu 和 Google 收录]]></title>
+    <url>%2F2018%2F01%2F14%2FHexo-submit-article-baidu-google-to-included%2F</url>
+    <content type="text"><![CDATA[我们把 Hexo 托管在 Github 上，但是 Github 毕竟是国外的，访问速度上还是有点慢，并且百度的爬虫无法趴到 Github 上的数据，提交百度收录也自然是不存在的。所以同时部署了一套在国内的托管平台，也就是 Coding (也就是之前的 Gitcafe，部署方法和 Github 雷同据不写了)。这样国内访问的时候解析到 Coding，国外访问的时候解析到 Github，访问效率和文章收录就全部都搞定了。 为什么要提交文章到 Baidu 和 Google 收录呢，因为如果不提交的话通过对应的搜索引擎是搜索不到你的文章的，别人没法看到。提交收录成功后等待一段（大概15天左右，Google 会快些）就可以在晚上搜到你的文章了，我以 Baidu 和 Google 为例，记录下提交 Hexo 文章到 搜索引擎收录的方法。 收录情况打开浏览器的输入 site:www.xxx.com 即可查询，如果没有搜索到对应内容，就表示没有收录。 验证网站网站验证目的是为了证明你是该网站的持有者，分别登录到 Google Search Console 和 百度站长资源管理平台 添加你的域名，然后一步一步验证就好。 方法一般分为 HTML 文件验证、HTML 标签验证、CNAME 验证等，其实就是一串类似于 RTIrgNNg7m 的密钥，将其放在你的网站主页就好，网站上写的都比较详细，就不再记录了。 站点配置打开 Hexo 博客站点配置文件，添加以下两行。12google_site_verification: xxxxxxxbaidu-site-verification: xxxxxxx 执行编译命令 hexo d -g 。 注意 Google 的符号是 _，而百度为 -，其中 xxxxxxx 为在两个网站上获取的 HTML 标签内容。(即密钥) 添加站点地图首先安装站点地图生成插件，打开终端分别输入以下命令。12npm install hexo-generator-sitemap --savenpm install hexo-generator-baidu-sitemap --save 在博客的 站点配置文件 _config.yml 中添加以下代码。12345# 自动生成sitemapsitemap: path: sitemap.xmlbaidusitemap: path: baidusitemap.xml 再次执行编译命令 hexo d -g 。这时候在博客的public文件夹下面就会出现站点地图 sitemap.xml 和 baidusitemap.xml 了。 这里有一点需要注意，打开两个站点地图文件，会发现里面的网址全部是 http://yoursite.com/，不是我们自己的域名，这样显然是不性的。打开 站点配置文件 _config.yml 搜索 url: 字段，将 http://yoursite.com/ 替换成你的域名，然后重新 hexo d -g 编译部署即可。 提交站点地图经过上面的配置后，回到Google Search Console 和 百度站长资源管理平台 ，选择提交 Sitemap，按照示例的格式提交即可。 提交完成后如果没有报错显示正常就代表提交成功了，但短时间内还是无法搜索到你的博客的，接下来等搜索抓取收录即可。另外 Baidu 和 Google 都是可以配置自动提交的（手动效率最高），按照网站上的方法一步一步操作就好。还有如果你和我一样用的是 Next 主题，只需要将 主题配置文件 中的 baidu_push 设置为 true，就可以完成百度自动推送了。 关于网站 seo 这一块的内容还是很多的，如果维护好自己的站点看似简单其实也是很复杂的，就先写到这里，有时间的话会继续更新一些进阶的 seo 优化方法。待续……]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+  </entry>
+  <entry>
     <title><![CDATA[Hexo Next 主题的优化]]></title>
     <url>%2F2018%2F01%2F12%2F2018%2FHexo-next-theme-optimization%2F</url>
     <content type="text"><![CDATA[基础框架全部搭好之后，自然就是关于一些优化和个性化的事情了。关于 Next 主题的优化，如设置主题样式、字体、头像、第三方统计、评论、分享等在 NexT 使用文档 里都有极详细的介绍，这里不一一介绍了。只记录一些文档中没有提及的点。 第三方推荐搜索：Local Search 简单方便，安装即可使用。统计：不蒜子统计，简单易用推荐使用。评论：来必力评论，目前好像也只有这个可用了，之前还用过多说评论和网易云跟帖。 侧边栏社交小图标设置打开主题配置文件 _config.yml 搜索 social:，在 图标库 找自己喜欢的小图标，并将名字复制在对应的 || 后，保存即可： 1234social: GitHub: https://github.com/Lewanny || github 微博: https://weibo.com/u/2951067307 || weibo 简书: https://www.jianshu.com/users/f0040a970739 || heartbeat 添加 about 页面进入到博客根目录下，执行以下命令： $ hexo new page &quot;about&quot; 完成后会在 /source/about 目录下生成一个 index.md 文件。打开 index.md 文件，在 data 下添加 type: &quot;about&quot;，然后编辑自己想要展示的内容即可。（注意将主题配置文件中的 menu: about 页面打开）。 添加网易云音乐播放使用 iframe 标签播放即可。 &lt;iframe frameborder=&quot;no&quot; border=&quot;0&quot; marginwidth=&quot;0&quot; width=&quot;300&quot; height=&quot;86&quot; src=&quot;https://music.163.com/outchain/player?type=2&amp;id=5253801&amp;auto=0&amp;height=66&quot;&gt;&lt;/iframe&gt; // 到网易云中复制即可 如果想放在侧栏里面播放，将代码 加入到 hexo/themes/next/layout/_macro 目录中的 sidebar.swig 文件中即可。位置如下： 设置网站的 Favicon 图标准备一个常见格式名(如.jpg、.png等)的图片作为备选 favicon，选择一个 favicon 制作网站完成制作，例如：比特虫。 如下修改主题配置文件即可：12345favicon: small: /images/favicon_16x16.ico medium: /images/favicon_32x32.ico apple_touch_icon: /images/favicon_128x128.ico safari_pinned_tab: /images/favicon_128x128.ico 未完待续]]></content>
       <categories>
         <category>Hexo</category>
       </categories>
-      <tags>
-        <tag>主题优化</tag>
-      </tags>
   </entry>
   <entry>
     <title><![CDATA[使用 Hexo 搭建个人博客并部署到 Github Page]]></title>
