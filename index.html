@@ -339,7 +339,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://lewanny.com/2018/01/23/summary-year-end-2017/">
+    <link itemprop="mainEntityOfPage" href="http://lewanny.com/2018/03/15/iOS-large-number-UIimage-memory-problem-optimization/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lewanny">
@@ -358,7 +358,155 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/23/summary-year-end-2017/" itemprop="url">2017 年终总结</a></h1>
+                <a class="post-title-link" href="/2018/03/15/iOS-large-number-UIimage-memory-problem-optimization/" itemprop="url">iOS 大量图片处理导致占内存过高的优化方法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-15T14:50:08+08:00">2018-03-15</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Objective-C/" itemprop="url" rel="index"><span itemprop="name">Objective-C</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>最近项目中有一个视频剪辑的功能，其中需要把视频的帧图取出来，项目中使用了大量的 <code>collectionView + imageView</code>。这就涉及了大量的图片处理，会导致程序的内存占用飙升，如果此时刚好可用内存不大，就会导致程序闪退。</p>
+<p>通常报错 <code>[GatekeeperXPC] Connection to assetsd was interrupted or assetsd died</code> ，就是内存管理出了问题了，例如使用 <code>UIImagePickerController</code> 这个方法来调用图片库和相机的时候，选择的图片是原图，会被加载到内存并占用非常大的内存空间，连续选择多张图片会直接使得程序闪退。这里简单的总结下处理该问题的几种优化方法。</p>
+<h3 id="检查-UIImage-的加载方式"><a href="#检查-UIImage-的加载方式" class="headerlink" title="检查 UIImage 的加载方式"></a>检查 UIImage 的加载方式</h3><p>尽量不要使用 <code>[UIImage imageNamed:nil];</code> 这种方式加载，如果缓存中已存在该图片，会从直接从缓存中取得资源，使资源一直停留在内存当中，不会随着对象的销毁而销毁。且相同的图片，图片不会重复加载，内存占用较大。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/15/iOS-large-number-UIimage-memory-problem-optimization/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lewanny.com/2018/01/23/2018/summary-year-end-2017/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lewanny">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lewanny 的个人博客空间">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/23/2018/summary-year-end-2017/" itemprop="url">2017 年终总结</a></h1>
         
 
         <div class="post-meta">
@@ -433,7 +581,7 @@
 <p>2017 年较去年来讲算是变动比较大的一年，无论是工作的变故，还是个人生活方面的一些事情。2017 年终总结和2018 新年目标总结如下。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/23/summary-year-end-2017/#more" rel="contents">
+            <a class="btn" href="/2018/01/23/2018/summary-year-end-2017/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1653,154 +1801,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://lewanny.com/2017/01/04/2017/update-Ruby-by-RVM-CocoaPods-xcworkspace-solution/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lewanny">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Lewanny 的个人博客空间">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/01/04/2017/update-Ruby-by-RVM-CocoaPods-xcworkspace-solution/" itemprop="url">iOS 使用 RVM 升级 Ruby 解决 CocoaPods 无法生成 xcworkspace 文件的问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-04T13:38:21+08:00">2017-01-04</time>
-            
-
-            
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Objective-C/" itemprop="url" rel="index"><span itemprop="name">Objective-C</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在安装 CococaPods 时，出现执行 pod install 后成功后却没有生成对应的 xcworkspace 文件问题，查找后发现是本地 Ruby 环境版本过低，需要升级至 2.2.2 以上。在终端中输入 <code>ruby -v</code> 查看 Ruby 版本，果然版本为 2.0.0 。</p>
-<p>升级 Ruby 环境可以使用 <code>RVM</code> ，也就是 Ruby Version Manager , Ruby 版本管理器。RVM 包含了 Ruby 的版本管理和 Gem 库管理 (gemset)。RVM 可以让你拥有多个版本的 Ruby，并且可以在多个版本之间自由切换。</p>
-<p>下面的命令全部在终端中进行。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/01/04/2017/update-Ruby-by-RVM-CocoaPods-xcworkspace-solution/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1852,7 +1852,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">32</span>
+                    <span class="site-state-item-count">33</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -1932,7 +1932,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">21</span>
+                      
+                    
+                    <span class="site-state-item-count">22</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
