@@ -5,7 +5,7 @@ tags: 内存优化
 categories: Objective-C
 ---
 
-最近项目中有一个视频剪辑的功能，其中需要把视频的帧图取出来，项目中使用了大量的 `collectionView + imageView`。这就涉及了大量的图片处理，会导致程序的内存占用飙升，如果此时刚好可用内存不大，就会导致程序闪退。
+qqqqqqq最近项目中有一个视频剪辑的功能，其中需要把视频的帧图取出来，项目中使用了大量的 `collectionView + imageView`。这就涉及了大量的图片处理，会导致程序的内存占用飙升，如果此时刚好可用内存不大，就会导致程序闪退。
 
 通常报错 `[GatekeeperXPC] Connection to assetsd was interrupted or assetsd died` ，就是内存管理出了问题了，例如使用 `UIImagePickerController` 这个方法来调用图片库和相机的时候，选择的图片是原图，会被加载到内存并占用非常大的内存空间，连续选择多张图片会直接使得程序闪退。这里简单的总结下处理该问题的几种优化方法。
 
