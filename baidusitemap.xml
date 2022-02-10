@@ -4,13 +4,15 @@
 
     
   <url>
-    <loc>http://lewanny.com/2014/10/03/2014/iOS-objc-class-extension-methods/</loc>
+    <loc>http://lewanny.com/2014/11/09/2014/iOS-objc-development-note-UISlider/</loc>
     <lastmod>2022-01-25T07:00:18.810Z</lastmod>
     <data>
         <display>
-        <title>iOS 开发 OC 拓展类的几种方式</title>
-        <pubTime>2014-10-03T11:56:49.000Z</pubTime>
+        <title>iOS 开发笔记之 UISlider</title>
+        <pubTime>2014-11-09T12:21:34.000Z</pubTime>
         
+        <tag>UISlider</tag>
+         
          
            
              
@@ -22,15 +24,13 @@
 
     
   <url>
-    <loc>http://lewanny.com/2014/11/09/2014/iOS-objc-development-note-UISlider/</loc>
+    <loc>http://lewanny.com/2014/10/03/2014/iOS-objc-class-extension-methods/</loc>
     <lastmod>2022-01-25T07:00:18.810Z</lastmod>
     <data>
         <display>
-        <title>iOS 开发笔记之 UISlider</title>
-        <pubTime>2014-11-09T12:21:34.000Z</pubTime>
+        <title>iOS 开发 OC 拓展类的几种方式</title>
+        <pubTime>2014-10-03T11:56:49.000Z</pubTime>
         
-        <tag>UISlider</tag>
-         
          
            
              
@@ -102,26 +102,6 @@
 
     
   <url>
-    <loc>http://lewanny.com/2015/10/04/2015/iOS-judge-system-version-methods/</loc>
-    <lastmod>2022-01-25T07:00:18.808Z</lastmod>
-    <data>
-        <display>
-        <title>iOS 判断系统版本号的多种方法</title>
-        <pubTime>2015-10-04T13:09:11.000Z</pubTime>
-        
-        <tag>版本号</tag>
-         
-         
-           
-             
-              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://lewanny.com/2015/09/24/2015/iOS-block-basic-grammar-and-usage/</loc>
     <lastmod>2022-01-25T07:00:18.808Z</lastmod>
     <data>
@@ -142,14 +122,14 @@
 
     
   <url>
-    <loc>http://lewanny.com/2015/04/14/2015/iOS-select-acquire-device-unique-identifying/</loc>
+    <loc>http://lewanny.com/2015/10/04/2015/iOS-judge-system-version-methods/</loc>
     <lastmod>2022-01-25T07:00:18.808Z</lastmod>
     <data>
         <display>
-        <title>iOS 如何选择和获取设备的唯一标识符</title>
-        <pubTime>2015-04-14T13:39:20.000Z</pubTime>
+        <title>iOS 判断系统版本号的多种方法</title>
+        <pubTime>2015-10-04T13:09:11.000Z</pubTime>
         
-        <tag>设备标识</tag>
+        <tag>版本号</tag>
          
          
            
@@ -182,6 +162,26 @@
 
     
   <url>
+    <loc>http://lewanny.com/2015/04/14/2015/iOS-select-acquire-device-unique-identifying/</loc>
+    <lastmod>2022-01-25T07:00:18.808Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 如何选择和获取设备的唯一标识符</title>
+        <pubTime>2015-04-14T13:39:20.000Z</pubTime>
+        
+        <tag>设备标识</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://lewanny.com/2015/06/23/2015/iOS-thirdlib-FMDB-detailed-annotation/</loc>
     <lastmod>2022-01-25T07:00:18.807Z</lastmod>
     <data>
@@ -202,15 +202,13 @@
 
     
   <url>
-    <loc>http://lewanny.com/2017/03/20/2017/iOS-beta-test-with-TestFlight/</loc>
+    <loc>http://lewanny.com/2017/05/15/2017/iOS-basic-mapping-usage-with-Quart2D/</loc>
     <lastmod>2022-01-25T07:00:18.806Z</lastmod>
     <data>
         <display>
-        <title>iOS 开发使用 TestFlight 进行 Beta 测试</title>
-        <pubTime>2017-03-20T12:37:59.000Z</pubTime>
+        <title>iOS 使用 Quart2D 绘图基础</title>
+        <pubTime>2017-05-15T13:32:50.000Z</pubTime>
         
-        <tag>TestFlight</tag>
-         
          
            
              
@@ -222,13 +220,15 @@
 
     
   <url>
-    <loc>http://lewanny.com/2017/05/15/2017/iOS-basic-mapping-usage-with-Quart2D/</loc>
+    <loc>http://lewanny.com/2017/03/20/2017/iOS-beta-test-with-TestFlight/</loc>
     <lastmod>2022-01-25T07:00:18.806Z</lastmod>
     <data>
         <display>
-        <title>iOS 使用 Quart2D 绘图基础</title>
-        <pubTime>2017-05-15T13:32:50.000Z</pubTime>
+        <title>iOS 开发使用 TestFlight 进行 Beta 测试</title>
+        <pubTime>2017-03-20T12:37:59.000Z</pubTime>
         
+        <tag>TestFlight</tag>
+         
          
            
              
@@ -356,26 +356,6 @@
 
     
   <url>
-    <loc>http://lewanny.com/2018/02/12/2018/iOS-large-number-UIimage-memory-problem-optimization/</loc>
-    <lastmod>2022-01-25T07:00:18.803Z</lastmod>
-    <data>
-        <display>
-        <title>iOS 大量图片处理导致占内存过高的优化方法</title>
-        <pubTime>2018-02-12T12:50:08.000Z</pubTime>
-        
-        <tag>内存优化</tag>
-         
-         
-           
-             
-              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://lewanny.com/2018/01/12/2018/Hexo-next-theme-optimization/</loc>
     <lastmod>2022-01-25T07:00:18.803Z</lastmod>
     <data>
@@ -405,6 +385,26 @@
            
              
               <breadCrumb title="日常总结" url="http://lewanny.com/categories/%E6%97%A5%E5%B8%B8%E6%80%BB%E7%BB%93/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2018/02/12/2018/iOS-large-number-UIimage-memory-problem-optimization/</loc>
+    <lastmod>2022-01-25T07:00:18.803Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 大量图片处理导致占内存过高的优化方法</title>
+        <pubTime>2018-02-12T12:50:08.000Z</pubTime>
+        
+        <tag>内存优化</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
           
         </display>
     </data>
@@ -544,6 +544,24 @@
 
     
   <url>
+    <loc>http://lewanny.com/2016/03/24/2016/iOS-modify-project-name-entirely/</loc>
+    <lastmod>2022-01-25T07:00:18.799Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 使用 Xcode 彻底修改项目名（包含修改 CocoaPods 项目名）</title>
+        <pubTime>2016-03-24T13:01:22.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://lewanny.com/2016/11/25/2016/iOS-null-safe-solution/</loc>
     <lastmod>2022-01-25T07:00:18.799Z</lastmod>
     <data>
@@ -564,30 +582,12 @@
 
     
   <url>
-    <loc>http://lewanny.com/2016/03/24/2016/iOS-modify-project-name-entirely/</loc>
-    <lastmod>2022-01-25T07:00:18.799Z</lastmod>
-    <data>
-        <display>
-        <title>iOS 使用 Xcode 彻底修改项目名（包含修改 CocoaPods 项目名）</title>
-        <pubTime>2016-03-24T13:01:22.000Z</pubTime>
-        
-         
-           
-             
-              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://lewanny.com/2016/11/21/2016/Swift-learn-part1-basis/</loc>
+    <loc>http://lewanny.com/2016/12/04/2016/Swift-learn-part2-operator/</loc>
     <lastmod>2022-01-25T07:00:18.798Z</lastmod>
     <data>
         <display>
-        <title>Swift 学习 – 基础部分</title>
-        <pubTime>2016-11-21T12:17:39.000Z</pubTime>
+        <title>Swift 学习 - 基本运算符</title>
+        <pubTime>2016-12-04T14:55:13.000Z</pubTime>
         
         <tag>Swift</tag>
          
@@ -602,12 +602,12 @@
 
     
   <url>
-    <loc>http://lewanny.com/2016/12/04/2016/Swift-learn-part2-operator/</loc>
+    <loc>http://lewanny.com/2016/11/21/2016/Swift-learn-part1-basis/</loc>
     <lastmod>2022-01-25T07:00:18.798Z</lastmod>
     <data>
         <display>
-        <title>Swift 学习 - 基本运算符</title>
-        <pubTime>2016-12-04T14:55:13.000Z</pubTime>
+        <title>Swift 学习 – 基础部分</title>
+        <pubTime>2016-11-21T12:17:39.000Z</pubTime>
         
         <tag>Swift</tag>
          
