@@ -4,19 +4,19 @@
 
     
   <url>
-    <loc>http://lewanny.com/2014/11/09/2014/iOS-objc-development-note-UISlider/</loc>
-    <lastmod>2022-01-25T07:00:18.810Z</lastmod>
+    <loc>http://lewanny.com/2022/02/10/2022/2022-ytig-ei-er-md/</loc>
+    <lastmod>2022-10-11T09:40:18.130Z</lastmod>
     <data>
         <display>
-        <title>iOS 开发笔记之 UISlider</title>
-        <pubTime>2014-11-09T12:21:34.000Z</pubTime>
+        <title>/2022/ytig-ei-er</title>
+        <pubTime>2022-02-10T09:04:08.000Z</pubTime>
         
-        <tag>UISlider</tag>
+        <tag>Markdown</tag>
          
          
            
              
-              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+              <breadCrumb title="Markdown" url="http://lewanny.com/categories/Markdown/"/>
           
         </display>
     </data>
@@ -31,6 +31,26 @@
         <title>iOS 开发 OC 拓展类的几种方式</title>
         <pubTime>2014-10-03T11:56:49.000Z</pubTime>
         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2014/11/09/2014/iOS-objc-development-note-UISlider/</loc>
+    <lastmod>2022-01-25T07:00:18.810Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 开发笔记之 UISlider</title>
+        <pubTime>2014-11-09T12:21:34.000Z</pubTime>
+        
+        <tag>UISlider</tag>
+         
          
            
              
@@ -102,26 +122,6 @@
 
     
   <url>
-    <loc>http://lewanny.com/2015/04/14/2015/iOS-select-acquire-device-unique-identifying/</loc>
-    <lastmod>2022-01-25T07:00:18.808Z</lastmod>
-    <data>
-        <display>
-        <title>iOS 如何选择和获取设备的唯一标识符</title>
-        <pubTime>2015-04-14T13:39:20.000Z</pubTime>
-        
-        <tag>设备标识</tag>
-         
-         
-           
-             
-              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://lewanny.com/2015/09/24/2015/iOS-block-basic-grammar-and-usage/</loc>
     <lastmod>2022-01-25T07:00:18.808Z</lastmod>
     <data>
@@ -130,26 +130,6 @@
         <pubTime>2015-09-24T11:23:33.000Z</pubTime>
         
         <tag>block</tag>
-         
-         
-           
-             
-              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://lewanny.com/2015/11/06/2015/iOS-upload-appstore-error-90096-solution/</loc>
-    <lastmod>2022-01-25T07:00:18.808Z</lastmod>
-    <data>
-        <display>
-        <title>iOS 上传 ipa 包至 App Store 报错 Error ITMS-90096 Your binary is not optimized for iPhone 5</title>
-        <pubTime>2015-11-06T04:35:26.000Z</pubTime>
-        
-        <tag>AppStore 上传</tag>
          
          
            
@@ -182,6 +162,46 @@
 
     
   <url>
+    <loc>http://lewanny.com/2015/04/14/2015/iOS-select-acquire-device-unique-identifying/</loc>
+    <lastmod>2022-01-25T07:00:18.808Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 如何选择和获取设备的唯一标识符</title>
+        <pubTime>2015-04-14T13:39:20.000Z</pubTime>
+        
+        <tag>设备标识</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2015/11/06/2015/iOS-upload-appstore-error-90096-solution/</loc>
+    <lastmod>2022-01-25T07:00:18.808Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 上传 ipa 包至 App Store 报错 Error ITMS-90096 Your binary is not optimized for iPhone 5</title>
+        <pubTime>2015-11-06T04:35:26.000Z</pubTime>
+        
+        <tag>AppStore 上传</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://lewanny.com/2015/06/23/2015/iOS-thirdlib-FMDB-detailed-annotation/</loc>
     <lastmod>2022-01-25T07:00:18.807Z</lastmod>
     <data>
@@ -190,6 +210,26 @@
         <pubTime>2015-06-23T10:59:22.000Z</pubTime>
         
         <tag>FMDB</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://lewanny.com/2017/03/20/2017/iOS-beta-test-with-TestFlight/</loc>
+    <lastmod>2022-01-25T07:00:18.806Z</lastmod>
+    <data>
+        <display>
+        <title>iOS 开发使用 TestFlight 进行 Beta 测试</title>
+        <pubTime>2017-03-20T12:37:59.000Z</pubTime>
+        
+        <tag>TestFlight</tag>
          
          
            
@@ -231,26 +271,6 @@
            
              
               <breadCrumb title="日常总结" url="http://lewanny.com/categories/%E6%97%A5%E5%B8%B8%E6%80%BB%E7%BB%93/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://lewanny.com/2017/03/20/2017/iOS-beta-test-with-TestFlight/</loc>
-    <lastmod>2022-01-25T07:00:18.806Z</lastmod>
-    <data>
-        <display>
-        <title>iOS 开发使用 TestFlight 进行 Beta 测试</title>
-        <pubTime>2017-03-20T12:37:59.000Z</pubTime>
-        
-        <tag>TestFlight</tag>
-         
-         
-           
-             
-              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
           
         </display>
     </data>
@@ -432,12 +452,12 @@
 
     
   <url>
-    <loc>http://lewanny.com/2018/01/14/2018/Hexo-submit-article-baidu-google-to-included/</loc>
+    <loc>http://lewanny.com/2018/01/21/2018/Hexo-how-to-backups-bolg-method/</loc>
     <lastmod>2022-01-25T07:00:18.802Z</lastmod>
     <data>
         <display>
-        <title>Hexo 博客文章提交 Baidu 和 Google 收录</title>
-        <pubTime>2018-01-14T11:51:30.000Z</pubTime>
+        <title>Hexo 如何备份好你的博客</title>
+        <pubTime>2018-01-21T13:20:31.000Z</pubTime>
         
          
            
@@ -450,12 +470,12 @@
 
     
   <url>
-    <loc>http://lewanny.com/2018/01/21/2018/Hexo-how-to-backups-bolg-method/</loc>
+    <loc>http://lewanny.com/2018/01/14/2018/Hexo-submit-article-baidu-google-to-included/</loc>
     <lastmod>2022-01-25T07:00:18.802Z</lastmod>
     <data>
         <display>
-        <title>Hexo 如何备份好你的博客</title>
-        <pubTime>2018-01-21T13:20:31.000Z</pubTime>
+        <title>Hexo 博客文章提交 Baidu 和 Google 收录</title>
+        <pubTime>2018-01-14T11:51:30.000Z</pubTime>
         
          
            
