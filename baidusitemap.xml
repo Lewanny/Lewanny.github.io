@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>http://lewanny.com/2018/02/12/2018/iOS-large-number-UIimage-memory-problem-optimization/</loc>
+    <lastmod>2022-10-12T12:36:38.599Z</lastmod>
+    <data>
+        <display>
+        <title>2222222 iOS 大量图片处理导致占内存过高的优化方法</title>
+        <pubTime>2018-02-12T12:50:08.000Z</pubTime>
+        
+        <tag>内存优化</tag>
+         
+         
+           
+             
+              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://lewanny.com/2022/02/10/2022/2022-ytig-ei-er-md/</loc>
     <lastmod>2022-10-11T09:40:18.130Z</lastmod>
     <data>
@@ -387,26 +407,6 @@
            
              
               <breadCrumb title="Hexo" url="http://lewanny.com/categories/Hexo/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://lewanny.com/2018/02/12/2018/iOS-large-number-UIimage-memory-problem-optimization/</loc>
-    <lastmod>2022-01-25T07:00:18.803Z</lastmod>
-    <data>
-        <display>
-        <title>iOS 大量图片处理导致占内存过高的优化方法</title>
-        <pubTime>2018-02-12T12:50:08.000Z</pubTime>
-        
-        <tag>内存优化</tag>
-         
-         
-           
-             
-              <breadCrumb title="Objective-C" url="http://lewanny.com/categories/Objective-C/"/>
           
         </display>
     </data>
