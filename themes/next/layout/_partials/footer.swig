@@ -41,11 +41,8 @@
 {% endif %}
 
 <div>
-<span id="busuanzi_container_site_pv">
-    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
-</span>
+<a href="http://www.miitbeian.gov.cn/">京ICP备2022005071号-1</a> 
 </div>
-
 
 {% if theme.footer.custom_text %}
   <div class="footer-custom">{#
