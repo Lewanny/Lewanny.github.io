@@ -5,10 +5,10 @@
     
   <url>
     <loc>http://lewanny.com/2018/02/12/2018/iOS-large-number-UIimage-memory-problem-optimization/</loc>
-    <lastmod>2022-10-12T12:36:38.599Z</lastmod>
+    <lastmod>2022-10-13T07:33:54.204Z</lastmod>
     <data>
         <display>
-        <title>2222222 iOS 大量图片处理导致占内存过高的优化方法</title>
+        <title>iOS 大量图片处理导致占内存过高的优化方法</title>
         <pubTime>2018-02-12T12:50:08.000Z</pubTime>
         
         <tag>内存优化</tag>
