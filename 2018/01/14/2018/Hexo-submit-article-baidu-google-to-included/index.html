@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lewanny.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="我们把 Hexo 托管在 Github 上，但是 Github 毕竟是国外的，访问速度上还是有点慢，并且百度的爬虫无法趴到 Github 上的数据，提交百度收录也自然是不存在的。所以同时部署了一套在国内的托管平台，也就是 Coding (也就是之前的 Gitcafe，部署方法和 Github 雷同据不写了)。这样国内访问的时候解析到 Coding，国外访问的时候解析到 Github，访问效率和文章">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo 博客文章提交 Baidu 和 Google 收录">
+<meta property="og:url" content="http://lewanny.com/2018/01/14/2018/Hexo-submit-article-baidu-google-to-included/index.html">
+<meta property="og:site_name" content="Lewanny 的个人博客空间">
+<meta property="og:description" content="我们把 Hexo 托管在 Github 上，但是 Github 毕竟是国外的，访问速度上还是有点慢，并且百度的爬虫无法趴到 Github 上的数据，提交百度收录也自然是不存在的。所以同时部署了一套在国内的托管平台，也就是 Coding (也就是之前的 Gitcafe，部署方法和 Github 雷同据不写了)。这样国内访问的时候解析到 Coding，国外访问的时候解析到 Github，访问效率和文章">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-01-14T11:51:30.000Z">
+<meta property="article:modified_time" content="2026-01-13T06:31:59.680Z">
+<meta property="article:author" content="Lewanny">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://lewanny.com/2018/01/14/2018/Hexo-submit-article-baidu-google-to-included/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Hexo 博客文章提交 Baidu 和 Google 收录 | Lewanny 的个人博客空间</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lewanny 的个人博客空间</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://lewanny.com/2018/01/14/2018/Hexo-submit-article-baidu-google-to-included/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Lewanny">
+      <meta itemprop="description" content="世界拥挤繁忙，行人各有方向。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lewanny 的个人博客空间">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hexo 博客文章提交 Baidu 和 Google 收录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-01-14 19:51:30" itemprop="dateCreated datePublished" datetime="2018-01-14T19:51:30+08:00">2018-01-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-01-13 14:31:59" itemprop="dateModified" datetime="2026-01-13T14:31:59+08:00">2026-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hexo/" itemprop="url" rel="index"><span itemprop="name">Hexo</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>我们把 Hexo 托管在 Github 上，但是 Github 毕竟是国外的，访问速度上还是有点慢，并且百度的爬虫无法趴到 Github 上的数据，提交百度收录也自然是不存在的。所以同时部署了一套在国内的托管平台，也就是 <a href="https://coding.net/">Coding</a> (也就是之前的 Gitcafe，部署方法和 Github 雷同据不写了)。这样国内访问的时候解析到 Coding，国外访问的时候解析到 Github，访问效率和文章收录就全部都搞定了。</p>
+<p>为什么要提交文章到 Baidu 和 Google 收录呢，因为如果不提交的话通过对应的搜索引擎是搜索不到你的文章的，别人没法看到。提交收录成功后等待一段（大概15天左右，Google 会快些）就可以在晚上搜到你的文章了，我以 Baidu 和 Google 为例，记录下提交 Hexo 文章到 搜索引擎收录的方法。</p>
+<span id="more"></span>
+
+<h3 id="收录情况"><a href="#收录情况" class="headerlink" title="收录情况"></a>收录情况</h3><p>打开浏览器的输入 <code>site:www.xxx.com</code> 即可查询，如果没有搜索到对应内容，就表示没有收录。</p>
+<h3 id="验证网站"><a href="#验证网站" class="headerlink" title="验证网站"></a>验证网站</h3><p>网站验证目的是为了证明你是该网站的持有者，分别登录到 <a href="https://www.google.com/webmasters/tools/home">Google Search Console</a> 和 <a href="https://ziyuan.baidu.com/site/index">百度站长资源管理平台</a> 添加你的域名，然后一步一步验证就好。</p>
+<p>方法一般分为 HTML 文件验证、HTML 标签验证、CNAME 验证等，其实就是一串类似于 <code>RTIrgNNg7m</code> 的密钥，将其放在你的网站主页就好，网站上写的都比较详细，就不再记录了。</p>
+<h3 id="站点配置"><a href="#站点配置" class="headerlink" title="站点配置"></a>站点配置</h3><p>打开 Hexo 博客<code>站点配置文件</code>，添加以下两行。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">google_site_verification: xxxxxxx</span><br><span class="line">baidu-site-verification: xxxxxxx</span><br></pre></td></tr></table></figure>
+<p>执行编译命令 <code>hexo d -g</code> 。</p>
+<p>注意 Google 的符号是 <code>_</code>，而百度为 <code>-</code>，其中 xxxxxxx 为在两个网站上获取的 HTML 标签内容。(即密钥)</p>
+<h3 id="添加站点地图"><a href="#添加站点地图" class="headerlink" title="添加站点地图"></a>添加站点地图</h3><p>首先安装站点地图生成插件，打开终端分别输入以下命令。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-sitemap --save</span><br><span class="line">npm install hexo-generator-baidu-sitemap --save</span><br></pre></td></tr></table></figure>
+
+<p>在博客的 <code>站点配置文件 _config.yml</code> 中添加以下代码。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 自动生成sitemap</span><br><span class="line">sitemap:</span><br><span class="line">  path: sitemap.xml</span><br><span class="line">baidusitemap:</span><br><span class="line">  path: baidusitemap.xml</span><br></pre></td></tr></table></figure>
+
+<p>再次执行编译命令 <code>hexo d -g</code> 。这时候在博客的public文件夹下面就会出现站点地图 <code>sitemap.xml</code> 和 <code>baidusitemap.xml</code> 了。</p>
+<p><font color=red>这里有一点需要注意</font>，打开两个站点地图文件，会发现里面的网址全部是 <code>http://yoursite.com/</code>，不是我们自己的域名，这样显然是不性的。打开 <code>站点配置文件 _config.yml</code> 搜索 <code>url:</code> 字段，将 <a href="http://yoursite.com/">http://yoursite.com/</a> 替换成你的域名，然后重新 <code>hexo d -g</code> 编译部署即可。</p>
+<h3 id="提交站点地图"><a href="#提交站点地图" class="headerlink" title="提交站点地图"></a>提交站点地图</h3><p>经过上面的配置后，回到<a href="https://www.google.com/webmasters/tools/home">Google Search Console</a> 和 <a href="https://ziyuan.baidu.com/site/index">百度站长资源管理平台</a> ，选择提交 <code>Sitemap</code>，按照示例的格式提交即可。</p>
+<p>提交完成后如果没有报错显示正常就代表提交成功了，但短时间内还是无法搜索到你的博客的，接下来等搜索抓取收录即可。另外 Baidu 和 Google 都是可以配置自动提交的（手动效率最高），按照网站上的方法一步一步操作就好。还有如果你和我一样用的是 <code>Next</code> 主题，只需要将 <code>主题配置文件</code> 中的 <code>baidu_push</code> 设置为 <code>true</code>，就可以完成百度自动推送了。</p>
+<p>关于网站 seo 这一块的内容还是很多的，如果维护好自己的站点看似简单其实也是很复杂的，就先写到这里，有时间的话会继续更新一些进阶的 seo 优化方法。待续……</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/01/12/2018/Hexo-next-theme-optimization/" rel="prev" title="Hexo Next 主题的优化">
+      <i class="fa fa-chevron-left"></i> Hexo Next 主题的优化
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/01/21/2018/Hexo-how-to-backups-bolg-method/" rel="next" title="Hexo 如何备份好你的博客">
+      Hexo 如何备份好你的博客 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B6%E5%BD%95%E6%83%85%E5%86%B5"><span class="nav-number">1.</span> <span class="nav-text">收录情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E7%BD%91%E7%AB%99"><span class="nav-number">2.</span> <span class="nav-text">验证网站</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AB%99%E7%82%B9%E9%85%8D%E7%BD%AE"><span class="nav-number">3.</span> <span class="nav-text">站点配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E7%AB%99%E7%82%B9%E5%9C%B0%E5%9B%BE"><span class="nav-number">4.</span> <span class="nav-text">添加站点地图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E4%BA%A4%E7%AB%99%E7%82%B9%E5%9C%B0%E5%9B%BE"><span class="nav-number">5.</span> <span class="nav-text">提交站点地图</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Lewanny</p>
+  <div class="site-description" itemprop="description">世界拥挤繁忙，行人各有方向。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lewanny</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

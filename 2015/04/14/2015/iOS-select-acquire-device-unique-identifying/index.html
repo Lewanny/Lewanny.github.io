@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lewanny.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="iOS 开发中常常需要将一些用户的使用日志等上传的服务器，方便反馈查询错误。要识别用户，就要选择一个标识符，通过这个标识符来识别这个用户的设备，这个标识符要能够保证一个设备上返回的值是一样的，并且在其他设备上不会出现相同的值，那么该如何获取这个到 iOS 设备的标识符。 概述在 iOS 7 之前，曾经有过很多方法来识别用户的设备，从最原始的设备 UDID、mac 地址，到被各广告统计平台广泛使用的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 如何选择和获取设备的唯一标识符">
+<meta property="og:url" content="http://lewanny.com/2015/04/14/2015/iOS-select-acquire-device-unique-identifying/index.html">
+<meta property="og:site_name" content="Lewanny 的个人博客空间">
+<meta property="og:description" content="iOS 开发中常常需要将一些用户的使用日志等上传的服务器，方便反馈查询错误。要识别用户，就要选择一个标识符，通过这个标识符来识别这个用户的设备，这个标识符要能够保证一个设备上返回的值是一样的，并且在其他设备上不会出现相同的值，那么该如何获取这个到 iOS 设备的标识符。 概述在 iOS 7 之前，曾经有过很多方法来识别用户的设备，从最原始的设备 UDID、mac 地址，到被各广告统计平台广泛使用的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-04-14T13:39:20.000Z">
+<meta property="article:modified_time" content="2026-01-13T06:31:59.664Z">
+<meta property="article:author" content="Lewanny">
+<meta property="article:tag" content="设备标识">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://lewanny.com/2015/04/14/2015/iOS-select-acquire-device-unique-identifying/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>iOS 如何选择和获取设备的唯一标识符 | Lewanny 的个人博客空间</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lewanny 的个人博客空间</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://lewanny.com/2015/04/14/2015/iOS-select-acquire-device-unique-identifying/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Lewanny">
+      <meta itemprop="description" content="世界拥挤繁忙，行人各有方向。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lewanny 的个人博客空间">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS 如何选择和获取设备的唯一标识符
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-04-14 21:39:20" itemprop="dateCreated datePublished" datetime="2015-04-14T21:39:20+08:00">2015-04-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-01-13 14:31:59" itemprop="dateModified" datetime="2026-01-13T14:31:59+08:00">2026-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Objective-C/" itemprop="url" rel="index"><span itemprop="name">Objective-C</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>iOS 开发中常常需要将一些用户的使用日志等上传的服务器，方便反馈查询错误。要识别用户，就要选择一个标识符，通过这个标识符来识别这个用户的设备，这个标识符要能够保证一个设备上返回的值是一样的，并且在其他设备上不会出现相同的值，那么该如何获取这个到 <code>iOS 设备的标识符</code>。</p>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>在 iOS 7 之前，曾经有过很多方法来识别用户的设备，从最原始的设备 UDID、mac 地址，到被各广告统计平台广泛使用的开源方案 OpenUDID 。</p>
+<span id="more"></span>
+
+<p>但 iOS 7 之后，Apple 更加注重保护用户隐私，随着 AppStore 开始拒绝接受使用 UDID 的应用，到 mac 地址在在所有设备上都返回相同的值，再到 iOS7 上对剪贴板的限制，导致 OpenUDID 无法被不同应用共享相同的值，注定了上面提到的这些 id 们不得不退出历史的舞台。</p>
+<p>那么我们该用什么来追踪和识别用户？</p>
+<ul>
+<li><code>idfa</code>: 适用于对外：例如广告推广，换量等跨应用的用户追踪等。</li>
+<li><code>idfv</code>: 适用于对内：例如分析用户在应用内的行为等。</li>
+</ul>
+<h3 id="被弃用的方法"><a href="#被弃用的方法" class="headerlink" title="被弃用的方法"></a>被弃用的方法</h3><h4 id="UDID"><a href="#UDID" class="headerlink" title="UDID"></a>UDID</h4><p><code>设备唯一标识符（Unique Device Identifier）</code>之前被各种国内外统计平台，应用开发商广泛使用，后 Apple 从 2013 年 05 月 01 日起拒绝接受使用 UDID 的应用。</p>
+<h4 id="Mac-地址"><a href="#Mac-地址" class="headerlink" title="Mac 地址"></a>Mac 地址</h4><p>每一个网卡都有一个唯一的标识，即 <code>Mac 地址</code>，用来标识一个手机是绰绰有余，也有一些开源的方案也用到了它，国内 UMTrack 等也用它作为过主 id，随着 iOS 7 返回同样的值后，不得不被弃用。</p>
+<h4 id="OpenUDID"><a href="#OpenUDID" class="headerlink" title="OpenUDID"></a>OpenUDID</h4><p>在 Apple 拒绝 UDID 后，<code>OpenUDID</code> 作为独立于 Apple 的开源方案，被广大的开发者所接受，各大统计广告平台都从 UDID 等方案切换到 OpenUDID 的方案，但同样由于 iOS 7 对剪贴板的限制，导致同一个设备上应用间，无法再共享一个 OpenUDID，即 OpenUDID 作为设备唯一标识的能力被大大削弱。</p>
+<h4 id="DeviceToken"><a href="#DeviceToken" class="headerlink" title="DeviceToken"></a>DeviceToken</h4><p><code>DeviceToken 是推送用的唯一标识</code>，但是用户如果没开推送，或者拒绝了推送，这个便没有了。</p>
+<h3 id="推荐的方法"><a href="#推荐的方法" class="headerlink" title="推荐的方法"></a>推荐的方法</h3><h4 id="idfa"><a href="#idfa" class="headerlink" title="idfa"></a>idfa</h4><ul>
+<li><strong>全名</strong>：advertisingIdentifier</li>
+<li><strong>示例代码</strong>：</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#import <span class="string">&lt;AdSupport/AdSupport.h&gt;</span></span></span><br><span class="line"><span class="built_in">NSString</span> *adIdStr = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>适用于</strong>：iOS 6.0 之后，适用于对外，例如广告推广，换量等跨应用的用户追踪等。</li>
+<li><strong>说明</strong>：直译就是广告id， 在同一个设备上的所有 App 都会取到相同的值，是苹果专门给各广告提供商用来追踪用户而设的，用户可以在 设置|隐私|广告追踪 里重置此 id 的值，或限制此 id 的使用，故此 id有 可能会取不到值，但好在 Apple 默认是允许追踪的，而且一般用户都不知道有这么个设置，所以基本上用来监测推广效果，是戳戳有余了。</li>
+<li><strong>注意</strong>：由于 idfa 会出现取不到的情况，故绝不可以作为业务分析的主 id，来识别用户。</li>
+</ul>
+<h4 id="idfv"><a href="#idfv" class="headerlink" title="idfv"></a>idfv</h4><ul>
+<li><strong>全名</strong>：identifierForVendor</li>
+<li><strong>示例代码</strong>：</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSString</span> *idfv = [[[<span class="built_in">UIDevice</span> currentDevice] identifierForVendor] UUIDString];</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>适用于</strong>：iOS 6.0 之后，适用于对内，例如分析用户在应用内的行为等。</li>
+<li><strong>说明</strong>：顾名思义，是给 Vendor 标识用户用的，每个设备在所属同一个 Vender 的应用里，都有相同的值。其中的 Vender 是指应用提供商，但准确点说，是通过 BundleID 的 DNS 转的前两部分进行匹配，如果相同就是同一个 Vender，例如对于 com.somecompany.appone 和 com.somecompany.apptwo 这两个 BundleID 来说，就属于同一个 Vender，共享同一个 idfv 的值。和 idfa 不同的是，idfv 的值是一定能取到的，所以非常适合于作为内部用户行为分析的主 id，来标识用户，替代 OpenUDID。</li>
+<li><strong>注意</strong>：如果用户将属于此 Vender 的所有 App 卸载，则 idfv 的值会被重置，即再重装此 Vender 的 App，idfv 的值和之前不同。</li>
+</ul>
+<p>总之，Apple 越来越注重用户的隐私，也越来越去掌控一些关于隐私的设置，所以跟随 Apple 的政策，使用 <code>idfv</code> 和 <code>idfa</code> 作为设备的唯一标识符为最佳。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%BE%E5%A4%87%E6%A0%87%E8%AF%86/" rel="tag"># 设备标识</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2015/02/19/2015/iOS-NSTimer-notice-and-GCDTimer-usage/" rel="prev" title="iOS NSTimer 注意事项及 GCD 定时器的使用">
+      <i class="fa fa-chevron-left"></i> iOS NSTimer 注意事项及 GCD 定时器的使用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2015/06/23/2015/iOS-thirdlib-FMDB-detailed-annotation/" rel="next" title="iOS 第三方库 FMDB 详解">
+      iOS 第三方库 FMDB 详解 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A2%AB%E5%BC%83%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">被弃用的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UDID"><span class="nav-number">2.1.</span> <span class="nav-text">UDID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mac-%E5%9C%B0%E5%9D%80"><span class="nav-number">2.2.</span> <span class="nav-text">Mac 地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OpenUDID"><span class="nav-number">2.3.</span> <span class="nav-text">OpenUDID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DeviceToken"><span class="nav-number">2.4.</span> <span class="nav-text">DeviceToken</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A8%E8%8D%90%E7%9A%84%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">推荐的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#idfa"><span class="nav-number">3.1.</span> <span class="nav-text">idfa</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#idfv"><span class="nav-number">3.2.</span> <span class="nav-text">idfv</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Lewanny</p>
+  <div class="site-description" itemprop="description">世界拥挤繁忙，行人各有方向。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lewanny</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

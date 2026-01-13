@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lewanny.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="3D Touch 是苹果在 2015 年秋季发布会上发布的 iPhone 6S 的新功能，除了类似 Apple Watch、MacBook 触摸板的标准、深压体验之外， iPhone 6s 的触摸屏还将新增一种新层次的维度，实现更多操作体验。 3D Touch 是什么3D Touch 的具体功能3D Touch 是一种可以让你与手机进行互动的全新方式。新的 iPhone 6S 能够感应你按压屏幕的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 3D Touch 功能的介绍和实现">
+<meta property="og:url" content="http://lewanny.com/2015/12/11/2015/iOS-3DTouch-introduction-and-realization/index.html">
+<meta property="og:site_name" content="Lewanny 的个人博客空间">
+<meta property="og:description" content="3D Touch 是苹果在 2015 年秋季发布会上发布的 iPhone 6S 的新功能，除了类似 Apple Watch、MacBook 触摸板的标准、深压体验之外， iPhone 6s 的触摸屏还将新增一种新层次的维度，实现更多操作体验。 3D Touch 是什么3D Touch 的具体功能3D Touch 是一种可以让你与手机进行互动的全新方式。新的 iPhone 6S 能够感应你按压屏幕的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-3DTouch-introduction-and-realization/3D%20Touch.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-3DTouch-introduction-and-realization/PlistAdd.png">
+<meta property="article:published_time" content="2015-12-11T14:26:52.000Z">
+<meta property="article:modified_time" content="2026-01-13T06:31:59.660Z">
+<meta property="article:author" content="Lewanny">
+<meta property="article:tag" content="3D Touch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://omkug1guu.bkt.clouddn.com/iOS-3DTouch-introduction-and-realization/3D%20Touch.png">
+
+<link rel="canonical" href="http://lewanny.com/2015/12/11/2015/iOS-3DTouch-introduction-and-realization/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>iOS 3D Touch 功能的介绍和实现 | Lewanny 的个人博客空间</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lewanny 的个人博客空间</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://lewanny.com/2015/12/11/2015/iOS-3DTouch-introduction-and-realization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Lewanny">
+      <meta itemprop="description" content="世界拥挤繁忙，行人各有方向。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lewanny 的个人博客空间">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS 3D Touch 功能的介绍和实现
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-12-11 22:26:52" itemprop="dateCreated datePublished" datetime="2015-12-11T22:26:52+08:00">2015-12-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-01-13 14:31:59" itemprop="dateModified" datetime="2026-01-13T14:31:59+08:00">2026-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Objective-C/" itemprop="url" rel="index"><span itemprop="name">Objective-C</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>3D Touch 是苹果在 2015 年秋季发布会上发布的 iPhone 6S 的新功能，除了类似 Apple Watch、MacBook 触摸板的标准、深压体验之外， iPhone 6s 的触摸屏还将新增一种新层次的维度，实现更多操作体验。</p>
+<h3 id="3D-Touch-是什么"><a href="#3D-Touch-是什么" class="headerlink" title="3D Touch 是什么"></a>3D Touch 是什么</h3><h4 id="3D-Touch-的具体功能"><a href="#3D-Touch-的具体功能" class="headerlink" title="3D Touch 的具体功能"></a>3D Touch 的具体功能</h4><p>3D Touch 是一种可以让你与手机进行互动的全新方式。新的 iPhone 6S 能够感应你按压屏幕的力度。除了轻点、轻扫、双指开合这些熟悉的 Multi‑Touch 手势之外，3D Touch 还带来 Peek 和 Pop，且当你使用 3D Touch 时，iPhone 将回以轻微的触感，让你不仅能够看到按下屏幕的操作效果，还能感觉得到。</p>
+<span id="more"></span>
+
+<p>  <img src="http://omkug1guu.bkt.clouddn.com/iOS-3DTouch-introduction-and-realization/3D%20Touch.png" width="720" height="500"></img></p>
+<p>具体功能是，用力按一个图标会弹出一层半透明菜单，里面包含了该应用下的一些快捷操作，看起来类似 PC 上的右键。3D Touch 的功能很强大，Peek 和 Pop 让你能够预览所有类型的内容，甚至可对内容进行操作，却不必真的打开它们。例如轻点电话就可以查看最近联系人，按压相机可以快速自拍，按压图片库可以快速浏览大图等。</p>
+<h4 id="开发环境和调试设备"><a href="#开发环境和调试设备" class="headerlink" title="开发环境和调试设备"></a>开发环境和调试设备</h4><p>Apple 不仅推出了 3D Touch 功能，还开放其 API 的调用接口。</p>
+<ul>
+<li>开发环境：Xcode7 或以上版本。</li>
+<li>调试设备：iOS9 或以上系统版本，iPhone6s 或以上设备。</li>
+</ul>
+<h4 id="主要功能模块"><a href="#主要功能模块" class="headerlink" title="主要功能模块"></a>主要功能模块</h4><p>3D Touch 功能主要分为两大块：</p>
+<ul>
+<li>主屏幕 Icon 上的快捷标签。（Home Screen Quick Actions</li>
+<li>Peek（预览）和 Pop （跳至预览的详细界面）</li>
+</ul>
+<h3 id="3D-Touch-的实现"><a href="#3D-Touch-的实现" class="headerlink" title="3D Touch 的实现"></a>3D Touch 的实现</h3><h4 id="如何让你的模拟器支持-3D-Touch"><a href="#如何让你的模拟器支持-3D-Touch" class="headerlink" title="如何让你的模拟器支持 3D Touch"></a>如何让你的模拟器支持 3D Touch</h4><p>3D Touch的必要条件是 iPhone 6s 或以上、iOS 9 或以上、 Xcode 7 或以上版本，没有 iPhone 6s 的话也没关系，github 上有人提供了这样的一个可以让我们在模拟器上进行 3D Touch 的效果测试的插件，安装和使用方法参见 git 主页里的介绍。<br><a href="https://github.com/DeskConnect/SBShortcutMenuSimulator">SBShortcutMenuSimulator</a></p>
+<h4 id="如何判断设备是否支持-3D-Touch"><a href="#如何判断设备是否支持-3D-Touch" class="headerlink" title="如何判断设备是否支持 3D Touch"></a>如何判断设备是否支持 3D Touch</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">self</span>.traitCollection.forceTouchCapability == <span class="built_in">UIForceTouchCapabilityAvailable</span>) &#123;</span><br><span class="line">    <span class="comment">// 支持 3D Touch</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>不能使用判断手机是否为 6S 或 6SP，是因为如果用户在设置 -&gt; 通用 -&gt; 3D Touch 中将该功能关闭的话，同样 forceTouch 是不可用的。另外可在 traitCollectionDidChange: 代理中监听 forceTouchCapability 的变化。</p>
+<h4 id="主屏幕按压应用图标展示快捷选项（即-Home-Screen-Quick-Actions）"><a href="#主屏幕按压应用图标展示快捷选项（即-Home-Screen-Quick-Actions）" class="headerlink" title="主屏幕按压应用图标展示快捷选项（即 Home Screen Quick Actions）"></a>主屏幕按压应用图标展示快捷选项（即 Home Screen Quick Actions）</h4><p>一个应用最多可以有 4 个快捷选项标签，iOS 9 为我们提供了 2 种方式来开发按压应用图标展示快捷选项功能（Home Screen Quick Actions），即动态标签和静态标签。</p>
+<h5 id="静态标签"><a href="#静态标签" class="headerlink" title="静态标签"></a>静态标签</h5><p>在 info.plist 文件中手动加入 UIApplicationShortcutItems 选项。</p>
+<p>  <img src="http://omkug1guu.bkt.clouddn.com/iOS-3DTouch-introduction-and-realization/PlistAdd.png" width="720" height="500"></img></p>
+<ul>
+<li>UIApplicationShortcutItems：数组中的每个元素就是每一个快捷选项标签（最多 4 个）。</li>
+<li>UIApplicationShortcutItemTitle：标签的标题（必填）</li>
+<li>UIApplicationShortcutItemType：标签的唯一标识，用作区分（必填）</li>
+<li>UIApplicationShortcutItemIconType：标签系统图标的类型，如搜索、定位、分享等，详见 enum UIApplicationShortcutIconType（选填）</li>
+<li>UIApplicationShortcutItemIconFile：自定义标签图片（可选）</li>
+<li>UIApplicationShortcutItemSubtitle：标签的副标题（可选）</li>
+<li>UIApplicationShortcutItemUserInfo：字典信息，可用于传值等（可选）</li>
+</ul>
+<h5 id="动态标签"><a href="#动态标签" class="headerlink" title="动态标签"></a>动态标签</h5><p>在 AppDelegate.m 文件中调用如下方法：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建应用图标上的3D touch快捷选项</span></span><br><span class="line">- (<span class="type">void</span>)creatShortcutItem &#123;</span><br><span class="line">    <span class="comment">//创建系统风格的icon</span></span><br><span class="line">    <span class="built_in">UIApplicationShortcutIcon</span> *icon = [<span class="built_in">UIApplicationShortcutIcon</span> iconWithType:<span class="built_in">UIApplicationShortcutIconTypeShare</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 创建自定义图标的icon</span></span><br><span class="line">    <span class="comment">// UIApplicationShortcutIcon *icon2 = [UIApplicationShortcutIcon iconWithTemplateImageName:@&quot;分享.png&quot;];</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//创建快捷选项</span></span><br><span class="line">    <span class="built_in">UIApplicationShortcutItem</span> * item = [[<span class="built_in">UIApplicationShortcutItem</span> alloc]initWithType:<span class="string">@&quot;com.mycompany.myapp.share&quot;</span> localizedTitle:<span class="string">@&quot;分享&quot;</span> localizedSubtitle:<span class="string">@&quot;分享副标题&quot;</span> icon:icon userInfo:@&#123;<span class="string">@&quot;key2&quot;</span> : <span class="string">@&quot;value2&quot;</span>&#125;];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//添加到快捷选项数组</span></span><br><span class="line">    [<span class="built_in">UIApplication</span> sharedApplication].shortcutItems = @[item];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="点击快捷选项标签进入应用的响应"><a href="#点击快捷选项标签进入应用的响应" class="headerlink" title="点击快捷选项标签进入应用的响应"></a>点击快捷选项标签进入应用的响应</h5><p>主屏幕 icon 上的快捷标签点击进入页面的实现有点类似消息通知的实现方式，需要增加两处代码：首次启动 App （杀死后）和 App 从后台进入到前台启动（未被杀死）。</p>
+<p>首次启动的响应：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// App 首次启动的响应方法</span></span><br><span class="line">- (<span class="type">BOOL</span>)application:(<span class="built_in">UIApplication</span> *)application didFinishLaunchingWithOptions:(<span class="built_in">NSDictionary</span> *)launchOptions &#123;</span><br><span class="line">    </span><br><span class="line">    MainViewController *mainView = [[MainViewController alloc] init];</span><br><span class="line">    <span class="built_in">UINavigationController</span> *mainNavi = [[<span class="built_in">UINavigationController</span> alloc] initWithRootViewController:mainView];</span><br><span class="line">    <span class="keyword">self</span>.window.rootViewController = mainNavi;</span><br><span class="line">    [<span class="keyword">self</span>.window makeKeyAndVisible];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//创建应用图标上的3D touch快捷选项</span></span><br><span class="line">    [<span class="keyword">self</span> creatShortcutItem];</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="built_in">UIApplicationShortcutItem</span> *shortcutItem = [launchOptions valueForKey:<span class="built_in">UIApplicationLaunchOptionsShortcutItemKey</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 如果是从快捷选项标签启动 App，则根据不同标识执行不同操作，然后返回 NO，防止调用</span></span><br><span class="line">    <span class="comment">// - (void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler</span></span><br><span class="line">    <span class="keyword">if</span> (shortcutItem) &#123;</span><br><span class="line">        <span class="comment">//判断设置的快捷选项标签唯一标识，根据不同标识执行不同操作</span></span><br><span class="line">        <span class="keyword">if</span>([shortcutItem.type isEqualToString:<span class="string">@&quot;com.lewanny.button&quot;</span>])&#123;</span><br><span class="line">            <span class="comment">// 点击第一个按钮</span></span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@&quot;点击了 -&gt; 第一个按钮&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ([shortcutItem.type isEqualToString:<span class="string">@&quot;com.lewanny.search&quot;</span>]) &#123;</span><br><span class="line">            <span class="comment">// 进入搜索界面</span></span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@&quot;点击了 -&gt; 搜索按钮&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ([shortcutItem.type isEqualToString:<span class="string">@&quot;com.lewanny.location&quot;</span>]) &#123;</span><br><span class="line">            <span class="comment">// 进入定位界面</span></span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@&quot;点击了 -&gt; 定位按钮&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> ([shortcutItem.type isEqualToString:<span class="string">@&quot;com.lewanny.share&quot;</span>]) &#123;</span><br><span class="line">            <span class="comment">// 进入分享页面</span></span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@&quot;点击了 -&gt; 分享按钮&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NO</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">YES</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>后台启动的响应：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如果 App 没被杀死，点开 Touch 后台启动会调用该代理方法</span></span><br><span class="line">- (<span class="type">void</span>)application:(<span class="built_in">UIApplication</span> *)application performActionForShortcutItem:(<span class="built_in">UIApplicationShortcutItem</span> *)shortcutItem completionHandler:(<span class="type">void</span> (^)(<span class="type">BOOL</span>))completionHandler &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (shortcutItem) &#123;</span><br><span class="line">        <span class="comment">//判断设置的快捷选项标签唯一标识，根据不同标识执行不同操作</span></span><br><span class="line">        <span class="keyword">if</span>([shortcutItem.type isEqualToString:<span class="string">@&quot;com.lewanny.button&quot;</span>])&#123;</span><br><span class="line">            <span class="comment">// 点击第一个按钮</span></span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@&quot;点击了 -&gt; 第一个按钮&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ([shortcutItem.type isEqualToString:<span class="string">@&quot;com.lewanny.search&quot;</span>]) &#123;</span><br><span class="line">            <span class="comment">// 进入搜索界面</span></span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@&quot;点击了 -&gt; 搜索按钮&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ([shortcutItem.type isEqualToString:<span class="string">@&quot;com.lewanny.location&quot;</span>]) &#123;</span><br><span class="line">            <span class="comment">// 进入定位界面</span></span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@&quot;点击了 -&gt; 定位按钮&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> ([shortcutItem.type isEqualToString:<span class="string">@&quot;com.lewanny.share&quot;</span>]) &#123;</span><br><span class="line">            <span class="comment">// 进入分享页面</span></span><br><span class="line">            <span class="built_in">NSLog</span>(<span class="string">@&quot;点击了 -&gt; 分享按钮&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (completionHandler) &#123;</span><br><span class="line">        completionHandler(<span class="literal">YES</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="peek（展示预览）和-pop（跳页至预览的界面）的实现"><a href="#peek（展示预览）和-pop（跳页至预览的界面）的实现" class="headerlink" title="peek（展示预览）和 pop（跳页至预览的界面）的实现"></a>peek（展示预览）和 pop（跳页至预览的界面）的实现</h4><p>peek：当你用力按下屏幕按到一定程度时，系统会弹出一个预览视图，这个过程就称之为 peek。pop：再用力按下去就会展开到预览视图的控制器，这过程就是 pop 。</p>
+<h5 id="注册-peek-和-pop"><a href="#注册-peek-和-pop" class="headerlink" title="注册 peek 和 pop"></a>注册 peek 和 pop</h5><p>首先给 view 注册 3DTouch 的 peek 和 pop 功能。（在需要使用该功能的个页面上注册）</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注册 3D Touch，先判断是否可用</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">self</span>.traitCollection.forceTouchCapability == <span class="built_in">UIForceTouchCapabilityAvailable</span>)&#123;</span><br><span class="line">  [<span class="keyword">self</span> registerForPreviewingWithDelegate:<span class="keyword">self</span> sourceView:<span class="keyword">self</span>.locationView];</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;3D Touch 可用&quot;</span>);</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;3D Touch 无效&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="继承协议"><a href="#继承协议" class="headerlink" title="继承协议"></a>继承协议</h5><p>需要继承协议 <code>UIViewControllerPreviewingDelegate</code> 。</p>
+<h5 id="代理方法"><a href="#代理方法" class="headerlink" title="代理方法"></a>代理方法</h5><p>实现 <code>UIViewControllerPreviewingDelegate</code> 的代理方法。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// peek 手势弹出的预览视图</span></span><br><span class="line"><span class="comment">// previewingContext: 执行 peek 的上下文对象。</span></span><br><span class="line"><span class="comment">// location: 按压位置再 souceView 上的点，可以理解为手指在屏幕上的按压点。</span></span><br><span class="line">- (<span class="keyword">nullable</span> <span class="built_in">UIViewController</span> *)previewingContext:(<span class="type">id</span>&lt;<span class="built_in">UIViewControllerPreviewing</span>&gt;)previewingContext viewControllerForLocation:(<span class="built_in">CGPoint</span>)location &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 获取sourceView 即注册时传入的sourceView，一般为控制器的view</span></span><br><span class="line">    <span class="built_in">UIView</span> *pressView = [previewingContext sourceView];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 然后判断按压点是否在某个控件的 frame 内，</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     这里有个涉及到坐标系转换的细节问题</span></span><br><span class="line"><span class="comment">     如果self.locationView不是sourceView的直接子控件，那么我们需要把point转换到self.locationView的父控件的坐标系中，代码如下：</span></span><br><span class="line"><span class="comment">     point = [self.locationView.superView convertPoint:point fromView:sourceView];</span></span><br><span class="line"><span class="comment">     若缺少这段代码，你会发现按压位置错乱的bug。</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 如果 self.locationView.frame 不包含这个点就直接 return, 不做任何操作</span></span><br><span class="line">    <span class="keyword">if</span>(!<span class="built_in">CGRectContainsPoint</span>(<span class="keyword">self</span>.locationView.frame, location)) <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 否则即触摸点在 self.locationView 上，设置 sourceRect，这个 souceRect 就是当你按压售后浮起来的那个矩形区域，即不被虚化的范围。</span></span><br><span class="line">    <span class="built_in">CGRect</span> sourceRect = <span class="keyword">self</span>.locationView.frame;</span><br><span class="line">    [previewingContext setSourceRect:sourceRect];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 返回预览界面</span></span><br><span class="line">    TouchViewController *touchVc = [[TouchViewController alloc] init];</span><br><span class="line">    <span class="keyword">return</span> touchVc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pop 过程会调用此方法，执行跳转</span></span><br><span class="line">- (<span class="type">void</span>)previewingContext:(<span class="type">id</span>&lt;<span class="built_in">UIViewControllerPreviewing</span>&gt;)previewingContext commitViewController:(<span class="built_in">UIViewController</span> *)viewControllerToCommit &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Show 要展示的视图</span></span><br><span class="line">    [<span class="keyword">self</span> showViewController:viewControllerToCommit sender:<span class="keyword">self</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="设置预览视图"><a href="#设置预览视图" class="headerlink" title="设置预览视图"></a>设置预览视图</h5><p>在接下来的预览视图中添加向上滑显示的菜单，即 TouchViewController 的 .m 文件中自定义你要显示的菜单。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 3D Touch 上移显示的视图</span></span><br><span class="line">-(<span class="built_in">NSArray</span>&lt;<span class="type">id</span>&lt;<span class="built_in">UIPreviewActionItem</span>&gt;&gt; *)previewActionItems&#123;</span><br><span class="line">    <span class="built_in">UIPreviewAction</span> *action1 = [<span class="built_in">UIPreviewAction</span> actionWithTitle:<span class="string">@&quot;菜单_01&quot;</span> style:<span class="built_in">UIPreviewActionStyleDefault</span> handler:^(<span class="built_in">UIPreviewAction</span> * _Nonnull action, <span class="built_in">UIViewController</span> * _Nonnull previewViewController) &#123;</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@&quot;click -&gt; 菜单_01&quot;</span>);   </span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">UIPreviewAction</span> *action2 = [<span class="built_in">UIPreviewAction</span> actionWithTitle:<span class="string">@&quot;菜单_02&quot;</span> style:<span class="built_in">UIPreviewActionStyleDefault</span> handler:^(<span class="built_in">UIPreviewAction</span> * _Nonnull action, <span class="built_in">UIViewController</span> * _Nonnull previewViewController) &#123;</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@&quot;click -&gt; 菜单_02&quot;</span>);</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">UIPreviewAction</span> *action3 = [<span class="built_in">UIPreviewAction</span> actionWithTitle:<span class="string">@&quot;菜单_03&quot;</span> style:<span class="built_in">UIPreviewActionStyleDefault</span> handler:^(<span class="built_in">UIPreviewAction</span> * _Nonnull action, <span class="built_in">UIViewController</span> * _Nonnull previewViewController) &#123;</span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@&quot;click -&gt; 菜单_03&quot;</span>);</span><br><span class="line">    &#125;];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 想要显示多个就定义多个 UIPreviewAction</span></span><br><span class="line">    <span class="built_in">NSArray</span> *actions = @[action1,action2,action3];</span><br><span class="line">    <span class="keyword">return</span> actions;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="Tableview-中使用-peek-和-pop"><a href="#Tableview-中使用-peek-和-pop" class="headerlink" title="Tableview 中使用 peek 和 pop"></a>Tableview 中使用 peek 和 pop</h5><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">nullable</span> <span class="built_in">UIViewController</span> *)previewingContext:(<span class="type">id</span>&lt;<span class="built_in">UIViewControllerPreviewing</span>&gt;)previewingContext viewControllerForLocation:(<span class="built_in">CGPoint</span>)location &#123;</span><br><span class="line">    <span class="comment">// 获取 sourceView</span></span><br><span class="line">    <span class="built_in">UIView</span> *sourceView = [previewingContext sourceView];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 通过坐标点获取 indexPath</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     同样如果sourceView != self.tableView的话，也需要转换坐标系</span></span><br><span class="line"><span class="comment">     point = [self.tableView convertPoint:point fromView:sourceView];</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="built_in">NSIndexPath</span>*indexPath = [<span class="keyword">self</span>.tableView indexPathForRowAtPoint:location];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 如果 indexPath 为 nil，则直接返回 nil</span></span><br><span class="line">    <span class="keyword">if</span>(!indexPath) <span class="keyword">return</span> <span class="literal">nil</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 获得当前cell，设置sourceRect</span></span><br><span class="line">    <span class="built_in">UITableViewCell</span> *cell = [<span class="keyword">self</span>.tableView cellForRowAtIndexPath:indexPath];</span><br><span class="line">    <span class="built_in">CGRect</span> sourceRect = cell.frame;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     这里同时也涉及到坐标系转换</span></span><br><span class="line"><span class="comment">     sourceRect = [self.tableView convertRect:cell.frame toView:sourceView];</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    [previewingContext setSourceRect:sourceRect];</span><br><span class="line">    <span class="comment">// 返回预览界面</span></span><br><span class="line">    TouchViewController *touchVc = [[TouchViewController alloc] init];</span><br><span class="line">    <span class="keyword">return</span> touchVc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="3D-Touch-压力值的运用"><a href="#3D-Touch-压力值的运用" class="headerlink" title="3D Touch 压力值的运用"></a>3D Touch 压力值的运用</h4><p>直接在需要的 ViewController 的 .m 文件中加入以下方法即可，按压 controller 中的任何视图都会调用这个方法：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 按住移动或压力值改变时的回调</span></span><br><span class="line">-(<span class="type">void</span>)touchesMoved:(<span class="built_in">NSSet</span>&lt;<span class="built_in">UITouch</span> *&gt; *)touches withEvent:(<span class="built_in">UIEvent</span> *)event &#123;</span><br><span class="line">    <span class="built_in">NSArray</span> *arrayTouch = [touches allObjects];</span><br><span class="line">    <span class="built_in">UITouch</span> *touch = (<span class="built_in">UITouch</span> *)[arrayTouch lastObject];</span><br><span class="line">    <span class="comment">// 注意：如果按压的是 UILabel 或 UIImageView，要将其的 userInteractionEnabled 属性设置为YES</span></span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;move压力 ＝ %f&quot;</span>,touch.force);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/3D-Touch/" rel="tag"># 3D Touch</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2015/11/06/2015/iOS-upload-appstore-error-90096-solution/" rel="prev" title="iOS 上传 ipa 包至 App Store 报错 Error ITMS-90096 Your binary is not optimized for iPhone 5">
+      <i class="fa fa-chevron-left"></i> iOS 上传 ipa 包至 App Store 报错 Error ITMS-90096 Your binary is not optimized for iPhone 5
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/01/27/2016/iOS-CocoaPods-usage-and-problem/" rel="next" title="CocoaPods 的安装使用和常见问题">
+      CocoaPods 的安装使用和常见问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#3D-Touch-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">3D Touch 是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3D-Touch-%E7%9A%84%E5%85%B7%E4%BD%93%E5%8A%9F%E8%83%BD"><span class="nav-number">1.1.</span> <span class="nav-text">3D Touch 的具体功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E5%92%8C%E8%B0%83%E8%AF%95%E8%AE%BE%E5%A4%87"><span class="nav-number">1.2.</span> <span class="nav-text">开发环境和调试设备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97"><span class="nav-number">1.3.</span> <span class="nav-text">主要功能模块</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3D-Touch-%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">3D Touch 的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%AE%A9%E4%BD%A0%E7%9A%84%E6%A8%A1%E6%8B%9F%E5%99%A8%E6%94%AF%E6%8C%81-3D-Touch"><span class="nav-number">2.1.</span> <span class="nav-text">如何让你的模拟器支持 3D Touch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E8%AE%BE%E5%A4%87%E6%98%AF%E5%90%A6%E6%94%AF%E6%8C%81-3D-Touch"><span class="nav-number">2.2.</span> <span class="nav-text">如何判断设备是否支持 3D Touch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BB%E5%B1%8F%E5%B9%95%E6%8C%89%E5%8E%8B%E5%BA%94%E7%94%A8%E5%9B%BE%E6%A0%87%E5%B1%95%E7%A4%BA%E5%BF%AB%E6%8D%B7%E9%80%89%E9%A1%B9%EF%BC%88%E5%8D%B3-Home-Screen-Quick-Actions%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">主屏幕按压应用图标展示快捷选项（即 Home Screen Quick Actions）</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E6%A0%87%E7%AD%BE"><span class="nav-number">2.3.1.</span> <span class="nav-text">静态标签</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E6%A0%87%E7%AD%BE"><span class="nav-number">2.3.2.</span> <span class="nav-text">动态标签</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%82%B9%E5%87%BB%E5%BF%AB%E6%8D%B7%E9%80%89%E9%A1%B9%E6%A0%87%E7%AD%BE%E8%BF%9B%E5%85%A5%E5%BA%94%E7%94%A8%E7%9A%84%E5%93%8D%E5%BA%94"><span class="nav-number">2.3.3.</span> <span class="nav-text">点击快捷选项标签进入应用的响应</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#peek%EF%BC%88%E5%B1%95%E7%A4%BA%E9%A2%84%E8%A7%88%EF%BC%89%E5%92%8C-pop%EF%BC%88%E8%B7%B3%E9%A1%B5%E8%87%B3%E9%A2%84%E8%A7%88%E7%9A%84%E7%95%8C%E9%9D%A2%EF%BC%89%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.4.</span> <span class="nav-text">peek（展示预览）和 pop（跳页至预览的界面）的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C-peek-%E5%92%8C-pop"><span class="nav-number">2.4.1.</span> <span class="nav-text">注册 peek 和 pop</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BB%A7%E6%89%BF%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.4.2.</span> <span class="nav-text">继承协议</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E6%96%B9%E6%B3%95"><span class="nav-number">2.4.3.</span> <span class="nav-text">代理方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E9%A2%84%E8%A7%88%E8%A7%86%E5%9B%BE"><span class="nav-number">2.4.4.</span> <span class="nav-text">设置预览视图</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Tableview-%E4%B8%AD%E4%BD%BF%E7%94%A8-peek-%E5%92%8C-pop"><span class="nav-number">2.4.5.</span> <span class="nav-text">Tableview 中使用 peek 和 pop</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3D-Touch-%E5%8E%8B%E5%8A%9B%E5%80%BC%E7%9A%84%E8%BF%90%E7%94%A8"><span class="nav-number">2.5.</span> <span class="nav-text">3D Touch 压力值的运用</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Lewanny</p>
+  <div class="site-description" itemprop="description">世界拥挤繁忙，行人各有方向。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lewanny</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

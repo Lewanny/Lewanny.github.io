@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lewanny.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="应用开发过程中 Beta 测试是必须的。TestFlight 就是用于 Beta 版测试的。不同与较老的 adhoc 测试包方法，TestFlight 不需要测试人员的设备 UDID，也没有 100 台设备的上限。目前 TestFlight 已经被苹果收购，需要 iOS8 及以上版本的 iOS 设备才能运行。TestFlight 整合进了 iTunes Connect，开发者可以通过电子邮件来邀请">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 开发使用 TestFlight 进行 Beta 测试">
+<meta property="og:url" content="http://lewanny.com/2017/03/20/2017/iOS-beta-test-with-TestFlight/index.html">
+<meta property="og:site_name" content="Lewanny 的个人博客空间">
+<meta property="og:description" content="应用开发过程中 Beta 测试是必须的。TestFlight 就是用于 Beta 版测试的。不同与较老的 adhoc 测试包方法，TestFlight 不需要测试人员的设备 UDID，也没有 100 台设备的上限。目前 TestFlight 已经被苹果收购，需要 iOS8 及以上版本的 iOS 设备才能运行。TestFlight 整合进了 iTunes Connect，开发者可以通过电子邮件来邀请">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.lewanny.com/images/iOS-beta-text-with-TestFlight/myApp.png">
+<meta property="og:image" content="https://www.lewanny.com/images/iOS-beta-text-with-TestFlight/addNew.png">
+<meta property="og:image" content="https://www.lewanny.com/images/iOS-beta-text-with-TestFlight/info.png">
+<meta property="og:image" content="https://www.lewanny.com/images/iOS-beta-text-with-TestFlight/build.png">
+<meta property="og:image" content="https://www.lewanny.com/images/iOS-beta-text-with-TestFlight/chooseTest.png">
+<meta property="og:image" content="https://www.lewanny.com/images/iOS-beta-text-with-TestFlight/visit.png">
+<meta property="article:published_time" content="2017-03-20T12:37:59.000Z">
+<meta property="article:modified_time" content="2026-01-13T06:31:59.675Z">
+<meta property="article:author" content="Lewanny">
+<meta property="article:tag" content="TestFlight">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.lewanny.com/images/iOS-beta-text-with-TestFlight/myApp.png">
+
+<link rel="canonical" href="http://lewanny.com/2017/03/20/2017/iOS-beta-test-with-TestFlight/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>iOS 开发使用 TestFlight 进行 Beta 测试 | Lewanny 的个人博客空间</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lewanny 的个人博客空间</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://lewanny.com/2017/03/20/2017/iOS-beta-test-with-TestFlight/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Lewanny">
+      <meta itemprop="description" content="世界拥挤繁忙，行人各有方向。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lewanny 的个人博客空间">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS 开发使用 TestFlight 进行 Beta 测试
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-03-20 20:37:59" itemprop="dateCreated datePublished" datetime="2017-03-20T20:37:59+08:00">2017-03-20</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-01-13 14:31:59" itemprop="dateModified" datetime="2026-01-13T14:31:59+08:00">2026-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Objective-C/" itemprop="url" rel="index"><span itemprop="name">Objective-C</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>应用开发过程中 <code>Beta</code> 测试是必须的。<code>TestFlight</code> 就是用于 Beta 版测试的。不同与较老的 adhoc 测试包方法，TestFlight 不需要测试人员的设备 UDID，也没有 100 台设备的上限。目前 TestFlight 已经被苹果收购，需要 iOS8 及以上版本的 iOS 设备才能运行。TestFlight 整合进了 iTunes Connect，开发者可以通过电子邮件来邀请测试员来进行测试，这样开发者就可以更简单地让你的同行非同行、你的上级、你的客户、你所想要一起参与测试的人一起来测试应用。</p>
+<h3 id="什么是-TestFlight"><a href="#什么是-TestFlight" class="headerlink" title="什么是 TestFlight"></a>什么是 TestFlight</h3><p>TestFlight 的测试方式分为内部测试和外部测试两种，从功能上讲，这两种方式都可以为测试人员在测试阶段对你的 App 进行测试。</p>
+<span id="more"></span>
+
+<h4 id="内部测试"><a href="#内部测试" class="headerlink" title="内部测试"></a>内部测试</h4><p>所谓的内部主要是指 iTunes Connect 上 在你的开发团队里参与技术开发或者管理的成员。最多可以邀请 25 个内部成员。无审核限制，也就是说只要你把你的 App 上传到 iTunes Connect 上之后内部成员就可以开始进行内部测试了，无需审核。在邀请发出后，有效测试时间为 90 天。</p>
+<h4 id="外部测试"><a href="#外部测试" class="headerlink" title="外部测试"></a>外部测试</h4><p>而与之相对的外部测试，指的是那些不属于你的团队或者公司的测试者，外部测试人员的上限是 2000 人，但在你邀请外部成员参与测试之前，需要先通过苹果的审核，一般审核会在一天左右。而这一限制在内部成员上就没有。在邀请发出后，有效测试时间为 60 天。</p>
+<h3 id="TestFlight-的优势"><a href="#TestFlight-的优势" class="headerlink" title="TestFlight 的优势"></a>TestFlight 的优势</h3><ol>
+<li><p>老旧的 Adhoc 测试包方法需要供参与 app 测试人员的设备 UDID，并且开发者需要将这些设备的 UDID 添加到开发者中心，每次有新的测试人员加入，需要重新生成 profiles，重新打包，而且只能添加100台设备的限制，TestFlight 这方面限制较小。</p>
+</li>
+<li><p>TestFlight 测试只需要参与 app 测试人员提供一个邮箱，开发者登录 iTunes Connect，给测试者发送邀请，测试者接受邀请，然后通过 TestFlight 应用，下载安装程序。不再次需要用户提供设备的 UDID，最重要的一点是没有了 100 台设备的限制，一般内部测试人员最多 25 个人，外部测试人员最多 2000 个人，也不需要每次都重新配置证书，不需要每次都手动发送 ipa 包, 直接上传到 iTunes 即可。</p>
+</li>
+<li><p>当然也可使用蒲公英等其他方法参与测试。</p>
+</li>
+</ol>
+<h3 id="如何使用-TestFlight"><a href="#如何使用-TestFlight" class="headerlink" title="如何使用 TestFlight"></a>如何使用 TestFlight</h3><h4 id="创建应用"><a href="#创建应用" class="headerlink" title="创建应用"></a>创建应用</h4><ol>
+<li><p>进入 <a href="https://itunesconnect.apple.com/">iTunes Connect</a> 网址：iTunes Connect ，输入账号密码登录至 iTunes Connect。</p>
+</li>
+<li><p>登陆成功后点击 MyApp 进入到应用列表。</p>
+</li>
+</ol>
+  <img src="https://www.lewanny.com/images/iOS-beta-text-with-TestFlight/myApp.png" width=520>
+  
+<ol start="3">
+<li>如果是初次创建的 App，需要创建一个 iTunes Connect Record。如果你的 App 已经创建好了，可以直接跳过这段，如果你要新建一个 App 的话，可以按照下面的步骤来做。</li>
+</ol>
+<h4 id="如何创建应用"><a href="#如何创建应用" class="headerlink" title="如何创建应用"></a>如何创建应用</h4><ol>
+<li><p>登录 <a href="https://itunesconnect.apple.com/login">iTunes Connect</a> 。在 iTunes Connect 的首页，点击 My Apps 图标。</p>
+</li>
+<li><p>点击 + 号按钮，创建一个新的应用。</p>
+</li>
+</ol>
+  <img src="https://www.lewanny.com/images/iOS-beta-text-with-TestFlight/addNew.png" width=230>
+  
+<ol start="3">
+<li>填写好如下弹窗内的信息，点击创建按钮完成创建即可，刚刚创建好的应用便会显示在 My App 列表中。</li>
+</ol>
+  <img src="https://www.lewanny.com/images/iOS-beta-text-with-TestFlight/info.png" width=450>
+  
+<ol start="4">
+<li><p>提交 App 到 <code>iTunes Connect</code>。在 Xcode 中配置好版本和证书信息。<br>选中 <code>菜单 -&gt; Product -&gt;Archive</code> 将当前代码归档。<br>归档完成后选择 <code>Organizer -&gt; Archives -&gt; Validate</code> 按钮来检测该归档文件是否符合要求。<br>验证通过之后，你可以选择 <code>Submit</code> 来提交这个归档至 iTunes Connect。<br>注意：提交的包必须是 <code>App Store</code> 包。</p>
+</li>
+<li><p>每当你提交一个新的 build 之后，在 iTunes Connect 的列表中都会对应的增加一个 <code>build</code>。</p>
+</li>
+</ol>
+  <img src="https://www.lewanny.com/images/iOS-beta-text-with-TestFlight/build.png" width=350>
+  
+
+<h4 id="邀请-TestFlight-测试人员"><a href="#邀请-TestFlight-测试人员" class="headerlink" title="邀请 TestFlight 测试人员"></a>邀请 TestFlight 测试人员</h4><ol>
+<li>选择 TestFlight，在 TestFlight 中填写基本信息接收反馈的邮箱地址，隐私政策网址等，然后构建好需要测试的版本信息。</li>
+</ol>
+  <img src="https://www.lewanny.com/images/iOS-beta-text-with-TestFlight/chooseTest.png" width= 720>
+  
+<ol start="2">
+<li>按照提示才操作来邀请你的测试人员（分内部和外部，其中 iTunes Connect 为内部）。</li>
+</ol>
+  <img src="https://www.lewanny.com/images/iOS-beta-text-with-TestFlight/visit.png" width=720>
+  
+<ol start="3">
+<li><p>填写好对应测试人员的邮箱，发送好对应邮件即可。测试人员需在 App Store 中下载 TestFlight，之后会收到两封邮件，一封是邀请你加入测试组的邮件，点击同意即可，另一封是成功加入测试组的通知，点击 start testing 然后跳转到有加粗黑色字体的8个字母测试码的页面，然后点击 Redeem，输入这8个字母即可下载测试app。（现在会直接跳转。）</p>
+</li>
+<li><p>开发者发布新的版本测试人员可直接在 TestFlight 查看对应版本即可。</p>
+</li>
+</ol>
+<p>另外 TestFlight 还有很多其他的功能和用途，还是挺不错的，这里不再一一记录了。具体可登陆 <a href="https://itunesconnect.apple.com/">iTunes Connect</a> 查看。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/TestFlight/" rel="tag"># TestFlight</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/02/18/2017/HTML-CSS-learn-note-part02-css-style-layout/" rel="prev" title="HTML+CSS 学习笔记 - CSS 基本样式与布局">
+      <i class="fa fa-chevron-left"></i> HTML+CSS 学习笔记 - CSS 基本样式与布局
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/04/16/2017/iOS-bluetooth-summary-of-data-conversion/" rel="next" title="总结下 iOS 蓝牙开发中常用的数据转换">
+      总结下 iOS 蓝牙开发中常用的数据转换 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-TestFlight"><span class="nav-number">1.</span> <span class="nav-text">什么是 TestFlight</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E6%B5%8B%E8%AF%95"><span class="nav-number">1.1.</span> <span class="nav-text">内部测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E6%B5%8B%E8%AF%95"><span class="nav-number">1.2.</span> <span class="nav-text">外部测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TestFlight-%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">2.</span> <span class="nav-text">TestFlight 的优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-TestFlight"><span class="nav-number">3.</span> <span class="nav-text">如何使用 TestFlight</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8"><span class="nav-number">3.1.</span> <span class="nav-text">创建应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E5%BA%94%E7%94%A8"><span class="nav-number">3.2.</span> <span class="nav-text">如何创建应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%82%80%E8%AF%B7-TestFlight-%E6%B5%8B%E8%AF%95%E4%BA%BA%E5%91%98"><span class="nav-number">3.3.</span> <span class="nav-text">邀请 TestFlight 测试人员</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Lewanny</p>
+  <div class="site-description" itemprop="description">世界拥挤繁忙，行人各有方向。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lewanny</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lewanny.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="iOS 8 出现的 Application Extension 极大的方便了用户查看应用的服务等信息。随着 iOS 10 的到来，苹果也越发重视 Widget 了，从锁屏页面，下拉通知栏的第一页，还有左滑主页面都可以进入 Widget。通过右上角的“展开”、“折叠”按钮，可以查看 Widget 的全部内容和部分内容。在 iPhone 6s 上面，点击应用 icon 的 3D Touch 界面中，也">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 构建 Widget 应用全解（适配 iOS 10）">
+<meta property="og:url" content="http://lewanny.com/2016/10/25/2016/iOS-build-widget-app-complete-solution/index.html">
+<meta property="og:site_name" content="Lewanny 的个人博客空间">
+<meta property="og:description" content="iOS 8 出现的 Application Extension 极大的方便了用户查看应用的服务等信息。随着 iOS 10 的到来，苹果也越发重视 Widget 了，从锁屏页面，下拉通知栏的第一页，还有左滑主页面都可以进入 Widget。通过右上角的“展开”、“折叠”按钮，可以查看 Widget 的全部内容和部分内容。在 iPhone 6s 上面，点击应用 icon 的 3D Touch 界面中，也">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/WidgetShow.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/WidgetCreate.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/WidgetFolder.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/Plist.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/setUrltype.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/AppGroud.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/AppGroupOk.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/icon.png">
+<meta property="article:published_time" content="2016-10-25T13:41:16.000Z">
+<meta property="article:modified_time" content="2026-01-13T06:31:59.669Z">
+<meta property="article:author" content="Lewanny">
+<meta property="article:tag" content="Widget 应用">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/WidgetShow.png">
+
+<link rel="canonical" href="http://lewanny.com/2016/10/25/2016/iOS-build-widget-app-complete-solution/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>iOS 构建 Widget 应用全解（适配 iOS 10） | Lewanny 的个人博客空间</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lewanny 的个人博客空间</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://lewanny.com/2016/10/25/2016/iOS-build-widget-app-complete-solution/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Lewanny">
+      <meta itemprop="description" content="世界拥挤繁忙，行人各有方向。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lewanny 的个人博客空间">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS 构建 Widget 应用全解（适配 iOS 10）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-10-25 21:41:16" itemprop="dateCreated datePublished" datetime="2016-10-25T21:41:16+08:00">2016-10-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-01-13 14:31:59" itemprop="dateModified" datetime="2026-01-13T14:31:59+08:00">2026-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Objective-C/" itemprop="url" rel="index"><span itemprop="name">Objective-C</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>iOS 8 出现的 <code>Application Extension</code> 极大的方便了用户查看应用的服务等信息。随着 iOS 10 的到来，苹果也越发重视 <code>Widget</code> 了，从锁屏页面，下拉通知栏的第一页，还有左滑主页面都可以进入 Widget。通过右上角的“展开”、“折叠”按钮，可以查看 Widget 的全部内容和部分内容。在 iPhone 6s 上面，点击应用 icon 的 3D Touch 界面中，也会有 Widget 的折叠界面的显示。</p>
+<p>  <img src="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/WidgetShow.png" width=750></img></p>
+<p>本文接下来要介绍的是如何在你的应用中接入 <code>Today Extension</code>，以及 Widget 的添加、UI 的绘制、主应用的吊起、Widget 和主应用数据的共享、针对 iOS 10 的适配等。</p>
+<span id="more"></span>
+
+<h3 id="在工程中创建（添加）Widget"><a href="#在工程中创建（添加）Widget" class="headerlink" title="在工程中创建（添加）Widget"></a>在工程中创建（添加）Widget</h3><p>在想要添加 Widget 的工程中执行以下操作<br><code>Xcode 菜单 -&gt; File -&gt; New -&gt; Target… -&gt; 选择 Today Extension</code>，如下所示。</p>
+<p>  <img src="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/WidgetCreate.png" width=600></img></p>
+<p>创建完之后多出 Widget 的文件夹及内容，名字默认为 TodayViewController 可自行修改。至此，为工程添加 Widget 就算成功了，运行工程就可以看到 Widget 的效果了。</p>
+<p>  <img src="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/WidgetFolder.png" width=400></img></p>
+<h3 id="Widget-的使用"><a href="#Widget-的使用" class="headerlink" title="Widget 的使用"></a>Widget 的使用</h3><h4 id="绘制-UI"><a href="#绘制-UI" class="headerlink" title="绘制 UI"></a>绘制 UI</h4><p>使用 <code>Interface Builder</code>。<br>工程默认的方式就是使用 Interface Builder，如果实现简单的布局的话可以考虑这种方式。</p>
+<p>使用代码进行布局。<br>使用代码需要修改一下 widget 下的 plist 文件。首先将原有 <code>NSExtensionMainStoryboard</code> 字段删除，添加字段 <code>NSExtensionPrincipalClass</code> ，value 是你所写的 controller 的名称，一般默认的都是 TodayViewController。</p>
+<p>  <img src="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/Plist.png" width=800></img></p>
+<h4 id="设置-Widget-的-size"><a href="#设置-Widget-的-size" class="headerlink" title="设置 Widget 的 size"></a>设置 Widget 的 size</h4><p>iOS 10 之后，Widget 支持<code>展开及折叠</code>两种展现方式，通过设置widgetLargestAvailableDisplayMode 属性可以让 Widget 程序实现展开布局。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="type">void</span>)viewDidLoad &#123;</span><br><span class="line">    [<span class="variable language_">super</span> viewDidLoad];</span><br><span class="line">    <span class="comment">// Do any additional setup after loading the view from its nib.</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> ([<span class="built_in">UIDevice</span> currentDevice].systemVersion.doubleValue &gt;= <span class="number">10.0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// iOS 10 以后</span></span><br><span class="line">        <span class="keyword">self</span>.extensionContext.widgetLargestAvailableDisplayMode = NCWidgetDisplayModeExpanded;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">self</span>.preferredContentSize = <span class="built_in">CGSizeMake</span>(kWidgetWidth, <span class="number">110</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重写切换展开及折叠布局时的方法（iOS 10 以后）。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="type">void</span>)widgetActiveDisplayModeDidChange:(NCWidgetDisplayMode)activeDisplayMode withMaximumSize:(<span class="built_in">CGSize</span>)maxSize</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;maxWidth %f maxHeight %f&quot;</span>,maxSize.width,maxSize.height);</span><br><span class="line">    <span class="keyword">if</span> (activeDisplayMode == NCWidgetDisplayModeCompact)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">self</span>.preferredContentSize = <span class="built_in">CGSizeMake</span>(maxSize.width, <span class="number">110</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">self</span>.preferredContentSize = <span class="built_in">CGSizeMake</span>(maxSize.width, <span class="number">200</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>iOS 10 之前绘制的内容与左侧边界有一定距离(约30px)。可用以下方法解决（iOS 10）不存在此问题。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="built_in">UIEdgeInsets</span>)widgetMarginInsetsForProposedMarginInsets:(<span class="built_in">UIEdgeInsets</span>)defaultMarginInsets</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">UIEdgeInsetsMake</span>(<span class="number">0</span>, <span class="number">10</span>, <span class="number">0</span>, <span class="number">10</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="唤起应用"><a href="#唤起应用" class="headerlink" title="唤起应用"></a>唤起应用</h4><p>因为 extension 和 containing app 是两个<code>完全独立的进程</code>，所以它们之间不能直接通信(不能像应用内部点击按钮，跳转到指定页面)。为了实现 widget 调起 app，这里通过 openURL 的方式来启动 containing app。</p>
+<p>为你的应用设置它的 URL Scheme。</p>
+<p>  <img src="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/setUrltype.png" width=800></img></p>
+<p>  使用以下代码来打开主应用，其中 <code>appextension://xxx</code> 为你的应用的 URL Scheme，如果想要快速启动微信换成 <code>wechat://</code> 即可，其他的应用全部类似。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="type">void</span>)openURLContainingAPP&#123;</span><br><span class="line">     <span class="comment">//通过 extensionContext 借助 host app 调起 app</span></span><br><span class="line">     [<span class="keyword">self</span>.extensionContext openURL:[<span class="built_in">NSURL</span> URLWithString:<span class="string">@&quot;appextension://xxx&quot;</span>] completionHandler:^(<span class="type">BOOL</span> success) &#123; </span><br><span class="line">        <span class="built_in">NSLog</span>(<span class="string">@&quot;open url result:%d&quot;</span>,success); </span><br><span class="line">    &#125;];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>相应的，在 AppDelegate 中实现以下方法，这里可以处理传过来的 action，对于传过来不同的值可以进行不同的操作。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="type">BOOL</span>)application:(<span class="built_in">UIApplication</span> *)application openURL:(<span class="built_in">NSURL</span> *)url sourceApplication:(<span class="built_in">NSString</span> *)sourceApplication annotation:(<span class="type">id</span>)annotation</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> ([[url absoluteString] hasPrefix:<span class="string">@&quot;appextension&quot;</span>])</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 处理你的事情</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>  <span class="literal">YES</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="数据的共享"><a href="#数据的共享" class="headerlink" title="数据的共享"></a>数据的共享</h4><p>扩展程序一般都不是脱离宿主程序单独运行的，难免需要和宿主程序进行数据交互。而相对于一般的 App，数据可以用单例，NSUserDefault 等等。但由于拓展与宿主应用是两个完全独立的 App，并且iOS应用基于沙盒的形式限制，所以一般的共享数据方法都是实现不了数据共享，这里就需要使用 <code>App Groups</code>。</p>
+<p>widget 也是需要<code>单独申请 App id</code> 的，需要配置证书和 Provisioning Profiles文件，到你的开发者中心后台分别添加宿主程序和 widget 程序的 App id，widget 程序的 Bundle id 需以主程序的 Bundle id 为前缀，例如 com.xxx 和 com.xxx.widget 。添加完成后需要在后台创建 App Groups 并包含两个 Bundle id 。</p>
+<p>  <img src="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/AppGroud.png" width=750></img></p>
+<p>打开应用的 Capabilities， 找到 App Groups 选项，勾选建立好的 group ，Steps 全部没问题即可。</p>
+<p>  <img src="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/AppGroupOk.png" width=650></img></p>
+<h4 id="两种数据存储方式"><a href="#两种数据存储方式" class="headerlink" title="两种数据存储方式"></a>两种数据存储方式</h4><ul>
+<li><strong>使用 NSUserDefault</strong><br>这里不能使用 <code>[NSUserDefaults standardUserDefaults];</code> 方法来初始化 NSUserDefault 对象，正像之前所说，由于沙盒机制，拓展应用是不允许访问宿主应用的沙盒路径的，因此上述用法是不对的，需要搭配 <code>app group</code> 来实例化 UserDefaults 。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 写入数据</span></span><br><span class="line"><span class="built_in">NSUserDefaults</span> *userDefaults = [[<span class="built_in">NSUserDefaults</span> alloc] initWithSuiteName:<span class="string">@&quot;group.com.snaillove.app.tool.quickpay&quot;</span>];</span><br><span class="line">[userDefaults setObject:<span class="keyword">self</span>.textField.text forKey:<span class="string">@&quot;widget&quot;</span>];</span><br><span class="line">[userDefaults synchronize];</span><br><span class="line"><span class="comment">// 读取数据</span></span><br><span class="line"><span class="built_in">NSUserDefaults</span> *userDefaults = [[<span class="built_in">NSUserDefaults</span> alloc] initWithSuiteName:<span class="string">@&quot;group.com.snaillove.app.tool.quickpay&quot;</span>];</span><br><span class="line"><span class="keyword">self</span>.contentStr = [userDefaults objectForKey:<span class="string">@&quot;widget&quot;</span>];</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>使用 NSFileManager 共享数据</strong><br>写入数据 和 读取数据。</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 写入数据</span></span><br><span class="line">-(<span class="type">BOOL</span>)saveDataByNSFileManager</span><br><span class="line">&#123;</span><br><span class="line">  <span class="built_in">NSError</span> *err = <span class="literal">nil</span>;</span><br><span class="line">  <span class="built_in">NSURL</span> *containerURL = [[<span class="built_in">NSFileManager</span> defaultManager] containerURLForSecurityApplicationGroupIdentifier:<span class="string">@&quot;group.com.xxx&quot;</span>];</span><br><span class="line">  containerURL = [containerURL URLByAppendingPathComponent:<span class="string">@&quot;Library/Caches/ widget&quot;</span>];</span><br><span class="line">  <span class="built_in">NSString</span> *value = <span class="string">@&quot;asdfasdfasf&quot;</span>;</span><br><span class="line">  <span class="type">BOOL</span> result = [value writeToURL:containerURL atomically:<span class="literal">YES</span> encoding:<span class="built_in">NSUTF8StringEncoding</span> error:&amp;err];</span><br><span class="line">  <span class="keyword">if</span> (!result)</span><br><span class="line">  &#123;</span><br><span class="line">      <span class="built_in">NSLog</span>(<span class="string">@&quot;%@&quot;</span>,err);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">  &#123;</span><br><span class="line">      <span class="built_in">NSLog</span>(<span class="string">@&quot;save value:%@ success.&quot;</span>,value);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 读取数据</span></span><br><span class="line">-(<span class="built_in">NSString</span> *)readDataByNSFileManager</span><br><span class="line">&#123;</span><br><span class="line">  <span class="built_in">NSError</span> *err = <span class="literal">nil</span>;</span><br><span class="line">  <span class="built_in">NSURL</span> *containerURL = [[<span class="built_in">NSFileManager</span> defaultManager] containerURLForSecurityApplicationGroupIdentifier:<span class="string">@&quot;group.com.xxx&quot;</span>];</span><br><span class="line">  containerURL = [containerURL URLByAppendingPathComponent:<span class="string">@&quot;Library/Caches/ widget&quot;</span>];</span><br><span class="line">  <span class="built_in">NSString</span> *value = [<span class="built_in">NSString</span> stringWithContentsOfURL:containerURL encoding: <span class="built_in">NSUTF8StringEncoding</span> error:&amp;err];</span><br><span class="line">  <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>Widget 因为有自己的 <code>App id</code>，所以也需要一套自己的配置文件(不同于 host 应用的)。<br>如果发现 widget 应用没有 AppIcon ，则需要在 AppIcon 的 Target Memberhip 选项中勾选 widget 应用。</p>
+<p>  <img src="http://omkug1guu.bkt.clouddn.com/iOS-build-widget-app-complete-solution/icon.png" width=820></img></p>
+<p>同样默认 widget 应用是无法使用宿主应用的类和资源文件的，如果想要使用的话同上面 AppIcon 方法一样，Target Memberhip 选项中勾选 widget 应用即可。</p>
+<p>到此，iOS 构建 Widget 就基本 ok 了。待续……</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Widget-%E5%BA%94%E7%94%A8/" rel="tag"># Widget 应用</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/08/21/2016/iOS-achive-ipa-package-methods/" rel="prev" title="iOS 打 ipa 包的几种实用方法">
+      <i class="fa fa-chevron-left"></i> iOS 打 ipa 包的几种实用方法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/21/2016/Swift-learn-part1-basis/" rel="next" title="Swift 学习 – 基础部分">
+      Swift 学习 – 基础部分 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E5%B7%A5%E7%A8%8B%E4%B8%AD%E5%88%9B%E5%BB%BA%EF%BC%88%E6%B7%BB%E5%8A%A0%EF%BC%89Widget"><span class="nav-number">1.</span> <span class="nav-text">在工程中创建（添加）Widget</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Widget-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">Widget 的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%98%E5%88%B6-UI"><span class="nav-number">2.1.</span> <span class="nav-text">绘制 UI</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE-Widget-%E7%9A%84-size"><span class="nav-number">2.2.</span> <span class="nav-text">设置 Widget 的 size</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%94%A4%E8%B5%B7%E5%BA%94%E7%94%A8"><span class="nav-number">2.3.</span> <span class="nav-text">唤起应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%9A%84%E5%85%B1%E4%BA%AB"><span class="nav-number">2.4.</span> <span class="nav-text">数据的共享</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">2.5.</span> <span class="nav-text">两种数据存储方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">3.</span> <span class="nav-text">注意事项</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Lewanny</p>
+  <div class="site-description" itemprop="description">世界拥挤繁忙，行人各有方向。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lewanny</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

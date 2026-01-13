@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lewanny.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Quartz 2D 是⼀个二维绘图引擎，同时支持 iOS 和 Mac 平台。 Quartz 2D 能够绘制图形、绘制文字、绘制\生成图片、读取\生成PDF、截图\裁剪图片等。其实，iOS 中⼤部分控件的内容都是通过 Quartz2D 画出来的，因此Quartz2D 在 iOS 开发中很重要的⼀个价值就是自定义 UI 控件)。 在 Mac OS X 中，Quartz 2D 可以与其它图形图像技术混合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 使用 Quart2D 绘图基础">
+<meta property="og:url" content="http://lewanny.com/2017/05/15/2017/iOS-basic-mapping-usage-with-Quart2D/index.html">
+<meta property="og:site_name" content="Lewanny 的个人博客空间">
+<meta property="og:description" content="Quartz 2D 是⼀个二维绘图引擎，同时支持 iOS 和 Mac 平台。 Quartz 2D 能够绘制图形、绘制文字、绘制\生成图片、读取\生成PDF、截图\裁剪图片等。其实，iOS 中⼤部分控件的内容都是通过 Quartz2D 画出来的，因此Quartz2D 在 iOS 开发中很重要的⼀个价值就是自定义 UI 控件)。 在 Mac OS X 中，Quartz 2D 可以与其它图形图像技术混合">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_Line.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_Rect.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_Circle.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_Sector.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_Words.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_Slider.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_ThreeLines.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_Gradient.png">
+<meta property="article:published_time" content="2017-05-15T13:32:50.000Z">
+<meta property="article:modified_time" content="2026-01-13T06:31:59.674Z">
+<meta property="article:author" content="Lewanny">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_Line.png">
+
+<link rel="canonical" href="http://lewanny.com/2017/05/15/2017/iOS-basic-mapping-usage-with-Quart2D/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>iOS 使用 Quart2D 绘图基础 | Lewanny 的个人博客空间</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lewanny 的个人博客空间</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://lewanny.com/2017/05/15/2017/iOS-basic-mapping-usage-with-Quart2D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Lewanny">
+      <meta itemprop="description" content="世界拥挤繁忙，行人各有方向。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lewanny 的个人博客空间">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS 使用 Quart2D 绘图基础
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-05-15 21:32:50" itemprop="dateCreated datePublished" datetime="2017-05-15T21:32:50+08:00">2017-05-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-01-13 14:31:59" itemprop="dateModified" datetime="2026-01-13T14:31:59+08:00">2026-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Objective-C/" itemprop="url" rel="index"><span itemprop="name">Objective-C</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Quartz 2D 是⼀个二维绘图引擎，同时支持 iOS 和 Mac 平台。 Quartz 2D 能够绘制图形、绘制文字、绘制\生成图片、读取\生成PDF、截图\裁剪图片等。其实，iOS 中⼤部分控件的内容都是通过 Quartz2D 画出来的，因此Quartz2D 在 iOS 开发中很重要的⼀个价值就是自定义 UI 控件)。</p>
+<p>在 Mac OS X 中，Quartz 2D 可以与其它图形图像技术混合使用，如 Core Image、Core Video、OpenGL、QuickTime。例如，通过使用  QuickTime 的 GraphicsImportCreateCGImage 函数，可以用 Quartz 从一个 QuickTime 图形导入器中创建一个图像。</p>
+<span id="more"></span>
+
+<h3 id="基础准备"><a href="#基础准备" class="headerlink" title="基础准备"></a>基础准备</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>Quartz2D 的 API 是纯 C 语⾔的，它的 API 来自于 Core Graphics 框架。数据类型和函数基本都以 CG 作为前缀，例如 CGContextRef、CGPathRef、CGContextStrokePath() 等。</p>
+<h4 id="图形上下文"><a href="#图形上下文" class="headerlink" title="图形上下文"></a>图形上下文</h4><p>图形上下文 (Graphics Context) 是一个 CGContextRef 类型的数据。图形上下文可以保存绘图信息、绘图状态、决定绘制的输出目标（PDF 文件、Bitmap 窗口等）。</p>
+<h4 id="drawRect-方法"><a href="#drawRect-方法" class="headerlink" title="drawRect 方法"></a>drawRect 方法</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-[viewController loadView]</span><br><span class="line">-[viewController viewDidLoad]</span><br><span class="line">-[viewController viewWillAppear:]</span><br><span class="line">-[viewController drawRect:]</span><br><span class="line">-[viewController viewDidAppear:]</span><br></pre></td></tr></table></figure>
+<p>在 <code>drawRect:</code> 方法中取得上下文后，就可以绘制东西到 view 上，view 内部有个 layer(图层) 属性，drawRect: 方法中取得的是 Layer Graphics Context ，因此绘制的东西其实是绘制到 layer 上面。view 之所以能显示东西，也完全是因为它内部的 layer 。</p>
+<h4 id="绘制步骤"><a href="#绘制步骤" class="headerlink" title="绘制步骤"></a>绘制步骤</h4><ol>
+<li>创建一个 UIView 的子类，重写这个类的 <code>- (void)drawRect:(CGRect)rect</code> 方法。</li>
+<li><code>UIGraphicsGetCurrentContext()</code> 获取当前的上下文（这里只能获取一次，并且只能在 drawRect 方法中获取）</li>
+<li>描述路径、形状（就是处理想要显示的样子）</li>
+<li>把描述好的路径、形状添加早上下文中 <code>CGContextAddPath()</code>。</li>
+<li>显示上下文内容。</li>
+</ol>
+<h3 id="画线"><a href="#画线" class="headerlink" title="画线"></a>画线</h3><p>两点确定一条直线，先确定线的起点，然后确定终点，绘制出路径就 ok 了。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> mark - 画线</span></span><br><span class="line">- (<span class="type">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;%s&quot;</span>,__func__);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1.获取上下文</span></span><br><span class="line">    <span class="built_in">CGContextRef</span> contextRef = <span class="built_in">UIGraphicsGetCurrentContext</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2.路径描述</span></span><br><span class="line">    <span class="built_in">UIBezierPath</span> *linePath = [<span class="built_in">UIBezierPath</span> bezierPath];</span><br><span class="line">    [linePath moveToPoint:<span class="built_in">CGPointMake</span>(<span class="number">0</span>, <span class="number">0</span>)]; <span class="comment">// 起点</span></span><br><span class="line">    [linePath addLineToPoint:<span class="built_in">CGPointMake</span>(WIDTH, HEIGHT)]; <span class="comment">// 终点</span></span><br><span class="line">    [[<span class="built_in">UIColor</span> blackColor] setStroke]; <span class="comment">// 设置颜色</span></span><br><span class="line">    <span class="built_in">CGContextSetLineWidth</span>(contextRef, <span class="number">5</span>); <span class="comment">// 设置线宽</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3.添加路径</span></span><br><span class="line">    <span class="built_in">CGContextAddPath</span>(contextRef, linePath.CGPath);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4.显示路径</span></span><br><span class="line">    <span class="built_in">CGContextStrokePath</span>(contextRef);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_Line.png" width=400></img></p>
+<h3 id="画矩形"><a href="#画矩形" class="headerlink" title="画矩形"></a>画矩形</h3><p>绘制矩形，却要确定它的四个顶点和四条线，方法一。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> mark - 画矩形</span></span><br><span class="line">- (<span class="type">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect &#123;</span><br><span class="line">    <span class="comment">// 1.获取上下文</span></span><br><span class="line">    <span class="built_in">CGContextRef</span> contextRef = <span class="built_in">UIGraphicsGetCurrentContext</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2.描述路径</span></span><br><span class="line">    <span class="built_in">UIBezierPath</span> *rectPath = [<span class="built_in">UIBezierPath</span> bezierPath];</span><br><span class="line">    [rectPath moveToPoint:<span class="built_in">CGPointMake</span>(<span class="number">30</span>, <span class="number">30</span>)]; <span class="comment">// 第一个点</span></span><br><span class="line">    [rectPath addLineToPoint:<span class="built_in">CGPointMake</span>(WIDTH<span class="number">-60</span>, <span class="number">30</span>)]; <span class="comment">// 第二个点</span></span><br><span class="line">    [rectPath addLineToPoint:<span class="built_in">CGPointMake</span>(WIDTH<span class="number">-60</span>, HEIGHT<span class="number">-60</span>)]; <span class="comment">// 第三个点</span></span><br><span class="line">    [rectPath addLineToPoint:<span class="built_in">CGPointMake</span>(<span class="number">30</span>, HEIGHT<span class="number">-60</span>)]; <span class="comment">// 第四个点</span></span><br><span class="line">    [rectPath closePath]; <span class="comment">// 闭合路径，同 [rectPath addLineToPoint:CGPointMake(30, 30)];</span></span><br><span class="line">    [[<span class="built_in">UIColor</span> blackColor] setStroke]; <span class="comment">// 设置颜色</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3.添加路径</span></span><br><span class="line">    <span class="built_in">CGContextAddPath</span>(contextRef, rectPath.CGPath);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4.显示路径</span></span><br><span class="line">    <span class="built_in">CGContextStrokePath</span>(contextRef);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>方法二。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="type">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect &#123;</span><br><span class="line">    <span class="comment">// 1.获取上下文</span></span><br><span class="line">    <span class="built_in">CGContextRef</span> contextRef = <span class="built_in">UIGraphicsGetCurrentContext</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2.描述路径</span></span><br><span class="line">    <span class="built_in">UIBezierPath</span> *rectPath = [<span class="built_in">UIBezierPath</span> bezierPathWithRect:<span class="built_in">CGRectMake</span>(<span class="number">30</span>, <span class="number">30</span>, WIDTH<span class="number">-60</span>, HEIGHT<span class="number">-60</span>)]; <span class="comment">// 路径</span></span><br><span class="line">    [[<span class="built_in">UIColor</span> blackColor] setFill]; <span class="comment">// 颜色</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3.添加、显示路径</span></span><br><span class="line">    <span class="built_in">CGContextAddPath</span>(contextRef, rectPath.CGPath);</span><br><span class="line">    <span class="built_in">CGContextFillPath</span>(contextRef);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_Rect.png" width=400></img></p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[[<span class="built_in">UIColor</span> greenColor] setStroke]; <span class="comment">// 设置描边颜色</span></span><br><span class="line"><span class="built_in">CGContextStrokePath</span>(contextRef); <span class="comment">// 显示描边路径</span></span><br><span class="line">[[<span class="built_in">UIColor</span> greenColor] set]; <span class="comment">// 设置填充颜色</span></span><br><span class="line"><span class="built_in">CGContextFillPath</span>(contextRef); <span class="comment">// 显示填充路径</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="画圆"><a href="#画圆" class="headerlink" title="画圆"></a>画圆</h3><p>第一种画圆思路需要确定圆形的圆心点、半径以及旋转角度。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> mark - 画圆</span></span><br><span class="line">- (<span class="type">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect &#123;</span><br><span class="line">    <span class="comment">// 1、获取当前上下文</span></span><br><span class="line">    <span class="built_in">CGContextRef</span> contextRef = <span class="built_in">UIGraphicsGetCurrentContext</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 描述路径 -&gt; ArcCenter:中心点 / radius:半径 / startAngle：起始角度 / endAngle：结束角度 / clockwise：是否逆时针</span></span><br><span class="line">    <span class="built_in">UIBezierPath</span> *circlePath = [<span class="built_in">UIBezierPath</span> bezierPathWithArcCenter:<span class="built_in">CGPointMake</span>(WIDTH/<span class="number">2</span>, HEIGHT/<span class="number">2</span>) radius:<span class="number">120</span> startAngle:<span class="number">0</span> endAngle:M_PI*<span class="number">2</span> clockwise:<span class="literal">YES</span>];</span><br><span class="line">    [[<span class="built_in">UIColor</span> blackColor] setFill]; <span class="comment">//颜色</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 填充显示上下文</span></span><br><span class="line">    <span class="built_in">CGContextAddPath</span>(contextRef, circlePath.CGPath);</span><br><span class="line">    <span class="built_in">CGContextFillPath</span>(contextRef); <span class="comment">// 空心圆使用 CGContextStrokePath</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>第二种方法利用画椭圆的方法，圆形是特殊的椭圆形。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="type">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect &#123;</span><br><span class="line">    <span class="comment">// 1、获取当前上下文</span></span><br><span class="line">    <span class="built_in">CGContextRef</span> contextRef =<span class="built_in">UIGraphicsGetCurrentContext</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2. 描述路径，画椭圆的方法</span></span><br><span class="line">    <span class="built_in">UIBezierPath</span> *ovalePath = [<span class="built_in">UIBezierPath</span> bezierPathWithOvalInRect:<span class="built_in">CGRectMake</span>(<span class="number">30</span>, <span class="number">30</span>, <span class="number">200</span>, <span class="number">200</span>)];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 填充显示上下文</span></span><br><span class="line">    <span class="built_in">CGContextAddPath</span>(contextRef, ovalePath.CGPath);</span><br><span class="line">    <span class="built_in">CGContextStrokePath</span>(contextRef);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_Circle.png" width=400></img></p>
+<h3 id="扇形"><a href="#扇形" class="headerlink" title="扇形"></a>扇形</h3><p>扇形是圆形的一部分。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 计算度转弧度</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="type">float</span> radians(<span class="type">double</span> degrees) &#123;</span><br><span class="line">    <span class="keyword">return</span> degrees * M_PI / <span class="number">180</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">inline</span> <span class="type">void</span> drawArc(<span class="built_in">CGContextRef</span> ctx, <span class="built_in">CGPoint</span> point, <span class="type">float</span> angle_start, <span class="type">float</span> angle_end, <span class="built_in">UIColor</span>* color,<span class="type">float</span> radius) &#123;</span><br><span class="line">    <span class="built_in">CGContextMoveToPoint</span>(ctx, point.x, point.y);</span><br><span class="line">    <span class="built_in">CGContextSetFillColor</span>(ctx, <span class="built_in">CGColorGetComponents</span>( [color <span class="built_in">CGColor</span>]));</span><br><span class="line">    <span class="built_in">CGContextAddArc</span>(ctx, point.x, point.y, radius,  angle_start, angle_end, <span class="number">0</span>);</span><br><span class="line">    <span class="comment">//CGContextClosePath(ctx);</span></span><br><span class="line">    <span class="built_in">CGContextFillPath</span>(ctx);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-(<span class="type">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect &#123;</span><br><span class="line">    <span class="built_in">CGPoint</span> cent = <span class="built_in">CGPointMake</span>(WIDTH/<span class="number">2</span>, HEIGHT/<span class="number">2</span>);</span><br><span class="line">    <span class="built_in">CGContextRef</span> ctx = <span class="built_in">UIGraphicsGetCurrentContext</span>();</span><br><span class="line">    <span class="built_in">CGContextClearRect</span>(ctx, rect);</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> angle_start = radians(<span class="number">0.0</span>);</span><br><span class="line">    <span class="type">float</span> angle_end = radians(<span class="number">121.0</span>);</span><br><span class="line">    drawArc(ctx, cent, angle_start, angle_end, [<span class="built_in">UIColor</span> blueColor], _radius);</span><br><span class="line"></span><br><span class="line">    angle_start = angle_end;</span><br><span class="line">    angle_end = radians(<span class="number">228.0</span>);</span><br><span class="line">    drawArc(ctx, cent, angle_start, angle_end, [<span class="built_in">UIColor</span> greenColor], _radius);</span><br><span class="line"></span><br><span class="line">    angle_start = angle_end;</span><br><span class="line">    angle_end = radians(<span class="number">260</span>);</span><br><span class="line">    drawArc(ctx, cent, angle_start, angle_end, [<span class="built_in">UIColor</span> orangeColor], _radius);</span><br><span class="line"></span><br><span class="line">    angle_start = angle_end;</span><br><span class="line">    angle_end = radians(<span class="number">360</span>);</span><br><span class="line">    drawArc(ctx, cent, angle_start, angle_end, [<span class="built_in">UIColor</span> purpleColor], _radius);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_Sector.png" width=400></img></p>
+<p>如果需要更新角度或者颜色等，需要在更新的地方调用 <code>[self setNeedsDisplay];</code> 即可。</p>
+<h3 id="画文字"><a href="#画文字" class="headerlink" title="画文字"></a>画文字</h3><p>简单绘制。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="type">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect &#123;</span><br><span class="line">    <span class="built_in">CGContextRef</span> contextRef =<span class="built_in">UIGraphicsGetCurrentContext</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 绘制文字，默认从 (0,0) 开始</span></span><br><span class="line">    <span class="built_in">NSString</span> *norText = <span class="string">@&quot;我是普通文字&quot;</span>;</span><br><span class="line">    [norText drawInRect:rect withAttributes:<span class="literal">nil</span>];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">CGContextStrokePath</span>(contextRef);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其他的设置。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="type">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect &#123;</span><br><span class="line">    <span class="built_in">CGContextRef</span> contextRef = <span class="built_in">UIGraphicsGetCurrentContext</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 字体设置</span></span><br><span class="line">    <span class="built_in">NSString</span> *text = <span class="string">@&quot;艺术字体&quot;</span>;</span><br><span class="line">    <span class="built_in">NSMutableDictionary</span> * dict = [<span class="built_in">NSMutableDictionary</span> dictionary];</span><br><span class="line">    dict[<span class="built_in">NSFontAttributeName</span>] = [<span class="built_in">UIFont</span> systemFontOfSize:<span class="number">32</span>]; <span class="comment">// 字体大小</span></span><br><span class="line">    dict[<span class="built_in">NSForegroundColorAttributeName</span>] = [<span class="built_in">UIColor</span> blueColor]; <span class="comment">// 字体前景色</span></span><br><span class="line">    dict[<span class="built_in">NSBackgroundColorAttributeName</span>] = [<span class="built_in">UIColor</span> blackColor]; <span class="comment">// 字体背景色</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//字体阴影</span></span><br><span class="line">    <span class="built_in">NSShadow</span> * shadow = [[<span class="built_in">NSShadow</span> alloc] init];</span><br><span class="line">    shadow.shadowOffset = <span class="built_in">CGSizeMake</span>(<span class="number">2</span>, <span class="number">2</span>); <span class="comment">// 阴影偏移量</span></span><br><span class="line">    shadow.shadowColor = [<span class="built_in">UIColor</span> orangeColor]; <span class="comment">// 阴影颜色</span></span><br><span class="line">    shadow.shadowBlurRadius = <span class="number">5</span>; <span class="comment">// 高斯模糊</span></span><br><span class="line">    dict[<span class="built_in">NSShadowAttributeName</span>] = shadow;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//字体间距</span></span><br><span class="line">    dict[<span class="built_in">NSKernAttributeName</span>] = @<span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从某一点开始绘制</span></span><br><span class="line">    [text drawAtPoint:<span class="built_in">CGPointMake</span>(<span class="number">80</span>, <span class="number">100</span>) withAttributes:dict];</span><br><span class="line">    <span class="built_in">CGContextStrokePath</span>(contextRef);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_Words.png" width=400></img></p>
+<h3 id="画图片"><a href="#画图片" class="headerlink" title="画图片"></a>画图片</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> mark - 画图片</span></span><br><span class="line">- (<span class="type">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect &#123;</span><br><span class="line">    <span class="built_in">CGContextRef</span> contextRef = <span class="built_in">UIGraphicsGetCurrentContext</span>();</span><br><span class="line">    <span class="built_in">UIImage</span> *image = [<span class="built_in">UIImage</span> imageNamed:<span class="string">@&quot;avatar&quot;</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 直接绘制</span></span><br><span class="line"><span class="comment">//    [image drawInRect:rect];</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从某个点开始绘制</span></span><br><span class="line"><span class="comment">//    [image drawAtPoint:CGPointMake(60, 60)];</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//从某一点开始绘制图片，并且设置混合模式以及透明度</span></span><br><span class="line"><span class="comment">//    [image drawAtPoint:CGPointMake(0, 0) blendMode:kCGBlendModeNormal alpha:1];</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 绘制图片的大小，并且设置混合模式以及透明度</span></span><br><span class="line">    [image drawInRect:<span class="built_in">CGRectMake</span>(<span class="number">30</span>, <span class="number">30</span>, WIDTH<span class="number">-60</span>, HEIGHT<span class="number">-60</span>) blendMode:kCGBlendModeNormal alpha:<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">CGContextFillPath</span>(contextRef);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="进度条"><a href="#进度条" class="headerlink" title="进度条"></a>进度条</h3><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="type">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect &#123;</span><br><span class="line">    <span class="built_in">CGFloat</span> startA = -M_PI_2;</span><br><span class="line">    <span class="built_in">CGFloat</span> endA   = -M_PI_2 + <span class="keyword">self</span>.progress.value* M_PI*<span class="number">2</span>;</span><br><span class="line">    <span class="built_in">UIBezierPath</span> * path = [<span class="built_in">UIBezierPath</span> bezierPathWithArcCenter:<span class="built_in">CGPointMake</span>(<span class="keyword">self</span>.bounds.size.width*<span class="number">0.5</span>, <span class="keyword">self</span>.bounds.size.height*<span class="number">0.5</span>) radius:<span class="keyword">self</span>.bounds.size.width*<span class="number">0.3</span><span class="number">-10</span> startAngle:startA endAngle:endA clockwise:<span class="literal">YES</span>];</span><br><span class="line">    [path moveToPoint:<span class="built_in">CGPointMake</span>(<span class="number">30</span>, <span class="number">30</span>)];</span><br><span class="line">    [[<span class="built_in">UIColor</span> colorWithRed:<span class="number">0</span> green:(<span class="number">1</span>-<span class="keyword">self</span>.progress.value) blue:<span class="keyword">self</span>.progress.value alpha:<span class="number">1</span>]setStroke];</span><br><span class="line">    path.lineWidth = <span class="number">5.0</span>f;</span><br><span class="line">    [path stroke];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_Slider.png" width=400></img></p>
+<h3 id="如何绘制三条不同颜色的线"><a href="#如何绘制三条不同颜色的线" class="headerlink" title="如何绘制三条不同颜色的线"></a>如何绘制三条不同颜色的线</h3><p>方法一。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="type">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect &#123;</span><br><span class="line">    <span class="comment">//1 获取上下文</span></span><br><span class="line">    <span class="comment">//分别设置线段的颜色</span></span><br><span class="line">    <span class="built_in">CGContextRef</span> purple = <span class="built_in">UIGraphicsGetCurrentContext</span>();</span><br><span class="line">    [[<span class="built_in">UIColor</span> purpleColor]setStroke];</span><br><span class="line">    <span class="built_in">CGContextSaveGState</span>(purple);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">CGContextRef</span> orange = <span class="built_in">UIGraphicsGetCurrentContext</span>();</span><br><span class="line">    [[<span class="built_in">UIColor</span> orangeColor]setStroke];</span><br><span class="line">    <span class="built_in">CGContextSaveGState</span>(orange);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">CGContextRef</span> green = <span class="built_in">UIGraphicsGetCurrentContext</span>();</span><br><span class="line">    [[<span class="built_in">UIColor</span> greenColor]setStroke];</span><br><span class="line">    <span class="built_in">CGContextSaveGState</span>(green);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="built_in">UIBezierPath</span> * path = [<span class="built_in">UIBezierPath</span> bezierPath];</span><br><span class="line">    <span class="comment">//设置线宽</span></span><br><span class="line">    path.lineWidth = <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//把紫色的上下文从栈中取出来</span></span><br><span class="line">    <span class="built_in">CGContextRestoreGState</span>(purple);</span><br><span class="line">    <span class="comment">//第一条线</span></span><br><span class="line">    [[<span class="built_in">UIColor</span> purpleColor]setStroke];</span><br><span class="line">    [path moveToPoint:<span class="built_in">CGPointMake</span>(<span class="number">10</span>, <span class="number">10</span>)];</span><br><span class="line">    [path addLineToPoint:<span class="built_in">CGPointMake</span>(<span class="number">10</span>, <span class="number">100</span>)];</span><br><span class="line">    [path stroke];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">//把紫色的上下文从栈中取出来</span></span><br><span class="line">    <span class="built_in">CGContextRestoreGState</span>(orange);</span><br><span class="line">    path = [<span class="built_in">UIBezierPath</span> bezierPath];</span><br><span class="line">    <span class="comment">//设置线宽</span></span><br><span class="line">    path.lineWidth = <span class="number">9</span>;</span><br><span class="line">    <span class="comment">//第二条线</span></span><br><span class="line">    [[<span class="built_in">UIColor</span> orangeColor]setStroke];</span><br><span class="line">    [path moveToPoint:<span class="built_in">CGPointMake</span>(<span class="number">30</span>, <span class="number">10</span>)];</span><br><span class="line">    [path addLineToPoint:<span class="built_in">CGPointMake</span>(<span class="number">30</span>, <span class="number">100</span>)];</span><br><span class="line">    [path stroke];</span><br><span class="line"></span><br><span class="line">    <span class="comment">//把紫色的上下文从栈中取出来</span></span><br><span class="line">    <span class="built_in">CGContextRestoreGState</span>(green);</span><br><span class="line">    path = [<span class="built_in">UIBezierPath</span> bezierPath];</span><br><span class="line">    <span class="comment">//设置线宽</span></span><br><span class="line">    path.lineWidth = <span class="number">3</span>;</span><br><span class="line">    <span class="comment">//第三条线</span></span><br><span class="line">    [[<span class="built_in">UIColor</span> greenColor]setStroke];</span><br><span class="line">    [path moveToPoint:<span class="built_in">CGPointMake</span>(<span class="number">50</span>, <span class="number">10</span>)];</span><br><span class="line">    [path addLineToPoint:<span class="built_in">CGPointMake</span>(<span class="number">50</span>, <span class="number">100</span>)];</span><br><span class="line">    [path stroke];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>方法二。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="type">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect &#123;</span><br><span class="line">    [[<span class="keyword">self</span> bezierPathWithPoint:<span class="built_in">CGPointMake</span>(<span class="number">10</span>, <span class="number">10</span>) endPoint:<span class="built_in">CGPointMake</span>(<span class="number">10</span>, <span class="number">180</span>) lineColor:[<span class="built_in">UIColor</span> purpleColor] lineWidth:<span class="number">6</span>] stroke];</span><br><span class="line">    [[<span class="keyword">self</span> bezierPathWithPoint:<span class="built_in">CGPointMake</span>(<span class="number">50</span>, <span class="number">10</span>) endPoint:<span class="built_in">CGPointMake</span>(<span class="number">50</span>, <span class="number">180</span>) lineColor:[<span class="built_in">UIColor</span> greenColor] lineWidth:<span class="number">6</span>] stroke];</span><br><span class="line">    [[<span class="keyword">self</span> bezierPathWithPoint:<span class="built_in">CGPointMake</span>(<span class="number">90</span>, <span class="number">10</span>) endPoint:<span class="built_in">CGPointMake</span>(<span class="number">90</span>, <span class="number">180</span>) lineColor:[<span class="built_in">UIColor</span> orangeColor] lineWidth:<span class="number">6</span>] stroke];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="built_in">UIBezierPath</span> *)bezierPathWithPoint:(<span class="built_in">CGPoint</span>)startPoint endPoint:(<span class="built_in">CGPoint</span>) endPoint lineColor:(<span class="built_in">UIColor</span>*)lineColor lineWidth:(<span class="built_in">CGFloat</span>)lineWidth&#123;</span><br><span class="line">    <span class="built_in">UIBezierPath</span> * path = [<span class="built_in">UIBezierPath</span> bezierPath];</span><br><span class="line">    [lineColor setStroke];</span><br><span class="line">    path.lineWidth = lineWidth;</span><br><span class="line">    [path moveToPoint:startPoint];</span><br><span class="line">    [path addLineToPoint:endPoint];</span><br><span class="line">    <span class="keyword">return</span> path;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_ThreeLines.png" width=400></img></p>
+<h3 id="渐变色"><a href="#渐变色" class="headerlink" title="渐变色"></a>渐变色</h3><p>方法一。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="type">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect &#123;</span><br><span class="line">    <span class="built_in">CAGradientLayer</span> * layer = [<span class="built_in">CAGradientLayer</span> layer];</span><br><span class="line">    <span class="comment">// 设置大小</span></span><br><span class="line">    layer.frame = <span class="built_in">CGRectMake</span>(<span class="number">0</span>, <span class="number">400</span>, <span class="number">300</span>, <span class="number">3</span>);</span><br><span class="line">    <span class="comment">// 设置颜色</span></span><br><span class="line">    layer.colors = @[(__bridge <span class="type">id</span>)[<span class="built_in">UIColor</span> colorWithRed:<span class="number">204.0</span> / <span class="number">255.0</span> green:<span class="number">224.0</span> / <span class="number">255.0</span> blue:<span class="number">244.0</span> / <span class="number">255.0</span> alpha:<span class="number">1</span>].CGColor,</span><br><span class="line">                     (__bridge <span class="type">id</span>)[<span class="built_in">UIColor</span> colorWithRed:<span class="number">29.0</span> / <span class="number">255.0</span> green:<span class="number">156.0</span> / <span class="number">255.0</span> blue:<span class="number">215.0</span> / <span class="number">255.0</span> alpha:<span class="number">1</span>].CGColor,</span><br><span class="line">                     (__bridge <span class="type">id</span>)[<span class="built_in">UIColor</span> colorWithRed:<span class="number">255.0</span> / <span class="number">255.0</span> green:<span class="number">50.0</span> / <span class="number">255.0</span> blue:<span class="number">126.0</span> / <span class="number">255.0</span> alpha:<span class="number">1</span>].CGColor];</span><br><span class="line">    <span class="comment">// 渐变层的相对位置,起始点为0,终止点为1,中间点为 (point-startpoint)/(endpoint-startpoint)</span></span><br><span class="line">    layer.locations = @[@<span class="number">0</span>,@<span class="number">.5</span>,@<span class="number">1</span>];</span><br><span class="line">    <span class="comment">// 渐变方向</span></span><br><span class="line">    layer.startPoint = <span class="built_in">CGPointMake</span>(<span class="number">0</span>, <span class="number">1</span>);</span><br><span class="line">    layer.endPoint = <span class="built_in">CGPointMake</span>(<span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">    [<span class="keyword">self</span>.layer addSublayer:layer];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>方法二。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="type">void</span>)drawRect:(<span class="built_in">CGRect</span>)rect &#123;</span><br><span class="line">    [<span class="keyword">self</span> drawLine];</span><br><span class="line">    [<span class="keyword">self</span> drawLineWithStartColor:[<span class="built_in">UIColor</span> redColor] endColor:[<span class="built_in">UIColor</span> greenColor]];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="type">void</span>)drawLineWithStartColor:(<span class="built_in">UIColor</span> *)startColor endColor:(<span class="built_in">UIColor</span> *)endColor&#123;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">CGContextRef</span> ctx = <span class="built_in">UIGraphicsGetCurrentContext</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建颜色空间</span></span><br><span class="line">    <span class="built_in">CGColorSpaceRef</span> colorSpace = <span class="built_in">CGColorSpaceCreateDeviceRGB</span>();</span><br><span class="line">    <span class="built_in">CGFloat</span> locations[] = &#123; <span class="number">0.0</span>, <span class="number">1.0</span> &#125;;</span><br><span class="line">    <span class="comment">// 创建颜色数组，NSArray 只能存储 OC 对象，所以需要桥接</span></span><br><span class="line">    <span class="built_in">NSArray</span> *colors = @[(__bridge <span class="type">id</span>)startColor.CGColor,(__bridge <span class="type">id</span>)endColor.CGColor];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">CGGradientRef</span> gradient = <span class="built_in">CGGradientCreateWithColors</span>(colorSpace, (__bridge <span class="built_in">CFArrayRef</span>) colors, locations);</span><br><span class="line">    <span class="comment">//释放</span></span><br><span class="line">    <span class="built_in">CFRelease</span>(colorSpace);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 保存一份当前上下文，压栈</span></span><br><span class="line">    <span class="built_in">CGContextSaveGState</span>(ctx);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">CGFloat</span> width = <span class="keyword">self</span>.frame.size.width;</span><br><span class="line">    <span class="built_in">CGContextMoveToPoint</span>(ctx, <span class="number">0</span>, <span class="number">120</span>);</span><br><span class="line">    <span class="built_in">CGContextAddLineToPoint</span>(ctx, width, <span class="number">120</span>);</span><br><span class="line">    <span class="built_in">CGContextAddLineToPoint</span>(ctx, width, <span class="number">123</span>);</span><br><span class="line">    <span class="built_in">CGContextAddLineToPoint</span>(ctx, <span class="number">0</span>, <span class="number">123</span>);</span><br><span class="line">    <span class="comment">//裁剪</span></span><br><span class="line">    <span class="built_in">CGContextEOClip</span>(ctx);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//绘制渐变</span></span><br><span class="line">    <span class="built_in">CGContextDrawLinearGradient</span>(ctx, gradient, <span class="built_in">CGPointMake</span>(<span class="number">0</span>, <span class="number">100</span>), <span class="built_in">CGPointMake</span>(<span class="keyword">self</span>.frame.size.width, <span class="number">100</span>), kCGGradientDrawsBeforeStartLocation);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//恢复一份当前的上下文，出栈</span></span><br><span class="line">    <span class="built_in">CGContextRestoreGState</span>(ctx);</span><br><span class="line">    <span class="built_in">CGColorSpaceRelease</span>(colorSpace);</span><br><span class="line">    <span class="built_in">CGGradientRelease</span>(gradient);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (<span class="type">void</span>)drawLine&#123;</span><br><span class="line">    <span class="comment">// 获取上下文</span></span><br><span class="line">    <span class="built_in">CGContextRef</span> ctx = <span class="built_in">UIGraphicsGetCurrentContext</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">CGContextMoveToPoint</span>(ctx, <span class="number">0</span>, <span class="number">100</span>);</span><br><span class="line">    <span class="built_in">CGContextAddLineToPoint</span>(ctx, <span class="number">300</span>, <span class="number">100</span>);</span><br><span class="line">    <span class="built_in">CGContextSetLineWidth</span>(ctx, <span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 填充路径</span></span><br><span class="line">    <span class="built_in">CGContextStrokePath</span>(ctx);</span><br><span class="line">    <span class="comment">// 释放</span></span><br><span class="line">    <span class="built_in">CGContextRelease</span>(ctx);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://omkug1guu.bkt.clouddn.com/iOS-basic-mapping-usage-with-Quart2D/Quart2D_Gradient.png" width=400></img></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/04/16/2017/iOS-bluetooth-summary-of-data-conversion/" rel="prev" title="总结下 iOS 蓝牙开发中常用的数据转换">
+      <i class="fa fa-chevron-left"></i> 总结下 iOS 蓝牙开发中常用的数据转换
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/01/11/2018/Hexo-build-yourown-blog-with-hexo/" rel="next" title="使用 Hexo 搭建个人博客并部署到 Github Page">
+      使用 Hexo 搭建个人博客并部署到 Github Page <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E5%87%86%E5%A4%87"><span class="nav-number">1.</span> <span class="nav-text">基础准备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%BE%E5%BD%A2%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="nav-number">1.2.</span> <span class="nav-text">图形上下文</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#drawRect-%E6%96%B9%E6%B3%95"><span class="nav-number">1.3.</span> <span class="nav-text">drawRect 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%98%E5%88%B6%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.4.</span> <span class="nav-text">绘制步骤</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%BB%E7%BA%BF"><span class="nav-number">2.</span> <span class="nav-text">画线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%BB%E7%9F%A9%E5%BD%A2"><span class="nav-number">3.</span> <span class="nav-text">画矩形</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%BB%E5%9C%86"><span class="nav-number">4.</span> <span class="nav-text">画圆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%87%E5%BD%A2"><span class="nav-number">5.</span> <span class="nav-text">扇形</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%BB%E6%96%87%E5%AD%97"><span class="nav-number">6.</span> <span class="nav-text">画文字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%BB%E5%9B%BE%E7%89%87"><span class="nav-number">7.</span> <span class="nav-text">画图片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E5%BA%A6%E6%9D%A1"><span class="nav-number">8.</span> <span class="nav-text">进度条</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E7%BB%98%E5%88%B6%E4%B8%89%E6%9D%A1%E4%B8%8D%E5%90%8C%E9%A2%9C%E8%89%B2%E7%9A%84%E7%BA%BF"><span class="nav-number">9.</span> <span class="nav-text">如何绘制三条不同颜色的线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%90%E5%8F%98%E8%89%B2"><span class="nav-number">10.</span> <span class="nav-text">渐变色</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Lewanny</p>
+  <div class="site-description" itemprop="description">世界拥挤繁忙，行人各有方向。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lewanny</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

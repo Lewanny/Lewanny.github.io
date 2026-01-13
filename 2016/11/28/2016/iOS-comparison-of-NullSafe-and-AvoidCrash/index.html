@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lewanny.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="在前 “iOS null 导致程序 Crash 的解决方案” 文章中提到使用 NullSafe 框架在运行时操作，把空值置为 nil ，从而防止操作 nil 值引起程序 Crash 。针对防止程序 Crash 的框架还有 AvoidCrash ，下面对两个框架进行了对比。 NullsafeAvoidCrash 不同的作用NullSafeNullSafe 可在运行时，把虽有的空值置为 nil ，可有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="应用 Crash 捕获库 NullSafe 和 AvoidCrash 对比">
+<meta property="og:url" content="http://lewanny.com/2016/11/28/2016/iOS-comparison-of-NullSafe-and-AvoidCrash/index.html">
+<meta property="og:site_name" content="Lewanny 的个人博客空间">
+<meta property="og:description" content="在前 “iOS null 导致程序 Crash 的解决方案” 文章中提到使用 NullSafe 框架在运行时操作，把空值置为 nil ，从而防止操作 nil 值引起程序 Crash 。针对防止程序 Crash 的框架还有 AvoidCrash ，下面对两个框架进行了对比。 NullsafeAvoidCrash 不同的作用NullSafeNullSafe 可在运行时，把虽有的空值置为 nil ，可有">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2016-11-28T14:28:06.000Z">
+<meta property="article:modified_time" content="2026-01-13T06:31:59.669Z">
+<meta property="article:author" content="Lewanny">
+<meta property="article:tag" content="NullSafe">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://lewanny.com/2016/11/28/2016/iOS-comparison-of-NullSafe-and-AvoidCrash/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>应用 Crash 捕获库 NullSafe 和 AvoidCrash 对比 | Lewanny 的个人博客空间</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lewanny 的个人博客空间</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://lewanny.com/2016/11/28/2016/iOS-comparison-of-NullSafe-and-AvoidCrash/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Lewanny">
+      <meta itemprop="description" content="世界拥挤繁忙，行人各有方向。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lewanny 的个人博客空间">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          应用 Crash 捕获库 NullSafe 和 AvoidCrash 对比
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-11-28 22:28:06" itemprop="dateCreated datePublished" datetime="2016-11-28T22:28:06+08:00">2016-11-28</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-01-13 14:31:59" itemprop="dateModified" datetime="2026-01-13T14:31:59+08:00">2026-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Objective-C/" itemprop="url" rel="index"><span itemprop="name">Objective-C</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在前 “iOS null 导致程序 Crash 的解决方案” 文章中提到使用 NullSafe 框架在运行时操作，把空值置为 nil ，从而防止操作 nil 值引起程序 Crash 。针对防止程序 Crash 的框架还有 AvoidCrash ，下面对两个框架进行了对比。</p>
+<p><a href="https://github.com/nicklockwood/NullSafe">Nullsafe</a><br><a href="https://github.com/chenfanfang/AvoidCrash">AvoidCrash</a></p>
+<h3 id="不同的作用"><a href="#不同的作用" class="headerlink" title="不同的作用"></a>不同的作用</h3><h4 id="NullSafe"><a href="#NullSafe" class="headerlink" title="NullSafe"></a>NullSafe</h4><p>NullSafe 可在运行时，把虽有的空值置为 nil ，可有效的防止所有的空值问题引起的Crash 。</p>
+<span id="more"></span>
+
+<h4 id="AvoidCrash"><a href="#AvoidCrash" class="headerlink" title="AvoidCrash"></a>AvoidCrash</h4><p>AvoidCrash 利用 runtime 技术对 Foundation 一些常用并且容易导致崩溃的方法进行处理。</p>
+<p>目前可以防止崩溃的方法有:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> <span class="built_in">NSArray</span></span><br><span class="line"><span class="built_in">NSArray</span>的快速创建方式 <span class="built_in">NSArray</span> *array = @[@”chenfanfang”, @”AvoidCrash”];</span><br><span class="line">+ (<span class="keyword">instancetype</span>)arrayWithObjects:(<span class="keyword">const</span> <span class="type">id</span> _Nonnull __<span class="keyword">unsafe_unretained</span> *)objects count:(<span class="built_in">NSUInteger</span>)cnt</span><br><span class="line">- (<span class="type">id</span>)objectAtIndex:(<span class="built_in">NSUInteger</span>)index</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> <span class="built_in">NSMutableArray</span></span><br><span class="line">- (<span class="type">id</span>)objectAtIndex:(<span class="built_in">NSUInteger</span>)index</span><br><span class="line">- (<span class="type">void</span>)setObject:(<span class="type">id</span>)obj atIndexedSubscript:(<span class="built_in">NSUInteger</span>)idx</span><br><span class="line">- (<span class="type">void</span>)removeObjectAtIndex:(<span class="built_in">NSUInteger</span>)index</span><br><span class="line">- (<span class="type">void</span>)insertObject:(<span class="type">id</span>)anObject atIndex:(<span class="built_in">NSUInteger</span>)index</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> <span class="built_in">NSDictionary</span></span><br><span class="line"><span class="built_in">NSDictionary</span> 的快速创建方式 <span class="built_in">NSDictionary</span> *dict = @&#123;@”frameWork” : @”AvoidCrash”&#125;; <span class="comment">// 这种创建方式其实调用的是2中的方法。</span></span><br><span class="line">- (<span class="keyword">instancetype</span>)dictionaryWithObjects:(<span class="keyword">const</span> <span class="type">id</span> _Nonnull <span class="keyword">unsafe_unretained</span> *)objects forKeys:(<span class="keyword">const</span> <span class="type">id</span> _Nonnull <span class="keyword">unsafe_unretained</span> *)keys count:(<span class="built_in">NSUInteger</span>)cnt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">4.</span> <span class="built_in">NSMutableDictionary</span></span><br><span class="line">- (<span class="type">void</span>)setObject:(<span class="type">id</span>)anObject forKey:(<span class="type">id</span>)aKey</span><br><span class="line">- (<span class="type">void</span>)removeObjectForKey:(<span class="type">id</span>)aKey</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">5.</span> <span class="built_in">NSString</span></span><br><span class="line">- (<span class="type">unichar</span>)characterAtIndex:(<span class="built_in">NSUInteger</span>)index</span><br><span class="line">- (<span class="built_in">NSString</span> *)substringFromIndex:(<span class="built_in">NSUInteger</span>)from</span><br><span class="line">- (<span class="built_in">NSString</span> *)substringToIndex:(<span class="built_in">NSUInteger</span>)to &#123;</span><br><span class="line">- (<span class="built_in">NSString</span> *)substringWithRange:(<span class="built_in">NSRange</span>)range &#123;</span><br><span class="line">- (<span class="built_in">NSString</span> )stringByReplacingOccurrencesOfString:(<span class="built_in">NSString</span> )target withString:(<span class="built_in">NSString</span> *)replacement</span><br><span class="line">- (<span class="built_in">NSString</span> )stringByReplacingOccurrencesOfString:(<span class="built_in">NSString</span> )target withString:(<span class="built_in">NSString</span> *)replacement options:(<span class="built_in">NSStringCompareOptions</span>)options range:(<span class="built_in">NSRange</span>)searchRange</span><br><span class="line">- (<span class="built_in">NSString</span> )stringByReplacingCharactersInRange:(<span class="built_in">NSRange</span>)range withString:(<span class="built_in">NSString</span> )replacement</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">6.</span> <span class="built_in">NSMutableString</span></span><br><span class="line">由于 <span class="built_in">NSMutableString</span> 是继承于 <span class="built_in">NSString</span>，所以这里和 <span class="built_in">NSString</span> 有些同样的方法就不重复写了。</span><br><span class="line">- (<span class="type">void</span>)replaceCharactersInRange:(<span class="built_in">NSRange</span>)range withString:(<span class="built_in">NSString</span> *)aString</span><br><span class="line">- (<span class="type">void</span>)insertString:(<span class="built_in">NSString</span> *)aString atIndex:(<span class="built_in">NSUInteger</span>)loc</span><br><span class="line">- (<span class="type">void</span>)deleteCharactersInRange:(<span class="built_in">NSRange</span>)range</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">7.</span> KVC</span><br><span class="line">- (<span class="type">void</span>)setValue:(<span class="type">id</span>)value forKey:(<span class="built_in">NSString</span> *)key</span><br><span class="line">- (<span class="type">void</span>)setValue:(<span class="type">id</span>)value forKeyPath:(<span class="built_in">NSString</span> *)keyPath</span><br><span class="line">- (<span class="type">void</span>)setValue:(<span class="type">id</span>)value forUndefinedKey:(<span class="built_in">NSString</span> *)key <span class="comment">//这个方法一般用来重写，不会主动调用</span></span><br><span class="line">- (<span class="type">void</span>)setValuesForKeysWithDictionary:(<span class="built_in">NSDictionary</span> *)keyedValues</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">8.</span> <span class="built_in">NSAttributedString</span></span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithString:(<span class="built_in">NSString</span> *)str</span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithAttributedString:(<span class="built_in">NSAttributedString</span> *)attrStr</span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithString:(<span class="built_in">NSString</span> )str attributes:(<span class="built_in">NSDictionary</span>&lt;<span class="built_in">NSString</span> ,<span class="type">id</span>&gt; *)attrs</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="number">9.</span> <span class="built_in">NSMutableAttributedString</span></span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithString:(<span class="built_in">NSString</span> *)str</span><br><span class="line">- (<span class="keyword">instancetype</span>)initWithString:(<span class="built_in">NSString</span> )str attributes:(<span class="built_in">NSDictionary</span>&lt;<span class="built_in">NSString</span> ,<span class="type">id</span>&gt; *)attrs</span><br></pre></td></tr></table></figure>
+
+<p>AvoidCrash 可防止的 Crash 目前仅限以上 9 个类， 目前仍在更新中。</p>
+<h3 id="实现原理的异同"><a href="#实现原理的异同" class="headerlink" title="实现原理的异同"></a>实现原理的异同</h3><h4 id="NullSafe-1"><a href="#NullSafe-1" class="headerlink" title="NullSafe"></a>NullSafe</h4><p>NSNull 发送给它的而它又无法处理的消息经过如下几步处理:</p>
+<ol>
+<li>创建一个方法缓存，这个缓存会缓存项目中类的所有类名。</li>
+<li>遍历缓存，寻找是否已经有可以执行此方法的类。</li>
+<li>如果有的话，返回这个 NSMethodSignature 。</li>
+<li>如果没有的话，返回 nil ， 接下来会走 forwardInvocation: 方法。</li>
+<li>[invocation invokeWithTarget:nil] ; 将消息转发给 nil 。</li>
+</ol>
+<p>在 OC 中，系统如果对某个实例发送消息之后，它（及其父类）无法处理（比如，没有这个方法等），系统就会发送 methodSignatureForSelector 消息，如果这个方法返回非空，那么就去执行返回的方法，如果为 nil，则发送 forwardInvocation 消息，这样就完成整个转发链了。</p>
+<h4 id="AvoidCrash-1"><a href="#AvoidCrash-1" class="headerlink" title="AvoidCrash"></a>AvoidCrash</h4><p>AvoidCrash 利用 <code>runtime</code> 技术对一些常用并且容易导致崩溃的方法进行处理，可以有效的防止崩溃。</p>
+<ol>
+<li>通过 category 给类添加方法用来替换掉原本存在潜在崩溃的方法。</li>
+<li>利用 runtime 方法交换技术，将系统方法替换成我们给类添加的新方法。</li>
+<li>利用异常的捕获来防止程序的崩溃，并且进行相应的处理。</li>
+</ol>
+<h3 id="两者的优势对比"><a href="#两者的优势对比" class="headerlink" title="两者的优势对比"></a>两者的优势对比</h3><h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h4><h5 id="NullSafe-2"><a href="#NullSafe-2" class="headerlink" title="NullSafe"></a>NullSafe</h5><ol>
+<li>可自动将所有的 NSNull 对象转为 nil，直接防止空值导致的 Crash 。</li>
+<li>作为 Extension 使用方便，一劳永逸。</li>
+</ol>
+<h5 id="AvoidCrash-2"><a href="#AvoidCrash-2" class="headerlink" title="AvoidCrash"></a>AvoidCrash</h5><ol>
+<li>可捕获常用的 Foundation 中的方法存在潜在崩溃风险。</li>
+<li>可定位到具体的 Crash 位置。</li>
+<li>可以获取崩溃日志的所有详细信息。</li>
+<li>可拓展性强。</li>
+</ol>
+<p>####劣势</p>
+<h5 id="NullSafe-3"><a href="#NullSafe-3" class="headerlink" title="NullSafe"></a>NullSafe</h5><ol>
+<li>仅仅局限于处理空对象，而 AvoidCrash 可捕获用的 Foundation 方法的 Crash 。</li>
+<li>可拓展性差。</li>
+</ol>
+<h5 id="AvoidCrash-3"><a href="#AvoidCrash-3" class="headerlink" title="AvoidCrash"></a>AvoidCrash</h5><ol>
+<li>仅作用于常用的 Foundation 中的方法的 Crash 。</li>
+<li>目前版本并不是很稳定。</li>
+</ol>
+<h3 id="两者的使用方法"><a href="#两者的使用方法" class="headerlink" title="两者的使用方法"></a>两者的使用方法</h3><h4 id="NullSafe-4"><a href="#NullSafe-4" class="headerlink" title="NullSafe"></a>NullSafe</h4><p>NullSafe 是一个 Category，使用起来非常方便，只要加入到了工程中就可以了。</p>
+<h4 id="AvoidCrash-4"><a href="#AvoidCrash-4" class="headerlink" title="AvoidCrash"></a>AvoidCrash</h4><ol>
+<li>在 AppDelegate 的 didFinishLaunchingWithOptions 方法中添加如下代码，让 AvoidCrash 生效。</li>
+</ol>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 这句代码会让AvoidCrash生效，若没有如下代码，则AvoidCrash就不起作用</span></span><br><span class="line">[AvoidCrash becomeEffective];</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>如果想要获取崩溃日志的所有详细信息，需要注册通知：AvoidCrashNotification 。</li>
+</ol>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="type">BOOL</span>)application:(<span class="built_in">UIApplication</span> *)application didFinishLaunchingWithOptions:(<span class="built_in">NSDictionary</span> *)launchOptions &#123;</span><br><span class="line">    </span><br><span class="line">    [AvoidCrash becomeEffective];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//监听通知:AvoidCrashNotification, 获取AvoidCrash捕获的崩溃日志的详细信息</span></span><br><span class="line">    [[<span class="built_in">NSNotificationCenter</span> defaultCenter] addObserver:<span class="keyword">self</span> selector:<span class="keyword">@selector</span>(dealwithCrashMessage:) name:AvoidCrashNotification object:<span class="literal">nil</span>];</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">YES</span>;</span><br><span class="line">&#125;</span><br><span class="line">- (<span class="type">void</span>)dealwithCrashMessage:(<span class="built_in">NSNotification</span> *)note &#123;</span><br><span class="line">    <span class="comment">//注意:所有的信息都在userInfo中</span></span><br><span class="line">    <span class="comment">//你可以在这里收集相应的崩溃信息进行相应的处理(比如传到自己服务器)</span></span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;%@&quot;</span>,note.userInfo);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="总结建议"><a href="#总结建议" class="headerlink" title="总结建议"></a>总结建议</h3><p>综上，个人更倾向于 AvoidCrash ，虽然目前还不是很完善，但也可捕获常用的 Foundation 中的方法存在潜在崩溃风险，相对来说， NullSafe 便有些局限。</p>
+<p>在发布 APP 的时候再用上面介绍的方法来防止程序的崩溃，在开发阶段最好不用，能更好的发现应用的问题和不足。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/NullSafe/" rel="tag"># NullSafe</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/11/25/2016/iOS-null-safe-solution/" rel="prev" title="iOS null 导致程序 Crash 的解决方案">
+      <i class="fa fa-chevron-left"></i> iOS null 导致程序 Crash 的解决方案
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/11/30/2016/iOS-solution-view-offset-when-calling/" rel="next" title="iOS 通话或网络共享等状态栏变化导致 view 偏移的解决方法">
+      iOS 通话或网络共享等状态栏变化导致 view 偏移的解决方法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">不同的作用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NullSafe"><span class="nav-number">1.1.</span> <span class="nav-text">NullSafe</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AvoidCrash"><span class="nav-number">1.2.</span> <span class="nav-text">AvoidCrash</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E7%9A%84%E5%BC%82%E5%90%8C"><span class="nav-number">2.</span> <span class="nav-text">实现原理的异同</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NullSafe-1"><span class="nav-number">2.1.</span> <span class="nav-text">NullSafe</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AvoidCrash-1"><span class="nav-number">2.2.</span> <span class="nav-text">AvoidCrash</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E8%80%85%E7%9A%84%E4%BC%98%E5%8A%BF%E5%AF%B9%E6%AF%94"><span class="nav-number">3.</span> <span class="nav-text">两者的优势对比</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF"><span class="nav-number">3.1.</span> <span class="nav-text">优势</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#NullSafe-2"><span class="nav-number">3.1.1.</span> <span class="nav-text">NullSafe</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#AvoidCrash-2"><span class="nav-number">3.1.2.</span> <span class="nav-text">AvoidCrash</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#NullSafe-3"><span class="nav-number">3.1.3.</span> <span class="nav-text">NullSafe</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#AvoidCrash-3"><span class="nav-number">3.1.4.</span> <span class="nav-text">AvoidCrash</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E8%80%85%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">两者的使用方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NullSafe-4"><span class="nav-number">4.1.</span> <span class="nav-text">NullSafe</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AvoidCrash-4"><span class="nav-number">4.2.</span> <span class="nav-text">AvoidCrash</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93%E5%BB%BA%E8%AE%AE"><span class="nav-number">5.</span> <span class="nav-text">总结建议</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Lewanny</p>
+  <div class="site-description" itemprop="description">世界拥挤繁忙，行人各有方向。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lewanny</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

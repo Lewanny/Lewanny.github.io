@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lewanny.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="代码块 Block 是苹果在 iOS4 开始引入的对 C 语言的扩展，用来实现匿名函数的特性。Block 是一种特殊的数据类型，其可以正常定义变量、作为参数、作为返回值。特殊地，Block 还可以保存一段代码，在需要的时候调用。目前 Block 已经广泛应用于 iOS 开发中，常用于 GCD、动画、排序及各类回调。 Block 在我们的实际开发中太常用了，个人觉得很好用，无论是界面传值还是当做参数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 中 Block 的基本语法和使用">
+<meta property="og:url" content="http://lewanny.com/2015/09/24/2015/iOS-block-basic-grammar-and-usage/index.html">
+<meta property="og:site_name" content="Lewanny 的个人博客空间">
+<meta property="og:description" content="代码块 Block 是苹果在 iOS4 开始引入的对 C 语言的扩展，用来实现匿名函数的特性。Block 是一种特殊的数据类型，其可以正常定义变量、作为参数、作为返回值。特殊地，Block 还可以保存一段代码，在需要的时候调用。目前 Block 已经广泛应用于 iOS 开发中，常用于 GCD、动画、排序及各类回调。 Block 在我们的实际开发中太常用了，个人觉得很好用，无论是界面传值还是当做参数">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-09-24T11:23:33.000Z">
+<meta property="article:modified_time" content="2026-01-13T06:31:59.662Z">
+<meta property="article:author" content="Lewanny">
+<meta property="article:tag" content="block">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://lewanny.com/2015/09/24/2015/iOS-block-basic-grammar-and-usage/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>iOS 中 Block 的基本语法和使用 | Lewanny 的个人博客空间</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lewanny 的个人博客空间</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://lewanny.com/2015/09/24/2015/iOS-block-basic-grammar-and-usage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Lewanny">
+      <meta itemprop="description" content="世界拥挤繁忙，行人各有方向。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lewanny 的个人博客空间">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS 中 Block 的基本语法和使用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-09-24 19:23:33" itemprop="dateCreated datePublished" datetime="2015-09-24T19:23:33+08:00">2015-09-24</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-01-13 14:31:59" itemprop="dateModified" datetime="2026-01-13T14:31:59+08:00">2026-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Objective-C/" itemprop="url" rel="index"><span itemprop="name">Objective-C</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>代码块 Block 是苹果在 iOS4 开始引入的对 C 语言的扩展，用来实现匿名函数的特性。Block 是一种特殊的数据类型，其可以正常定义变量、作为参数、作为返回值。特殊地，Block 还可以保存一段代码，在需要的时候调用。目前 Block 已经广泛应用于 iOS 开发中，常用于 GCD、动画、排序及各类回调。</p>
+<p>Block 在我们的实际开发中太常用了，个人觉得很好用，无论是界面传值还是当做参数都十分的灵活。例如 GCD、AFNetworking 的回调等都是用 Block 实现的，且 Apple 官方的很多 API 都由 Delegate 写法换成了 Block 。</p>
+<span id="more"></span>
+
+<h3 id="Block-是什么？"><a href="#Block-是什么？" class="headerlink" title="Block 是什么？"></a>Block 是什么？</h3><p>那么，Block 到底是什么呢？用一句话来概括就是<code>带有自动变量的匿名函数</code>。</p>
+<h4 id="匿名函数"><a href="#匿名函数" class="headerlink" title="匿名函数"></a>匿名函数</h4><p><code>匿名函数</code>顾名思义就是不带名字的函数，C 语言中不允许该类函数的存在，而在 OC 的 Block 中则是可以使用指针来直接调用一个函数的。</p>
+<h4 id="自动变量"><a href="#自动变量" class="headerlink" title="自动变量"></a>自动变量</h4><p>自动变量在 Block 中的具体表现就是<code>截获自动变量</code>。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line"><span class="type">void</span>(^blockLog)() = ^&#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;Input a = %d&quot;</span>, a);</span><br><span class="line">&#125;;</span><br><span class="line">a = <span class="number">10</span>;</span><br><span class="line">blockLog();</span><br><span class="line"><span class="comment">// 打印结果：Input a = 0</span></span><br></pre></td></tr></table></figure>
+<p>上面的代码虽然我们在调用 blockLog 前改变了变量 a 的值，但是输出的值还是 blockLog 在编译时 a 的值。所以截获自动变量的概念就是：<strong>在Block中会保存变量的值，而不会随变量的值的改变而改变</strong>。</p>
+<p>我们再来看下面的代码。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line"><span class="type">void</span>(^blockLog)() = ^&#123;</span><br><span class="line">    a = <span class="number">10</span>;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;Input a = %d&quot;</span>, a);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码会报错，编译器会提示不能再 Block 中改变变量的值。因为在 Block 截获了变量的瞬间值后就不能再改变改变量的值，如果想在 Block 中改变该变量的值，那么我们需要在变量声明的时候加上 __Block 修饰符。如下：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">__block <span class="type">int</span> a = <span class="number">0</span>;</span><br><span class="line"><span class="type">void</span>(^blockLog)() = ^&#123;</span><br><span class="line">    a = <span class="number">10</span>;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;Input a = %d&quot;</span>, a);</span><br><span class="line">&#125;;</span><br><span class="line">blockLog();</span><br><span class="line"><span class="comment">// 打印结果：Input a = 10</span></span><br></pre></td></tr></table></figure>
+
+<p>但是下面的情况是允许的：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSMutableArray</span> *arrayInsert = [<span class="built_in">NSMutableArray</span> array];</span><br><span class="line"><span class="type">void</span>(^blockLog)() = ^&#123;</span><br><span class="line">    [arrayInsert addObject:<span class="string">@&quot;Obj&quot;</span>];</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;array = %@&quot;</span>, arrayInsert);</span><br><span class="line">&#125;;</span><br><span class="line">blockLog();</span><br></pre></td></tr></table></figure>
+
+<p>因为我们只是对截获的变量进行了操作，而没有进行赋值，所以对于截获变量，可以进行操作而不可以进行赋值。</p>
+<p>还有一点需要注意，在 Block 中不支持对 C 语言数组进行操作。</p>
+<h3 id="Block-的语法和分类"><a href="#Block-的语法和分类" class="headerlink" title="Block 的语法和分类"></a>Block 的语法和分类</h3><h4 id="Block-的语法"><a href="#Block-的语法" class="headerlink" title="Block 的语法"></a>Block 的语法</h4><p>下面是一个完整的 Block 写法：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">^<span class="type">int</span> (<span class="built_in">NSString</span> *str1, <span class="built_in">NSString</span> *str2) &#123;</span><br><span class="line">	<span class="keyword">return</span> [str1 intValue] + [str2 intValue];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>“^” 这个符号用来表示这是一个 <code>Block</code> 。</li>
+<li>int 表示<code>返回值</code>。（可省略或 void）</li>
+<li>(NSString str1, NSString str2) 这个括号中是 Block 的参数，即<code>参数列表</code>，语法和 C 语言类似。（没有时也可省略）</li>
+</ul>
+<h4 id="Block-变量"><a href="#Block-变量" class="headerlink" title="Block 变量"></a>Block 变量</h4><p>那么为什么需要 Block 变量？我们可以这样理解，我们可以通过这个 Block 变量来获取 Block 的指针，然后通过这个指针就可以来使用 Block 函数。我们先来看一下如何声明一个 Block 变量：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> (^blockExp)(<span class="built_in">NSString</span> *str1,<span class="built_in">NSString</span> *str1);</span><br></pre></td></tr></table></figure>
+
+<p>对照前面的 Block 函数其含义分别为：</p>
+<ul>
+<li>返回值</li>
+<li>变量名</li>
+<li>参数列表</li>
+</ul>
+<p>然后我们用上面讲到的 Block 语法来对这 Block 变量进行赋值，我们就可以将这个 Block 变量当作 C 语言函数来使用了。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> (^blockExp)(<span class="built_in">NSString</span> *str1, <span class="built_in">NSString</span> *str2);</span><br><span class="line">blockExp = ^(<span class="built_in">NSString</span> *str1, <span class="built_in">NSString</span> *str2) &#123;</span><br><span class="line">    <span class="keyword">return</span> [str1 intValue] + [str2 intValue];</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@&quot;Result = %d&quot;</span>, blockExp(<span class="string">@&quot;1&quot;</span>, <span class="string">@&quot;2&quot;</span>));</span><br><span class="line"><span class="comment">// 打印结果：Result = 3</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="无参无返的-Block"><a href="#无参无返的-Block" class="headerlink" title="无参无返的 Block"></a>无参无返的 Block</h4><p>无参数无返回值的 Block 。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> (^block1)() = ^() &#123;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br><span class="line">block1()</span><br></pre></td></tr></table></figure>
+
+<h4 id="有参无返的-Block"><a href="#有参无返的-Block" class="headerlink" title="有参无返的 Block"></a>有参无返的 Block</h4><p>无参数无返回值的 Block 。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> (^block2)(<span class="built_in">NSString</span> *) = ^(<span class="built_in">NSString</span> *str) &#123;</span><br><span class="line">    </span><br><span class="line">&#125;;</span><br><span class="line">block2(<span class="string">@&quot;Obj&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="有参有返的-Block"><a href="#有参有返的-Block" class="headerlink" title="有参有返的 Block"></a>有参有返的 Block</h4><p>无参数有返回值的 Block 。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> (^block3)(<span class="type">int</span> num) = ^(<span class="type">int</span> num) &#123;</span><br><span class="line">    <span class="keyword">return</span> num+<span class="number">1</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">NSLog</span>(<span class="string">@&quot;Result = %d&quot;</span>, block3(<span class="number">10</span>));</span><br><span class="line"><span class="comment">// 输出结果：Result = 11</span></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="Block-的实际应用"><a href="#Block-的实际应用" class="headerlink" title="Block 的实际应用"></a>Block 的实际应用</h3><h4 id="Block-结合-typedef-使用"><a href="#Block-结合-typedef-使用" class="headerlink" title="Block 结合 typedef 使用"></a>Block 结合 typedef 使用</h4><p>在实际使用 Block 的过程中，我们可能需要重复地声明多个相同返回值相同参数列表的 Block 变量，如果总是重复地编写一长串代码来声明变量会非常繁琐，所以我们可以使用 typedef 来定义 Block 类型。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一种无返回值有参数的 Block 类型</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">void</span> (^SayHello)(<span class="built_in">NSString</span> *str);</span><br><span class="line"><span class="comment">// 可以像 OC 中声明变量一样使用 Block 类型 SayHello 来声明变量并调用</span></span><br><span class="line">SayHello hello = ^(<span class="built_in">NSString</span> *saySrr)&#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;%@&quot;</span>, saySrr);</span><br><span class="line">&#125;;</span><br><span class="line">hello(<span class="string">@&quot;Hello World&quot;</span>);</span><br><span class="line">    </span><br><span class="line"><span class="comment">// 打印结果：Hello World</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Block-作为属性"><a href="#Block-作为属性" class="headerlink" title="Block 作为属性"></a>Block 作为属性</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一种有参有返的 Block </span></span><br><span class="line"><span class="keyword">typedef</span> <span class="built_in">NSString</span> *(^MyBlock)(<span class="type">int</span> a);</span><br><span class="line"><span class="comment">// 定义一个 MyBlock 属性</span></span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>,<span class="keyword">copy</span>)MyBlock block;</span><br></pre></td></tr></table></figure>
+
+<h4 id="Block-作为函数参数"><a href="#Block-作为函数参数" class="headerlink" title="Block 作为函数参数"></a>Block 作为函数参数</h4><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一个 Block </span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">void</span> (^MyBlock)(<span class="built_in">UIColor</span>* aColor);</span><br></pre></td></tr></table></figure>
+
+<p>这样我们就可以使用 MyBlock 来表示这个 Block，将 MyBlock 加入到函数参数中来声明一个函数。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="type">void</span>)setMyBlock:(MyBlock)block &#123;</span><br><span class="line">    </span><br><span class="line">    block([<span class="built_in">UIColor</span> redColor]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可在任意地方调用这个函数。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[secondVc setMyBlock:^<span class="built_in">NSString</span> *(<span class="built_in">UIColor</span>* aColor) &#123;</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;%@&quot;</span>, aColor);</span><br><span class="line">    wself.view.backgroundColor = aColor;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">@&quot;&quot;</span>;</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+
+<p>我们平时锁使用的许多回调当中大多都是这样的形式，其较多的就是网络请求回调了，我们只需要调用方法，然后在回调当中就可以对结果进行操作，很多苹果自己写的 API 都是使用了这样的方法。这样做的好处就是形式上十份简洁，当然像这种地方你使用 delegate 肯定也是可以的，但是表现上就没有 Block 那么简洁，使用起来也没有 Block 那么方便。</p>
+<h4 id="使用-Block-在页面中反向传值"><a href="#使用-Block-在页面中反向传值" class="headerlink" title="使用 Block 在页面中反向传值"></a>使用 Block 在页面中反向传值</h4><p>Blcok 是一个匿名函数，同时也是一个指针，那么使用 Block 就可以弥补在 iOS 中函数传递的功能。<br>在页面 B 中定义一个 Block 并声明一个 Block 变量。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 声明部分</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="type">void</span>(^BlockChange)(<span class="built_in">NSString</span> *titleStr, <span class="built_in">UIColor</span> *bgColor);</span><br><span class="line"><span class="keyword">@property</span>(<span class="keyword">nonatomic</span>, <span class="keyword">copy</span>)BlockChange blockChange;</span><br><span class="line">- (<span class="type">void</span>)setChangeColorBlock:(BlockChange) block;</span><br><span class="line"><span class="comment">// 实现部分</span></span><br><span class="line">- (<span class="type">void</span>)setChangeColorBlock:(BlockChange) block &#123;</span><br><span class="line">    <span class="keyword">self</span>.blockChange = block;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在页面 A 中的代码。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SecondViewController *secondVc = [[SecondViewController alloc] init];</span><br><span class="line">__<span class="keyword">weak</span> FirstViewController * wself = <span class="keyword">self</span>;</span><br><span class="line">[secondVc setChangeColorBlock:^(<span class="built_in">NSString</span> *titleStr, <span class="built_in">UIColor</span> *bgColor) &#123;</span><br><span class="line">    wself.view.backgroundColor = bgColor;</span><br><span class="line">    wself.tabBarItem.title = titleStr;</span><br><span class="line">&#125;];</span><br></pre></td></tr></table></figure>
+
+<p>在页面 B 的任意适当位置调用 block 变量。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">self</span>.blockChange(<span class="string">@&quot;传递颜色&quot;</span>, [<span class="built_in">UIColor</span> grayColor]);</span><br></pre></td></tr></table></figure>
+
+<p>这样 @”传递颜色” 和 [UIColor grayColor] 就从界面 B 传到了界面 A 。</p>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><h4 id="使用-block-修改局部变量"><a href="#使用-block-修改局部变量" class="headerlink" title="使用 __block 修改局部变量"></a>使用 __block 修改局部变量</h4><p>Block 可以访问局部变量，但是不能修改。如果想要修改局部变量，需要使用 __block 来修饰变量。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">__block <span class="type">int</span> multiplier = <span class="number">7</span>;</span><br><span class="line"><span class="type">int</span> (^myBlock)(<span class="type">int</span>) = ^(<span class="type">int</span> num) &#123;</span><br><span class="line">      multiplier ++;<span class="comment">//这样就可以了</span></span><br><span class="line">      <span class="keyword">return</span> num * multiplier;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>但是如果局部变量是<code>数组字典或者指针</code>的时候，只 copy 了这个指针，两个指针指向同一个地址，block 只修改指针上的内容。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSMutableArray</span> *arrayInsert = [<span class="built_in">NSMutableArray</span> array];</span><br><span class="line"><span class="type">void</span>(^blockLog)() = ^&#123;</span><br><span class="line">    [arrayInsert addObject:<span class="string">@&quot;Obj&quot;</span>];</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;array = %@&quot;</span>, arrayInsert);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>例子中的 arrayInsert 是一个指针，指向一个可数组。在 block 里面，并没有修改这个指针，而是修改了这个指针指向的数组。换句话说，指针保存的是一块内存区域的地址，在block 里，并没有改变这个地址，而是读取出这个地址，然后去操作这块地址空间的内容，这是允许的。</p>
+<p>因为声明 block 的时候实际上是把当时的临时变量又复制了一份，在 block 里即使修改了这些复制的变量，也不影响外面的原始变量。即所谓的闭包。但是当变量是一个指针的时候，block里只是复制了一份这个指针，两个指针指向同一个地址。所以，在block里面对指针指向内容做的修改，在block外面也一样生效。</p>
+<h4 id="使用-week-修改局部变量"><a href="#使用-week-修改局部变量" class="headerlink" title="使用 __week 修改局部变量"></a>使用 __week 修改局部变量</h4><p>如果在 Block 中使用附有 <code>__strong</code> 修饰符的对象类型自动变量，那么当 Block 从栈复制到堆时，改对象为 Block 所有。这样容易<code>引起循环引用</code>，从而发生内存泄漏。然而我们只需要保证当前控制器也就是 self 在需要释放的时候正确释放就可以。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__<span class="keyword">weak</span> FirstViewController * wself = <span class="keyword">self</span>;</span><br></pre></td></tr></table></figure>
+
+<p>我们定义一个 <code>wself 变量并使用 __weak 修饰符</code>，在 Block 代码块中，所有需要 self 的地方都用 wself 来替代。这样就不会增加引用计数，所以 Block 持有 self 对象就不会造成循环引用，从而造成内存泄漏。</p>
+<p>注意：在使用 block 前需要对 block 指针做判空处理，如果是MRC的编译环境下，要先 release 掉 block 对象。将 block 赋值为空，是解掉循环引用的重要方法。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/block/" rel="tag"># block</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2015/07/17/2015/iOS-loading-flash-screen-dynamically-metohd/" rel="prev" title="iOS 简单而实用的动态加载闪屏图方法">
+      <i class="fa fa-chevron-left"></i> iOS 简单而实用的动态加载闪屏图方法
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2015/10/04/2015/iOS-judge-system-version-methods/" rel="next" title="iOS 判断系统版本号的多种方法">
+      iOS 判断系统版本号的多种方法 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Block-%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">Block 是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.</span> <span class="nav-text">匿名函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E5%8F%98%E9%87%8F"><span class="nav-number">1.2.</span> <span class="nav-text">自动变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Block-%E7%9A%84%E8%AF%AD%E6%B3%95%E5%92%8C%E5%88%86%E7%B1%BB"><span class="nav-number">2.</span> <span class="nav-text">Block 的语法和分类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Block-%E7%9A%84%E8%AF%AD%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">Block 的语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Block-%E5%8F%98%E9%87%8F"><span class="nav-number">2.2.</span> <span class="nav-text">Block 变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A0%E5%8F%82%E6%97%A0%E8%BF%94%E7%9A%84-Block"><span class="nav-number">2.3.</span> <span class="nav-text">无参无返的 Block</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%89%E5%8F%82%E6%97%A0%E8%BF%94%E7%9A%84-Block"><span class="nav-number">2.4.</span> <span class="nav-text">有参无返的 Block</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%89%E5%8F%82%E6%9C%89%E8%BF%94%E7%9A%84-Block"><span class="nav-number">2.5.</span> <span class="nav-text">有参有返的 Block</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Block-%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">Block 的实际应用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Block-%E7%BB%93%E5%90%88-typedef-%E4%BD%BF%E7%94%A8"><span class="nav-number">3.1.</span> <span class="nav-text">Block 结合 typedef 使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Block-%E4%BD%9C%E4%B8%BA%E5%B1%9E%E6%80%A7"><span class="nav-number">3.2.</span> <span class="nav-text">Block 作为属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Block-%E4%BD%9C%E4%B8%BA%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0"><span class="nav-number">3.3.</span> <span class="nav-text">Block 作为函数参数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-Block-%E5%9C%A8%E9%A1%B5%E9%9D%A2%E4%B8%AD%E5%8F%8D%E5%90%91%E4%BC%A0%E5%80%BC"><span class="nav-number">3.4.</span> <span class="nav-text">使用 Block 在页面中反向传值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">4.</span> <span class="nav-text">注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-block-%E4%BF%AE%E6%94%B9%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F"><span class="nav-number">4.1.</span> <span class="nav-text">使用 __block 修改局部变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-week-%E4%BF%AE%E6%94%B9%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F"><span class="nav-number">4.2.</span> <span class="nav-text">使用 __week 修改局部变量</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Lewanny</p>
+  <div class="site-description" itemprop="description">世界拥挤繁忙，行人各有方向。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lewanny</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

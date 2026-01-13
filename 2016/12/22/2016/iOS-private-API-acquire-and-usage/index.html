@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 8.1.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"lewanny.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="iOS 的 API 除了公开的 API 以外，还有两类，分别是私有 API 和未公开 API 。iPhone 编程中一些非常精致强大的 API 都包含在私有 API 或未公开的 API 中，但未公开的 API 非常不稳定，变更的可能性很大。同时，最大的问题是使用了私有 API 的程序是不能上架 App Store 的。下面是三种 API 的介绍和对比。  公开API（Published API）介">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 私有 API、未公开 API 和公开 API 的对比和使用">
+<meta property="og:url" content="http://lewanny.com/2016/12/22/2016/iOS-private-API-acquire-and-usage/index.html">
+<meta property="og:site_name" content="Lewanny 的个人博客空间">
+<meta property="og:description" content="iOS 的 API 除了公开的 API 以外，还有两类，分别是私有 API 和未公开 API 。iPhone 编程中一些非常精致强大的 API 都包含在私有 API 或未公开的 API 中，但未公开的 API 非常不稳定，变更的可能性很大。同时，最大的问题是使用了私有 API 的程序是不能上架 App Store 的。下面是三种 API 的介绍和对比。  公开API（Published API）介">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-private-API-acquire-and-usage/ChatKitPosition.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-private-API-acquire-and-usage/DumpFile.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-private-API-acquire-and-usage/DumpVersion.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-private-API-acquire-and-usage/DumpChartKit.png">
+<meta property="og:image" content="http://omkug1guu.bkt.clouddn.com/iOS-private-API-acquire-and-usage/Success.png">
+<meta property="article:published_time" content="2016-12-22T15:07:07.000Z">
+<meta property="article:modified_time" content="2026-01-13T06:31:59.671Z">
+<meta property="article:author" content="Lewanny">
+<meta property="article:tag" content="私有 Api">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://omkug1guu.bkt.clouddn.com/iOS-private-API-acquire-and-usage/ChatKitPosition.png">
+
+<link rel="canonical" href="http://lewanny.com/2016/12/22/2016/iOS-private-API-acquire-and-usage/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>iOS 私有 API、未公开 API 和公开 API 的对比和使用 | Lewanny 的个人博客空间</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Lewanny 的个人博客空间</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://lewanny.com/2016/12/22/2016/iOS-private-API-acquire-and-usage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Lewanny">
+      <meta itemprop="description" content="世界拥挤繁忙，行人各有方向。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lewanny 的个人博客空间">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS 私有 API、未公开 API 和公开 API 的对比和使用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2016-12-22 23:07:07" itemprop="dateCreated datePublished" datetime="2016-12-22T23:07:07+08:00">2016-12-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2026-01-13 14:31:59" itemprop="dateModified" datetime="2026-01-13T14:31:59+08:00">2026-01-13</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Objective-C/" itemprop="url" rel="index"><span itemprop="name">Objective-C</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>iOS 的 API 除了公开的 API 以外，还有两类，分别是私有 API 和未公开 API 。iPhone 编程中一些非常精致强大的 API 都包含在私有 API 或未公开的 API 中，但未公开的 API 非常不稳定，变更的可能性很大。同时，最大的问题是使用了私有 API 的程序是不能上架 App Store 的。下面是三种 API 的介绍和对比。</p>
+<hr>
+<h3 id="公开API（Published-API）"><a href="#公开API（Published-API）" class="headerlink" title="公开API（Published API）"></a>公开API（Published API）</h3><h4 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h4><p><code>Published API</code>（公开的 API）：又称 <code>Documented API</code>（文档中记录的 API）。也就是是苹果通过 Cocoa Touch 向全世界第三方开发者公开的所有 API 。</p>
+<span id="more"></span>
+
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><p>所有的公有 API 的介绍和使用方法都有记录在 <code>Apple 的官方文档</code>中。</p>
+<h3 id="未公开API（UnPublished-API）"><a href="#未公开API（UnPublished-API）" class="headerlink" title="未公开API（UnPublished API）"></a>未公开API（UnPublished API）</h3><h4 id="介绍-1"><a href="#介绍-1" class="headerlink" title="介绍"></a>介绍</h4><p><code>UnPublished API</code>（未公开 API）：又称 <code>Undocumented API</code>（文档中未记录的 API ）。是指虽然放在 Frameworks 框架中，但是却没有在苹果的官方文档中有使用说明、代码介绍等记录的 API 。<br>按苹果的说法，未公开的 API 是还<code>不够成熟，可能还会变动的 API</code> ，等完全成型了后会变成公开的 API ，但是目前不对其提供承诺，就是系统版本升级后可能会失效。</p>
+<h4 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h4><p>是目前不对其提供未公开 API 虽然未公开，但已经放在了公开的 Frameworks 框架中，所以他的使用方法和公开 API 一样，只要知道了对应的方法名，直接调用即可。</p>
+<h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><p>如果应用中使用了未公开的 API ，程序是不能在苹果的 App Store 上发布的。当然也可以通过某些加密的方法躲过审核。</p>
+<h3 id="私有API（Private-API）"><a href="#私有API（Private-API）" class="headerlink" title="私有API（Private API）"></a>私有API（Private API）</h3><h4 id="介绍："><a href="#介绍：" class="headerlink" title="介绍："></a>介绍：</h4><p><code>Private API</code>（私有API）：指的是 SDK 下的 <code>PrivateFrameWorks</code> 框架下的 API ，真实存在于 Cocoa Touch 中，私有 API 是苹果明确规定不能使用的 API 。</p>
+<p>一旦你的程序中有私有 API，在上传 AppStore 的时候也是会被拒绝的。如果当作小范围软件的话就可以尝试一下，比如再 Cydia 上发布，91 上发布，条件不会很苛刻。</p>
+<h4 id="私有-Frameworks-的位置"><a href="#私有-Frameworks-的位置" class="headerlink" title="私有 Frameworks 的位置"></a>私有 Frameworks 的位置</h4><p>私有的 Frameworks 存放在 Xcode 包的目录下，这里以 <code>ChatKit</code> 举例：<br>	<br>	Applications&#x2F;Xcode.app&#x2F;Contents&#x2F;Developer&#x2F;Platforms&#x2F;iPhoneOS.platform&#x2F;Developer&#x2F;SDKs&#x2F;iPhoneOS9.2.sdk&#x2F;System&#x2F;Library&#x2F;PrivateFrameworks&#x2F;ChatKit.framework<br>	<br>  <img src="http://omkug1guu.bkt.clouddn.com/iOS-private-API-acquire-and-usage/ChatKitPosition.png" width=750></p>
+<h4 id="如何获取私有-API"><a href="#如何获取私有-API" class="headerlink" title="如何获取私有 API"></a>如何获取私有 API</h4><p>使用 class-dump 获取对应 Frameworks 的头文件。</p>
+<h5 id="下载class-dump"><a href="#下载class-dump" class="headerlink" title="下载class-dump"></a>下载class-dump</h5><p>可以在 <a href="http://stevenygard.com/projects/class-dump/">class-dump</a> 官网 直接下载，或者下载 <a href="https://github.com/nygard/class-dump">class-dump 源代码</a> 编译得到。<br>	<br>  <img src="http://omkug1guu.bkt.clouddn.com/iOS-private-API-acquire-and-usage/DumpFile.png" width=180></p>
+<h5 id="class-dump-放到本地目录"><a href="#class-dump-放到本地目录" class="headerlink" title="class-dump 放到本地目录"></a>class-dump 放到本地目录</h5><p>把 class-dump 放到本地的 <code>/usr/local/bin</code> 目录下（有的系统是 “&#x2F;usr&#x2F;bin” ），在终端输入 class-dump ，显示 class-dump 后就可以正常使用了。如下图：<br>	<br>  <img src="http://omkug1guu.bkt.clouddn.com/iOS-private-API-acquire-and-usage/DumpVersion.png" width=600></p>
+<h5 id="修改-class-dump-权限"><a href="#修改-class-dump-权限" class="headerlink" title="修改 class-dump 权限"></a>修改 class-dump 权限</h5><p>进入到 class-dump 所在目录，执行如下命令，修改 class-dump 的权限为可读可写。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod <span class="number">777</span> <span class="keyword">class</span>-dump</span><br></pre></td></tr></table></figure>
+
+<h5 id="执行-class-dump-H-命令"><a href="#执行-class-dump-H-命令" class="headerlink" title="执行 class-dump -H 命令"></a>执行 class-dump -H 命令</h5><p>执行如下命令便可导出对应私有 Frameworks 的头文件，我以 ChatKit.framework 为例。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span>-dump -H /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneOS9<span class="number">.2</span>.sdk/System/Library/PrivateFrameworks/ChatKit.framework -o/Users/apple/Desktop/Headers</span><br></pre></td></tr></table></figure>
+
+<h5 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h5><p><code>class-dump</code> -H class-dump 导出头文件命令。<br><code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneOS9.2.sdk/System/Library/PrivateFrameworks/ChatKit.framework</code> 需要 dump 文件的路径。<br><code>-o/Users/apple/Desktop/Headers</code> dump 出来头文件的文件夹路径。</p>
+<p>导出的头文件：</p>
+  <img src="http://omkug1guu.bkt.clouddn.com/iOS-private-API-acquire-and-usage/DumpChartKit.png" width=470>
+  
+ 
+<h4 id="如何使用私有-API"><a href="#如何使用私有-API" class="headerlink" title="如何使用私有 API"></a>如何使用私有 API</h4><p>现在我们有了对应的 Frameworks 文件和头文件，然后新建一个名为 Headers 的文件夹 将 dump 出来的头文件放到 Headers 文件夹中，在把 Headers 放到 Framework 文件中。然后在工程中导入 Frameworks ，就可以以静态库的方式在我们的代码中使用这些私有 API 函数了。</p>
+  <img src="http://omkug1guu.bkt.clouddn.com/iOS-private-API-acquire-and-usage/Success.png" width=650>
+  
+  
+<h4 id="补充-1"><a href="#补充-1" class="headerlink" title="补充"></a>补充</h4><p>现在 iOS 9.3 以后，苹果取消了所有私有 API 的开放，所以现在不能拿到私有的 API 了，只能拿到虚拟机的私有 API，方法同上。目录如下：</p>
+<pre><code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator9.2.sdk/System/Library/PrivateFrameworks/xx.framework
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%A7%81%E6%9C%89-Api/" rel="tag"># 私有 Api</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/12/04/2016/Swift-learn-part2-operator/" rel="prev" title="Swift 学习 - 基本运算符">
+      <i class="fa fa-chevron-left"></i> Swift 学习 - 基本运算符
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2017/01/04/2017/update-Ruby-by-RVM-CocoaPods-xcworkspace-solution/" rel="next" title="iOS 使用 RVM 升级 Ruby 解决 CocoaPods 无法生成 xcworkspace 文件的问题">
+      iOS 使用 RVM 升级 Ruby 解决 CocoaPods 无法生成 xcworkspace 文件的问题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AC%E5%BC%80API%EF%BC%88Published-API%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">公开API（Published API）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AA%E5%85%AC%E5%BC%80API%EF%BC%88UnPublished-API%EF%BC%89"><span class="nav-number">2.</span> <span class="nav-text">未公开API（UnPublished API）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D-1"><span class="nav-number">2.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-1"><span class="nav-number">2.2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%A5%E5%85%85"><span class="nav-number">2.3.</span> <span class="nav-text">补充</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%81%E6%9C%89API%EF%BC%88Private-API%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">私有API（Private API）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%8B%E7%BB%8D%EF%BC%9A"><span class="nav-number">3.1.</span> <span class="nav-text">介绍：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A7%81%E6%9C%89-Frameworks-%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">3.2.</span> <span class="nav-text">私有 Frameworks 的位置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96%E7%A7%81%E6%9C%89-API"><span class="nav-number">3.3.</span> <span class="nav-text">如何获取私有 API</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BDclass-dump"><span class="nav-number">3.3.1.</span> <span class="nav-text">下载class-dump</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#class-dump-%E6%94%BE%E5%88%B0%E6%9C%AC%E5%9C%B0%E7%9B%AE%E5%BD%95"><span class="nav-number">3.3.2.</span> <span class="nav-text">class-dump 放到本地目录</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-class-dump-%E6%9D%83%E9%99%90"><span class="nav-number">3.3.3.</span> <span class="nav-text">修改 class-dump 权限</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C-class-dump-H-%E5%91%BD%E4%BB%A4"><span class="nav-number">3.3.4.</span> <span class="nav-text">执行 class-dump -H 命令</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%A7%A3%E9%87%8A"><span class="nav-number">3.3.5.</span> <span class="nav-text">解释</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E7%A7%81%E6%9C%89-API"><span class="nav-number">3.4.</span> <span class="nav-text">如何使用私有 API</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%A5%E5%85%85-1"><span class="nav-number">3.5.</span> <span class="nav-text">补充</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Lewanny</p>
+  <div class="site-description" itemprop="description">世界拥挤繁忙，行人各有方向。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">37</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">21</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2026</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lewanny</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
